@@ -12,7 +12,7 @@
                     <th>No</th>
                     <th>OPD</th>
                     <th>Nama</th>
-                    <th>Subdomain</th>
+                    {{-- <th>Subdomain</th> --}}
                     <th>Jenis</th>
                     <th>Status</th>
                 </tr>
@@ -26,13 +26,13 @@
                         <td>{{ $n++ }}</td>
                         <td>{{ $apk->opd->nama_opd ?? '-' }}</td>
                         <td>{{ $apk->nama }}</td>
-                        <td>
+                        {{-- <td>
                             @if ($apk->subdomain)
                                 <a href="https://{{ $apk->subdomain }}" target="_blank">{{ $apk->subdomain }}</a>
                             @else
                                 -
                             @endif
-                        </td>
+                        </td> --}}
                         <td>{{ $apk->tipe_label }}</td>
                         <td>{{ $apk->status_label }}</td>
                     </tr>

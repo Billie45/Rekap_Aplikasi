@@ -16,6 +16,13 @@ class UserController extends Controller
         return view('user.dashboard', compact('aplikasis'));
     }
 
+    // ============================================================
+    // bagian ini digunakan user untuk mengajukan diri menjadi OPD
+    // ============================================================
+    // Karena Revisi Tidak jadi dipakai
+    // ============================================================
+    //
+    // Start
     public function showPengajuanForm()
     {
         $opds = Opd::all();
@@ -48,4 +55,6 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Pengajuan berhasil dikirim!');
     }
+    //
+    // end
 }

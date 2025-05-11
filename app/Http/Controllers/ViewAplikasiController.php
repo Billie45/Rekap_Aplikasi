@@ -8,13 +8,17 @@ use App\Models\Opd;
 
 class ViewAplikasiController extends Controller
 {
-    // public function dashboard()
-    // {
-    //     $aplikasis = RekapAplikasi::with('opd')->get();
-    //     $opds = Opd::all();
-    //     return view('components.rekap-assessment-1',  compact('aplikasis', 'opds'));
-    // }
-
+    // =========================================================
+    // digunakan untuk view pages
+    // =========================================================
+    // - rekap
+    // - assessment
+    // - development
+    // - selesai
+    // - akses server
+    // =========================================================
+    //
+    // Start
     public function rekap()
     {
         $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(20);
@@ -59,5 +63,43 @@ class ViewAplikasiController extends Controller
         $opds = Opd::all();
         return view('pages.server',  compact('aplikasis', 'opds'));
     }
+    //
+    // end
+
+    // =========================================================
+    // Bagian ini melanjutkan views dimana masuk ke detail
+    // =========================================================
+    // - detail assessment
+    // - detail rekap
+    // - detail development
+    // - detail selesai
+    // =========================================================
+    //
+    // Start
+    public function show_assessmet($id)
+    {
+        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        return view('pages.details.show-assessment', compact('apk'));
+    }
+
+    public function show_rekap($id)
+    {
+        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        return view('pages.details.show-rekap', compact('apk'));
+    }
+
+    public function show_development($id)
+    {
+        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        return view('pages.details.show-development', compact('apk'));
+    }
+
+    public function show_selesai($id)
+    {
+        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        return view('pages.details.show-selesai', compact('apk'));
+    }
+    //
+    // end
 }
 

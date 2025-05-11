@@ -10,6 +10,11 @@ use App\Models\Opd;
 
 class AdminController extends Controller
 {
+    // =========================================================
+    // digunakan untuk view pages
+    // =========================================================
+    //
+    // Start
     public function dashboard()
     {
         $aplikasis = RekapAplikasi::all();
@@ -22,11 +27,24 @@ class AdminController extends Controller
         return view('admin.list-apk', compact('opds'));
     }
 
+    public function showApk($id)
+    {
+        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        return view('admin.show-apk', compact('apk'));
+    }
+
     public function editApk()
     {
         return view('admin.edit-apk');
     }
+    //
+    // end
 
+    // =========================================================
+    // Bagian ini digunakan untuk 'kelola akun'
+    // =========================================================
+    //
+    // Start
     public function editRole()
     {
         $users = User::paginate(20);;
@@ -56,8 +74,14 @@ class AdminController extends Controller
 
         return redirect()->route('admin.edit-role')->with('success', 'Role berhasil diperbarui!');
     }
+    //
+    // end
 
-    // Bagian ini untuk fungsi approve pengajuan OPD oelh user
+    // ============================================================
+    // Bagian ini untuk fungsi approve pengajuan OPD oleh user
+    // ============================================================
+    // Karena revisi bagian ini tidak dipakai
+    // ============================================================
     //
     // Start
     public function daftarPengajuanOPD()
@@ -84,5 +108,6 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
     }
+    //
     // end
 }

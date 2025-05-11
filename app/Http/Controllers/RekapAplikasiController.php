@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 class RekapAplikasiController extends Controller
 {
+    // ============================================================
     // Digunakan untuk 'tambah' di halaman 'admin/list-apk'
+    // ============================================================
+    //
+    // Start
     public function index(Request $request)
     {
         $query = RekapAplikasi::with('opd');
@@ -39,9 +43,14 @@ class RekapAplikasiController extends Controller
 
         return view('./admin/list-apk', compact('aplikasis', 'opds'));
     }
+    //
+    // end
 
-
+    // =======================================================================
     // Digunakan untuk 'ajukan assessment' di 'opd/form-pengajuan-assessment'
+    // =======================================================================
+    //
+    // Start
     public function indexAssessment()
     {
         $aplikasis = RekapAplikasi::with('opd')->get();
@@ -64,72 +73,55 @@ class RekapAplikasiController extends Controller
         ]);
 
     }
+    //
+    // end
 
+    // ============================================================
     // Digunakan untuk 'tambah' di halaman 'admin/list-apk'
+    // ============================================================
+    //
+    // Start
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'nullable',
-            'opd_id' => 'nullable',
-            'subdomain' => 'nullable',
-            'tipe' => 'nullable',
-            'jenis' => 'nullable',
-            'status' => 'nullable',
-            // 'server' => 'nullable',
-            // 'keterangan' => 'nullable',
-            // 'last_update' => 'nullable',
-            // 'jenis_permohonan' => 'nullable',
-            // 'tanggal_masuk_ba' => 'nullable',
-            // 'link_dokumentasi' => 'nullable',
-            // 'akun_link' => 'nullable',
-            // 'akun_username' => 'nullable',
-            // 'akun_password' => 'nullable',
-            // 'cp_opd_nama' => 'nullable',
-            // 'cp_opd_no_telepon' => 'nullable',
-            // 'cp_pengembang_nama' => 'nullable',
-            // 'cp_pengembang_no_telepon' => 'nullable',
-            // 'assesment_terakhir' => 'nullable',
-            // 'permohonan' => 'nullable',
-            // 'undangan_terakhir' => 'nullable',
-            // 'laporan_perbaikan' => 'nullable',
-            // 'open_akses' => 'nullable',
-            // 'close_akses' => 'nullable',
-            // 'urgensi' => 'nullable',
+            'nama' => 'required',
+            'opd_id' => 'required',
+            'tipe' => 'required',
+            'jenis' => 'required',
+            'status' => 'required',
+        ], [
+            'nama.required' => 'Nama aplikasi wajib diisi.',
+            'opd_id.required' => 'OPD wajib dipilih.',
+            'tipe.required' => 'Tipe aplikasi wajib diisi.',
+            'jenis.required' => 'Jenis aplikasi wajib diisi.',
+            'status.required' => 'Status aplikasi wajib diisi.',
         ]);
 
         RekapAplikasi::create([
             'nama' => $request->nama,
             'opd_id' => $request->opd_id,
-            'subdomain' => $request->subdomain,
             'tipe' => $request->tipe,
-            //'jenis' => 'baru',
-            'status' => 'diproses',
-            // 'server' => '',
-            // 'keterangan' => '-',
-            // 'last_update' => '-',
-            // 'jenis_permohonan' => '-',
-            // 'tanggal_masuk_ba' => '-',
-            // 'link_dokumentasi' => '-',
-            // 'akun_link' => '-',
-            // 'akun_username' => '-',
-            // 'akun_password' => '-',
-            // 'cp_opd_nama' => '-',
-            // 'cp_opd_no_telepon' => '-',
-            // 'cp_pengembang_nama' => '-',
-            // 'cp_pengembang_no_telepon' => '-',
-            // 'assesment_terakhir' => '-',
-            // 'permohonan' => '-',
-            // 'undangan_terakhir' => '-',
-            // 'laporan_perbaikan' => '-',
-            // 'open_akses' => '-',
-            // 'close_akses' => '-',
-            // 'urgensi' => '-',
+            'jenis' => $request->jenis,
+            'status' => $request->status,
         ]);
 
-        return redirect()->route('rekap-aplikasi.index');
+        return redirect()->route('rekap-aplikasi.index')->with('success', 'Aplikasi berhasil ditambahkan.');
     }
 
+    public function create()
+    {
+        $apk = new RekapAplikasi();
+        $opds = Opd::all();
+        return view('nama_view', compact('apk', 'opds'));
+    }
+    //
+    // end
+
+    // ======================================================================
     // Digunakan untuk 'ajukan assessment' di 'opd/form-pengajuan-assessment'
+    // ======================================================================
+    //
+    // Start
     public function storeAssessment(Request $request)
     {
         $request->validate([
@@ -192,7 +184,14 @@ class RekapAplikasiController extends Controller
 
         return redirect()->route('rekap-aplikasi.indexAssessment');
     }
+    //
+    // end
 
+    // ======================================================================
+    // Fungsi digunakan untuk admin melakukan edit assessment
+    // ======================================================================
+    //
+    // Start
     public function edit($id)
     {
         $apk = RekapAplikasi::with('opd')->findOrFail($id);
@@ -201,13 +200,14 @@ class RekapAplikasiController extends Controller
         return view('admin.edit-apk', compact('apk', 'opds'));
     }
 
+
     public function update(Request $request, $id)
     {
         $apk = RekapAplikasi::findOrFail($id);
 
         $messages = [
-            'link_dokumentasi.url' => 'Format URL tidak valid untuk link dokumentasi.',
-            'akun_link.url' => 'Format URL tidak valid untuk link akun.',
+            'link_dokumentasi.url' => 'Format URL tidak valid.',
+            'akun_link.url' => 'Format URL tidak valid.',
         ];
 
         try {
@@ -265,8 +265,14 @@ class RekapAplikasiController extends Controller
                 ->withInput();
         }
     }
+    //
+    // end
 
+    // ============================================================
     // Mulai ke bawah ini mencoba melakukan soft delete
+    // ============================================================
+    // hanya 'public function destroy($id)' yang dipakai
+    // ============================================================
     //
     // start
     public function destroy($id)

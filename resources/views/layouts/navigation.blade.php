@@ -31,6 +31,10 @@
                             <i>Kelola Akun</i>
                             {{-- <span>Kelola Akun</span> --}}
                         </a>
+                        <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
+                            <i>Daftar Pengajuan Assessment</i>
+                            {{-- <span>Daftar Pengajuan Assessment</span> --}}
+                        </a>
                         {{-- <a href="{{ route('admin.pengajuan-opd') }}">
                             <i>Daftar Pengajuan OPD</i>
                             <span>Daftar Pengajuan OPD</span>

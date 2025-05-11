@@ -11,11 +11,20 @@ use App\Http\Controllers\RekapAplikasiController;
 use App\Http\Controllers\ViewAplikasiController;
 use App\Models\RekapAplikasi;
 
+// ============================================================
+// Landing Page
+// ============================================================
+//
+// Start
 Route::get('/', function () {
     return view('selamat-datang');
 });
+//
+// end
 
+// ============================================================
 // bagian ini untuk rute authentikasi
+// ============================================================
 //
 // start
 Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])
@@ -39,44 +48,69 @@ Route::get('/dashboard', function () {
         return redirect()->route('user.dashboard');
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
+//
 // end
 
+// ============================================================
 // Bagian ini untuk view pages
+// ============================================================
 //
 // start
-// Route::get('/rekap-assessment-1', [ViewAplikasiController::class, 'dashboard']);
-Route::get('/rekap-aplikasi-view', [ViewAplikasiController::class, 'rekap']);
-Route::get('/assessment', [ViewAplikasiController::class, 'assessment']);
-Route::get('/development', [ViewAplikasiController::class, 'development']);
-Route::get('/selesai', [ViewAplikasiController::class, 'selesai']);
-Route::get('/akses-server', [ViewAplikasiController::class, 'aksesServer']);
+Route::get('/rekap-aplikasi-view', [ViewAplikasiController::class, 'rekap'])->name('rekap-aplikasi-view');
+Route::get('/assessment', [ViewAplikasiController::class, 'assessment'])->name('assessment');
+Route::get('/development', [ViewAplikasiController::class, 'development'])->name('development');
+Route::get('/selesai', [ViewAplikasiController::class, 'selesai'])->name('selesai');
+Route::get('/akses-server', [ViewAplikasiController::class, 'aksesServer'])->name('akses-server');
+
+Route::get('/assessment/{id}', [ViewAplikasiController::class, 'show_assessmet'])->name('pages.details.show-assessment');
+Route::get('/rekap-aplikasi-view/{id}', [ViewAplikasiController::class, 'show_rekap'])->name('pages.details.show-rekap');
+Route::get('/development/{id}', [ViewAplikasiController::class, 'show_development'])->name('pages.details.show-development');
+Route::get('/selesai/{id}', [ViewAplikasiController::class, 'show_selesai'])->name('pages.details.show-selesai');
+//
 //end
 
+// ============================================================
 // bagian ini untuk rute list-apk
+// ============================================================
 //
 // start
-Route::get('/admin/list-apk', [\App\Http\Controllers\AdminController::class, 'listApk'])
+Route::get('/admin/list-apk', [AdminController::class, 'listApk'])
     ->name('admin.list-apk')
     ->middleware(['auth', 'role:admin']);
+
+Route::get('/admin/show-apk/{id}', [AdminController::class, 'showApk'])
+    ->name('admin.show-apk')
+    ->middleware(['auth', 'role:admin']);
+//
 //end
 
+// ============================================================
 // bagian ini untuk from aplikasi baru -> list-apk
+// ============================================================
 //
 // start
 Route::post('/admin/aplikasi', [\App\Http\Controllers\AdminController::class, 'store'])
     ->name('admin.aplikasi.store')
     ->middleware(['auth', 'role:admin']);
+//
 //end
 
+// ============================================================
 // bagian ini untuk edit aplikasi -> list-apk
+// ============================================================
 //
 // start
 Route::get('/admin/edit-apk', [\App\Http\Controllers\AdminController::class, 'editApk'])
     ->name('admin.edit-apk')
     ->middleware(['auth', 'role:admin']);
+//
 //end
 
-// bagian ini untuk edit role Secara keseluruha mulai dari masuk ke halaman list akun dan edit akun yang ada
+// ============================================================
+// bagian ini untuk edit role Secara keseluruhan
+// ============================================================
+// mulai dari masuk ke halaman list akun dan edit akun yang ada
+// ============================================================
 //
 // start
 Route::get('/admin/edit-role', [\App\Http\Controllers\AdminController::class, 'editRole'])
@@ -90,26 +124,34 @@ Route::get('/admin/users/{id}/edit', [\App\Http\Controllers\AdminController::cla
 Route::put('/admin/users/{id}/update-role', [\App\Http\Controllers\AdminController::class, 'updateRole'])
     ->name('users.updateRole')
     ->middleware(['auth', 'role:admin']);
-
+//
 //end
 
+// ============================================================
 // bagian ini untuk tambah pengajuan assessment
+// ============================================================
 //
 // start
 Route::get('/opd.form-pengajuan-assessment', [\App\Http\Controllers\OpdController::class, 'formPengajuan'])
     ->name('opd.form-pengajuan-assessment')
     ->middleware(['auth', 'role:opd']);
+//
 //end
 
+// ============================================================
 // bagian ini untuk melihat daftar pengajuan assessment
+// ============================================================
 //
 // start
 Route::get('/opd.daftar-pengajuan-assessment', [\App\Http\Controllers\OpdController::class, 'daftarPengajuan'])
     ->name('opd.daftar-pengajuan-assessment')
-    ->middleware(['auth', 'role:opd']);
+    ->middleware(['auth', 'role:admin, opd']);
+//
 //end
 
+// ============================================================
 // bagian ini untuk edit akun pribadi -> template laravel blade
+// ============================================================
 //
 // start
 Route::middleware('auth')->group(function () {
@@ -117,29 +159,50 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+//
 //end
 
+// ============================================================
 // Mulai ke bawah untuk CRUD
+// ============================================================
+// - admin
+// - opd
+// ============================================================
 //
 // start
 //
+// ============================================================
 // Untuk Role Admin
+// ============================================================
 //
 Route::resource('/rekap-aplikasi', RekapAplikasiController::class);
-//
-// routes/web.php
+
+// Route untuk list aplikasi
 Route::get('/admin/list-apk', [RekapAplikasiController::class, 'index'])->name('admin.list-apk');
-//
-// routes/web.php
+
+// Route untuk form tambah aplikasi
+Route::get('/rekap-aplikasi/create', [RekapAplikasiController::class, 'create'])->name('rekap-aplikasi.create');
+Route::post('/rekap-aplikasi', [RekapAplikasiController::class, 'store'])->name('rekap-aplikasi.store');
+
+// Route untuk edit aplikasi
 Route::get('/rekap-aplikasi/{id}/edit', [RekapAplikasiController::class, 'edit'])->name('rekap-aplikasi.edit');
-//
-// Verify your routes/web.php
 Route::put('/rekap-aplikasi/{id}', [RekapAplikasiController::class, 'update'])->name('rekap-aplikasi.update');
-require __DIR__.'/auth.php';
-//
+
+// Route untuk menampilkan detail aplikasi
+Route::get('/rekap-aplikasi/{id}', [RekapAplikasiController::class, 'show'])->name('rekap-aplikasi.show');
+
+// Route untuk delete aplikasi
+Route::delete('/rekap-aplikasi/{id}', [RekapAplikasiController::class, 'destroy'])->name('rekap-aplikasi.destroy');
+
+// Untuk menampilkan rekap aplikasi
 Route::get('admin/rekap-aplikasi', [RekapAplikasiController::class, 'index'])->name('rekap-aplikasi.index');
-//
+
+// Verifikasi route dan pastikan file auth.php dimuat
+require __DIR__.'/auth.php';
+
+// ============================================================
 // Untuk Role OPD
+// ============================================================
 //
 Route::post('/rekap-aplikasi/storeAssessment', [RekapAplikasiController::class, 'storeAssessment'])->name('rekap-aplikasi.storeAssessment');
 //
@@ -153,7 +216,11 @@ Route::get('opd/rekap-aplikasi', [RekapAplikasiController::class, 'indexAssessme
 //
 // end
 
+// ============================================================
 // Bagian ini untuk fungsi approve pengajuan OPD oleh user
+// ============================================================
+// - Karena revisi fitur ini tidak digunakan
+// ============================================================
 //
 // Start
 //
@@ -172,16 +239,21 @@ Route::middleware('auth', 'role:admin')->group(function () {
 //
 // end
 
+// ============================================================
 // bagian ini untuk mencoba melakukan soft delete
-//
+// ============================================================
+// - Sotf Delete (hanya ini yang dipakai)
+// - Restore
+// - permanet delete
+// ============================================================
 // start
 //
 // Route to view trashed applications
 Route::get('/rekap-aplikasi/trash', [RekapAplikasiController::class, 'trash'])->name('rekap-aplikasi.trash');
-
+//
 // Route to restore a trashed application
 Route::post('/rekap-aplikasi/{id}/restore', [RekapAplikasiController::class, 'restore'])->name('rekap-aplikasi.restore');
-
+//
 // Route to permanently delete a trashed application
 Route::delete('/rekap-aplikasi/{id}/force-delete', [RekapAplikasiController::class, 'forceDelete'])->name('rekap-aplikasi.force-delete');
 //

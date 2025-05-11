@@ -15,6 +15,11 @@ class OpdController extends Controller
         return view('opd.dashboard', compact('aplikasis'));
     }
 
+    // ================================================================
+    // Bagian ini digunakan untuk 'form-pengajuan-assessment' dari OPD
+    // ================================================================
+    //
+    // Start
     public function formPengajuan()
     {
         $user =  Auth::user();
@@ -23,12 +28,33 @@ class OpdController extends Controller
 
         return view('opd.form-pengajuan-assessment', compact('namaOpd'));
     }
+    //
+    // end
 
+    // ==================================================================
+    // Bagian ini digunakan untuk 'daftar-pengajuan-assessment' dari OPD
+    // ==================================================================
+    //
+    // Start
     public function daftarPengajuan()
     {
-        $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(15);
+        $user =  Auth::user();
+
         $opds = Opd::all();
+
+        if ($user->role === 'admin') {
+            $aplikasis = RekapAplikasi::with('opd')
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+        } else {
+            $aplikasis = RekapAplikasi::with('opd')
+                ->where('opd_id', $user->opd_id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+        }
 
         return view('./opd.daftar-pengajuan-assessment', compact('aplikasis', 'opds'));
     }
+    //
+    // end
 }
