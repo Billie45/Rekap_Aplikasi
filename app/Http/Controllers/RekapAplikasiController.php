@@ -46,6 +46,13 @@ class RekapAplikasiController extends Controller
     //
     // end
 
+    public function show($id)
+    {
+        $apk = \App\Models\RekapAplikasi::with(['opd', 'undangan'])->findOrFail($id);
+        $opds = Opd::all();
+        return view('admin.show-apk', compact('apk', 'opds'));
+    }
+
     // =======================================================================
     // Digunakan untuk 'ajukan assessment' di 'opd/form-pengajuan-assessment'
     // =======================================================================

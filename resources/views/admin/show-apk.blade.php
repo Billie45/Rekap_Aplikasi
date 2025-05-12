@@ -64,13 +64,66 @@ $detailData = [
 
 @include('components.template-tabel-2', ['data' => $detailData])
 
-<div class="mt-4">
-    @if($apk->status === 'selesai')
-        <a>Buat Undangan</a>
-    @endif
+<!-- Tabel Undangan -->
+@include('components.template-tabel')
+@if($apk->status === 'selesai')
+    <div class="mt-4">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal Undangan</th>
+                    <th>Assessment Dokumentasi</th>
+                    <th>Catatan Assessment</th>
+                    <th>Surat Rekomendasi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($apk->undangan as $index => $undangan)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
+                        <td>
+                            @if($undangan->assessment_dokumentasi)
+                                <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank">Lihat</a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
+                        <td>
+                            @if($undangan->surat_rekomendasi)
+                                <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank">Lihat</a>
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('undangan.edit', $undangan->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <form action="{{ route('undangan.destroy', $undangan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus undangan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Belum ada data undangan</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+@endif
 
 <div class="mt-4">
-        <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">← Kembali</a>
+    @if($apk->status === 'selesai')
+        <a href="{{ route('undangan.create', ['apk_id' => $apk->id]) }}" class="btn btn-primary">Buat Undangan</a>
+    @endif
+
+    <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">← Kembali</a>
 </div>
 
 @endsection

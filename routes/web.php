@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OpdController;
 use App\Http\Controllers\RekapAplikasiController;
+use App\Http\Controllers\UndanganController;
 use App\Http\Controllers\ViewAplikasiController;
 use App\Models\RekapAplikasi;
 
@@ -268,6 +269,16 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::post('/admin/pengajuan-opd/{id}/approve', [\App\Http\Controllers\AdminController::class, 'approvePengajuan'])->name('admin.pengajuan-opd.approve');
     Route::post('/admin/pengajuan-opd/{id}/reject', [\App\Http\Controllers\AdminController::class, 'rejectPengajuan'])->name('admin.pengajuan-opd.reject');
 });
+//
+// end
+
+// ============================================================
+// Bagian ini untuk undangan
+// ============================================================
+//
+// Start
+Route::resource('rekap-aplikasi', RekapAplikasiController::class);
+Route::resource('undangan', UndanganController::class);
 //
 // end
 

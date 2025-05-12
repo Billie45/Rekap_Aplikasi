@@ -1,0 +1,54 @@
+<!-- resources/views/undangan/create.blade.php -->
+@extends('layouts.app')
+@section('content')
+<div class="container">
+    <h2>Buat Undangan</h2>
+    <h4>Aplikasi: {{ $apk->nama }}</h4>
+
+    <form action="{{ route('undangan.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="rekap_aplikasi_id" value="{{ $apk->id }}">
+
+        <div class="form-group">
+            <label for="tanggal_undangan">Tanggal Undangan</label>
+            <input type="date" class="form-control @error('tanggal_undangan') is-invalid @enderror"
+                id="tanggal_undangan" name="tanggal_undangan" value="{{ old('tanggal_undangan') }}" required>
+            @error('tanggal_undangan')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="assessment_dokumentasi">Assessment Dokumentasi</label>
+            <input type="file" class="form-control @error('assessment_dokumentasi') is-invalid @enderror"
+                id="assessment_dokumentasi" name="assessment_dokumentasi">
+            @error('assessment_dokumentasi')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="catatan_assessment">Catatan Assessment</label>
+            <textarea class="form-control @error('catatan_assessment') is-invalid @enderror"
+                id="catatan_assessment" name="catatan_assessment" rows="3">{{ old('catatan_assessment') }}</textarea>
+            @error('catatan_assessment')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="surat_rekomendasi">Surat Rekomendasi</label>
+            <input type="file" class="form-control @error('surat_rekomendasi') is-invalid @enderror"
+                id="surat_rekomendasi" name="surat_rekomendasi">
+            @error('surat_rekomendasi')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="{{ route('rekap-aplikasi.show', $apk->id) }}" class="btn btn-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+@endsection

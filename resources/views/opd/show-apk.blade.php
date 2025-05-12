@@ -56,6 +56,49 @@ $detailData = [
 
 @include('components.template-tabel-2', ['data' => $detailData])
 
+<!-- Tabel Undangan -->
+<div class="mt-4">
+    <h4>Daftar Undangan</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal Undangan</th>
+                <th>Assessment Dokumentasi</th>
+                <th>Catatan Assessment</th>
+                <th>Surat Rekomendasi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($apk->undangan as $index => $undangan)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
+                    <td>
+                        @if($undangan->assessment_dokumentasi)
+                            <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank">Lihat</a>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
+                    <td>
+                        @if($undangan->surat_rekomendasi)
+                            <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank">Lihat</a>
+                        @else
+                            -
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center">Belum ada data undangan</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
 <div class="mt-4">
         <a href="{{ route('opd.daftar-pengajuan-assessment') }}" class="btn btn-secondary">← Kembali</a>
 </div>

@@ -62,6 +62,11 @@ class RekapAplikasi extends Model
         return $this->belongsTo(Opd::class);
     }
 
+    public function undangan()
+    {
+        return $this->hasMany(Undangan::class, 'rekap_aplikasi_id');
+    }
+
     public function getTipeLabelAttribute()
     {
         return match ($this->tipe) {
