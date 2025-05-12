@@ -14,11 +14,12 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>OPD</th>
-                    <th>Nama</th>
-                    <th>Jenis</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th>Organisasi Pemerintah Daerah</th>
+                    <th>Nama Aplikasi</th>
+                    <th>Status Assessment</th>
+                    <th>Jenis Pengajuan</th>
+                    {{-- <th>Status Pengajuan</th> --}}
+                    <th>Status Pengajuan</th>
                     <th>Detail</th>
                 </tr>
             </thead>
@@ -31,8 +32,9 @@
                         <td>{{ $n++ }}</td>
                         <td>{{ $apk->opd->nama_opd ?? '-' }}</td>
                         <td>{{ $apk->nama }}</td>
+                        <td>{{ $apk->status_label }}</td>
                         <td>{{ $apk->jenis_assessment == 'Pertama' ? 'Pengajuan Pertama' : 'Pengajuan Revisi' }}</td>
-                        <td>
+                        {{-- <td>
                             @if($apk->status != 'perbaikan' && $apk->status != 'diproses')
                                 Diterima
                             @elseif($apk->status == 'perbaikan' && $apk->jenis_jawaban == 'Ditolak')
@@ -42,33 +44,33 @@
                             @else
                                 Diproses
                             @endif
-                        </td>
+                        </td> --}}
                         <td>
                             @if(Auth::user()->role == 'opd')
-                                @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan')
-                                    Menunggu verifikasi admin
+                                @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan' || $apk->jenis_jawaban === null)
+                                    <span class="btn btn-warning btn-sm">Menunggu verifikasi admin</span>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="badge bg-success">Assessment diterima</span>
+                                    <span class="btn btn-success btn-sm">Assessment diterima</span>
                                 @elseif($apk->jenis_jawaban == 'Ditolak')
                                     <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-warning btn-sm">Ajukan Revisi</button>
+                                        <button class="btn btn-warning btn-sm" type="submit">Ajukan Revisi</button>
                                     </form>
                                 @endif
                             @elseif(Auth::user()->role == 'admin')
                                 @if($apk->jenis_jawaban === null)
                                     <form action="{{ route('assessment.terima', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-success btn-sm">Diterima</button>
+                                        <button class="btn btn-primary btn-sm">Diterima</button>
                                     </form>
                                     <form action="{{ route('assessment.tolak', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button class="btn btn-danger btn-sm">Ditolak</button>
                                     </form>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="badge bg-success">Assessment diterima</span>
+                                    <span class="btn btn-success btn-sm">Assessment diterima</span>
                                 @elseif($apk->jenis_jawaban == 'Ditolak')
-                                    <span class="badge bg-secondary">Assessment ditunda</span>
+                                    <span class="btn btn-warning btn-sm">Assessment ditunda</span>
                                 @endif
                             @endif
                         </td>
@@ -76,7 +78,7 @@
                             @php
                                 $routeName = Auth::user()->role === 'admin' ? 'admin.show-apk' : 'opd.show-apk';
                             @endphp
-                            <a href="{{ route($routeName, $apk->id) }}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="{{ route($routeName, $apk->id) }}">Detail</a>
                         </td>
                     </tr>
                 @endforeach

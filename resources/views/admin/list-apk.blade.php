@@ -81,7 +81,7 @@
 
     @php
         $n = $aplikasis->firstItem();
-        $headers = ['No', 'OPD', 'Nama', 'Subdomain', 'Status', 'Detail'];
+        $headers = ['No', 'Organisasi Pemerintah Daerah', 'Nama Aplikasi', 'Nama Subdomain', 'Status Assessment', 'Detail'];
         $rows = [];
 
         foreach ($aplikasis as $apk) {

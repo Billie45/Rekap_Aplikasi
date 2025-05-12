@@ -21,15 +21,15 @@
         <div class="accordion">
             <!-- Informasi -->
             <div class="contentBx active">
-                <div class="label">Aplikasi</div>
+                <div class="label">Informasi Mengenai Aplikasi</div>
                 <div class="content">
-                    <label>Nama:</label>
+                    <label>Nama Aplikasi:</label>
                     <input type="text" name="nama" value="{{ $apk->nama ?? '' }}">
                     @error('nama')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>OPD:</label>
+                    <label>Organisasi Pemerintah Daerah:</label>
                     <select name="opd_id">
                         @foreach($opds as $opd)
                             <option value="{{ $opd->id }}" {{ ($apk->opd_id ?? '') == $opd->id ? 'selected' : '' }}>
@@ -41,10 +41,10 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Subdomain:</label>
+                    <label>Nama Subdomain:</label>
                     <input type="text" name="subdomain" value="{{ $apk->subdomain ?? '' }}">
 
-                    <label>Tipe:</label>
+                    <label>Jenis Pengajuan Aplikasi:</label>
                     <select name="tipe">
                         <option value="web" {{ ($apk->tipe ?? '') == 'web' ? 'selected' : '' }}>Website</option>
                         <option value="apk" {{ ($apk->tipe ?? '') == 'apk' ? 'selected' : '' }}>Aplikasi Web</option>
@@ -53,7 +53,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Jenis:</label>
+                    <label>Jenis Permohonan:</label>
                     <select name="jenis">
                         <option value="pengembangan" {{ ($apk->jenis ?? '') == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
                         <option value="baru" {{ ($apk->jenis ?? '') == 'baru' ? 'selected' : '' }}>Baru</option>
@@ -62,7 +62,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Status:</label>
+                    <label>Status Assessment:</label>
                     <select name="status">
                         <option value="diproses" {{ ($apk->status ?? '') == 'diproses' ? 'selected' : '' }}>0. diproses</option>
                         <option value="perbaikan" {{ ($apk->status ?? '') == 'perbaikan' ? 'selected' : '' }}>1. perbaikan</option>
@@ -77,16 +77,16 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Server:</label>
+                    <label>Server Hosting:</label>
                     <input type="text" name="server" value="{{ $apk->server ?? '' }}">
 
                     <label>Keterangan:</label>
                     <textarea name="keterangan">{{ $apk->keterangan ?? '' }}</textarea>
 
-                    <label>Last Update:</label>
+                    <label>Deskripsi Singkat Last Update:</label>
                     <textarea name="last_update">{{ $apk->last_update ?? '' }}</textarea>
 
-                    <label>Jenis Permohonan:</label>
+                    <label>Jenis Pengembangan:</label>
                     <select name="jenis_permohonan">
                         <option value="subdomain" {{ ($apk->jenis_permohonan ?? '') == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
                         <option value="permohonan" {{ ($apk->jenis_permohonan ?? '') == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
@@ -104,7 +104,7 @@
             <div class="contentBx active">
                 <div class="label">Informasi Akun Untuk Diskominfo</div>
                 <div class="content">
-                    <label>Link:</label>
+                    <label>Link Login:</label>
                     <input type="text" name="akun_link" value="{{ $apk->akun_link ?? '' }}">
 
                     <label>Username:</label>
@@ -117,7 +117,7 @@
 
             <!-- CP OPD -->
             <div class="contentBx active">
-                <div class="label">CP OPD</div>
+                <div class="label">Contact Person OPD</div>
                 <div class="content">
                     <label>Nama:</label>
                     <input type="text" name="cp_opd_nama" value="{{ $apk->cp_opd_nama ?? '' }}">
@@ -129,7 +129,7 @@
 
             <!-- CP Pengembang -->
             <div class="contentBx active">
-                <div class="label">CP Pengembang</div>
+                <div class="label">Contact Person Pengembang</div>
                 <div class="content">
                     <label>Nama:</label>
                     <input type="text" name="cp_pengembang_nama" value="{{ $apk->cp_pengembang_nama ?? '' }}">
@@ -147,31 +147,31 @@
         <div class="accordion">
             <!-- Rekap Aplikasi -->
             <div class="contentBx active">
-                <div class="label">Rekap Aplikasi</div>
+                <div class="label">Informasi Tambahan Rekap Aplikasi</div>
                 <div class="content">
-                    <label>Assessment Terakhir:</label>
+                    <label>Tanggal Assessment Terakhir:</label>
                     <input type="date" name="assesment_terakhir" value="{{ $apk->assesment_terakhir ?? '' }}">
                 </div>
             </div>
 
             <!-- Assessment -->
             <div class="contentBx active">
-                <div class="label">Assessment</div>
+                <div class="label">Informasi Tambahan Assessment</div>
                 <div class="content">
                     <label>Tanggal Permohonan:</label>
                     <input type="date" name="permohonan" value="{{ $apk->permohonan ?? '' }}">
 
-                    <label>Undangan Terakhir:</label>
+                    <label>Tanggal Undangan Terakhir:</label>
                     <input type="date" name="undangan_terakhir" value="{{ $apk->undangan_terakhir ?? '' }}">
 
-                    <label>Laporan Perbaikan:</label>
+                    <label>Tanggal Laporan Perbaikan:</label>
                     <input type="date" name="laporan_perbaikan" value="{{ $apk->laporan_perbaikan ?? '' }}">
                 </div>
             </div>
 
             <!-- Server -->
             <div class="contentBx active">
-                <div class="label">Server</div>
+                <div class="label">Detail Akses Server</div>
                 <div class="content">
                     <label>Status Server:</label>
                     <select name="status_server">
@@ -179,10 +179,10 @@
                         <option value="OPEN" {{ ($apk->status_server ?? '') == 'OPEN' ? 'selected' : '' }}>OPEN</option>
                     </select>
 
-                    <label>Open Akses:</label>
+                    <label>Tanggal Open Akses:</label>
                     <input type="date" name="open_akses" value="{{ $apk->open_akses ?? '' }}">
 
-                    <label>Close Akses:</label>
+                    <label>Tanggal Close Akses:</label>
                     <input type="date" name="close_akses" value="{{ $apk->close_akses ?? '' }}">
 
                     <label>Urgensi:</label>
@@ -196,7 +196,7 @@
         <button type="submit" class="btn btn-primary">
             {{ isset($apk->id) ? 'Update Data' : 'Simpan Data' }}
         </button>
-        <a href="{{ route('rekap-aplikasi-view') }}" class="btn btn-secondary">← Kembali</a>
+        <a href="{{ isset($apk->id) ? route('admin.show-apk', $apk->id) : route('admin.list-apk') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </form>
 

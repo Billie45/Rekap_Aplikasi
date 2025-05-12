@@ -10,11 +10,11 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>OPD</th>
-                    <th>Nama</th>
-                    <th>Subdomain</th>
-                    <th>Status</th>
-                    <th>Server</th>
+                    <th>Organisasi Pemerintah Daerah</th>
+                    <th>Nama Aplikasi </th>
+                    <th>Nama Subdomain</th>
+                    <th>Status Server</th>
+                    <th>Server Hosting</th>
                     <th>Open Akses</th>
                     <th>Close Akses</th>
                     <th>Urgensi</th>

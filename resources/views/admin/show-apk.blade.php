@@ -3,71 +3,89 @@
 
 @php
 $detailData = [
-    ['label' => 'OPD', 'value' => $apk->opd->nama_opd ?? '-'],
+    ['label' => 'Organisasi Pemerintah Daerah', 'value' => $apk->opd->nama_opd ?? '-'],
     ['label' => 'Nama Aplikasi', 'value' => $apk->nama ?? '-'],
-    ['label' => 'Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>' : '-'],
-    ['label' => 'Status', 'value' => $apk->status_label ?? '-'],
-    ['label' => 'Jenis', 'value' => $apk->jenis ?? '-'],
-    ['label' => 'Tipe', 'value' => $apk->tipe_label ?? '-'],
-    ['label' => 'Server', 'value' => $apk->server ?? '-'],
+    ['label' => 'Nama Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>': '-'],
+    ['label' => 'Status Assessment', 'value' => $apk->status_label ?? '-'],
+    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis ?? '-'],
+    ['label' => 'Jenis Pengajuan Aplikasi', 'value' => $apk->tipe_label ?? '-'],
+    ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],
     ['label' => 'Keterangan', 'value' => $apk->keterangan ?? '-'],
-    ['label' => 'Last Update', 'value' => $apk->last_update ?? '-'],
-    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
-    ['label' => 'Tanggal Masuk / BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
-    ['label' => 'Link Dokumentasi', 'value' => $apk->link_dokumentasi ? '<a href="' . $apk->link_dokumentasi . '" target="_blank">LINK</a>' : '-'],
-
-    ['label' => 'Akun', 'value' =>
+    ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
+    ['label' => 'Jenis Pengembangan', 'value' => $apk->jenis_permohonan ?? '-'],
+    ['label' => 'Tanggal Rekom Lulus / BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
+    ['label' => 'Link Dokumentasi', 'value' => $apk->link_dokumentasi ? '<a href="' . $apk->link_dokumentasi . '" target="_blank">LINK</a>' : '-' ],
+    ['label' => 'Akun untuk Diskominfo', 'value' =>
         $apk->akun_link && $apk->akun_username && $apk->akun_password
-        ? '<strong>Link:</strong> <a href="' . $apk->akun_link . '" target="_blank">LINK</a><br>
-           <strong>Username:</strong> ' . $apk->akun_username . '<br>
-           <strong>Password:</strong> ' . $apk->akun_password
-        : '-'],
-
-    ['label' => 'CP OPD', 'value' =>
+            ? implode('<br>', [
+                '<strong>Link Login :</strong> <a href="' . $apk->akun_link . '" target="_blank">LINK</a>',
+                '<strong>Username   :</strong> ' . $apk->akun_username,
+                '<strong>Password   :</strong> ' . $apk->akun_password,
+            ])
+            : '-'
+    ],
+    ['label' => 'Contact Person OPD', 'value' =>
         $apk->cp_opd_nama || $apk->cp_opd_no_telepon
-        ? '<strong>Nama:</strong> ' . ($apk->cp_opd_nama ?? '-') . '<br>
-           <strong>No Telepon:</strong> ' . ($apk->cp_opd_no_telepon ?? '-')
-        : '-'],
-
-    ['label' => 'CP Pengembang', 'value' =>
+            ? implode('<br>', [
+                '<strong>Nama       :</strong> ' . ($apk->cp_opd_nama ?? '-'),
+                '<strong>No Telepon :</strong> ' . ($apk->cp_opd_no_telepon ?? '-'),
+            ])
+            : '-'
+    ],
+    ['label' => 'Contact Person Pengembang', 'value' =>
         $apk->cp_pengembang_nama || $apk->cp_pengembang_no_telepon
-        ? '<strong>Nama:</strong> ' . ($apk->cp_pengembang_nama ?? '-') . '<br>
-           <strong>No Telepon:</strong> ' . ($apk->cp_pengembang_no_telepon ?? '-')
-        : '-'],
-
-    ['label' => 'Rekap Aplikasi', 'value' =>
+            ? implode('<br>', [
+                '<strong>Nama       :</strong> ' . ($apk->cp_pengembang_nama ?? '-'),
+                '<strong>No Telepon :</strong> ' . ($apk->cp_pengembang_no_telepon ?? '-'),
+            ])
+            : '-'
+    ],
+    ['label' => 'Informasi Rekap Aplikasi', 'value' =>
         $apk->assesment_terakhir || $apk->permohonan || $apk->undangan_terakhir || $apk->laporan_perbaikan
-        ? '<strong>Assessment Terakhir:</strong> ' . ($apk->assesment_terakhir ?? '-') . '<br>
-           <strong>Permohonan:</strong> ' . ($apk->permohonan ?? '-') . '<br>
-           <strong>Undangan Terakhir:</strong> ' . ($apk->undangan_terakhir ?? '-') . '<br>
-           <strong>Laporan Perbaikan:</strong> ' . ($apk->laporan_perbaikan ?? '-')
-        : '-'],
-
-    ['label' => 'Server', 'value' =>
+            ? implode('<br>', [
+                '<strong>Tanggal Assessment Terakhir    :</strong> ' . ($apk->assesment_terakhir ?? '-'),
+                '<strong>Tanggal Permohonan             :</strong> ' . ($apk->permohonan ?? '-'),
+                '<strong>Tanggal Undangan Terakhir      :</strong> ' . ($apk->undangan_terakhir ?? '-'),
+                '<strong>Tanggal Laporan Perbaikan      :</strong> ' . ($apk->laporan_perbaikan ?? '-'),
+            ])
+            : '-'
+    ],
+    ['label' => 'Detail Akses Server', 'value' =>
         $apk->status_server || $apk->open_akses || $apk->close_akses || $apk->urgensi
-        ? '<strong>Status:</strong> ' . ($apk->status_server ?? '-') . '<br>
-           <strong>Open Akses:</strong> ' . ($apk->open_akses ?? '-') . '<br>
-           <strong>Close Akses:</strong> ' . ($apk->close_akses ?? '-') . '<br>
-           <strong>Urgensi:</strong> ' . ($apk->urgensi ?? '-')
-        : '-'],
-
-    ['label' => 'Aksi', 'value' =>
-        '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '">Edit</a><br>
-         <form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">
-             ' . csrf_field() . '
-             ' . method_field('DELETE') . '
-             <button type="submit" style="color: red">Hapus</button>
-         </form>'
+            ? implode('<br>', [
+                '<strong>Status             :</strong> ' . ($apk->status_server ?? '-'),
+                '<strong>Tanggal Open Akses :</strong> ' . ($apk->open_akses ?? '-'),
+                '<strong>Tanggal Close Akses:</strong> ' . ($apk->close_akses ?? '-'),
+                '<strong>Urgensi            :</strong> ' . ($apk->urgensi ?? '-'),
+            ])
+            : '-'
+    ],
+    ['label' => 'Tools', 'value' =>
+        implode('', [
+            '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '">Edit</a><br>',
+            '<form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">',
+                csrf_field(),
+                method_field('DELETE'),
+                '<button type="submit" style="color: red">Hapus</button>',
+            '</form>',
+        ])
     ],
 ];
 @endphp
 
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Informasi Aplikasi</h4>
 @include('components.template-tabel-2', ['data' => $detailData])
 
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Daftar Undangan</h4>
+
+<div class="mt-4">
+    @if($apk->status === 'selesai')
+        <a href="{{ route('undangan.create', ['apk_id' => $apk->id]) }}" class="btn btn-primary">Buat Undangan</a>
+    @endif
+</div>
 <!-- Tabel Undangan -->
 @include('components.template-tabel')
-@if($apk->status === 'selesai')
-    <div class="mt-4">
+    <div class="bg-white rounded shadow p-4 mt-4">
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -116,14 +134,10 @@ $detailData = [
             </tbody>
         </table>
     </div>
-@endif
 
 <div class="mt-4">
-    @if($apk->status === 'selesai')
-        <a href="{{ route('undangan.create', ['apk_id' => $apk->id]) }}" class="btn btn-primary">Buat Undangan</a>
-    @endif
 
-    <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">← Kembali</a>
+    <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">Kembali</a>
 </div>
 
 @endsection

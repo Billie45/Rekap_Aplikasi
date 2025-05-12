@@ -53,7 +53,7 @@
 </style>
 
 <div class="container py-4">
-    <h1 class="mb-4">Rekap Assessment</h1>
+    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Rekap Aplikasi</h4>
     <p class="text-muted">
         <strong>Rekap update data S.D Tgl:</strong> {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
     </p>

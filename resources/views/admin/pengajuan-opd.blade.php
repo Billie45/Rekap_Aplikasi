@@ -13,7 +13,7 @@
         <table class="compact-table">
             <thead>
                 <tr>
-                    <th>Nama Pengaju</th>
+                    <th>Nama Pengajuan</th>
                     <th>OPD yang Diajukan</th>
                     <th>Status Pengajuan</th>
                     <th>Action</th>

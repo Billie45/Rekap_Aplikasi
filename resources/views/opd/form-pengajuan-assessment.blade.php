@@ -26,7 +26,7 @@
 
                         <!-- Utama -->
                         <div class="form-group row">
-                            <label for="opd" class="col-md-3 col-form-label text-md-right">OPD</label>
+                            <label for="opd" class="col-md-3 col-form-label text-md-right">Organisasi Pemerintah Daerah</label>
                             <div class="col-md-9">
                                 <input type="hidden" name="opd_id" value="{{ Auth::user()->opd_id}}">
                                 <input id="opd" type="text" class="form-control" value="{{ $namaOpd}}" readonly>
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="subdomain" class="col-md-3 col-form-label text-md-right">Subdomain</label>
+                            <label for="subdomain" class="col-md-3 col-form-label text-md-right">Nama Subdomain</label>
                             <div class="col-md-9">
                                 <input id="subdomain" type="text" class="form-control" name="subdomain"
                                     value="{{ old('subdomain') }}">
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="tipe" class="col-md-3 col-form-label text-md-right">Jenis Aplikasi</label>
+                            <label for="tipe" class="col-md-3 col-form-label text-md-right">jenis Pengajuan Aplikasi</label>
                             <div class="col-md-9">
                                 <select id="tipe" class="form-control" name="tipe" required>
                                     <option value="web" {{ old('tipe') == 'web' ? 'selected' : '' }}>Aplikasi Web</option>
@@ -82,7 +82,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Permohonan</label>
+                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>
                             <div class="col-md-9">
                                 <select id="jenis_permohonan" class="form-control" name="jenis_permohonan" required>
                                     <option value="subdomain" {{ old('jenis_permohonan') == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
