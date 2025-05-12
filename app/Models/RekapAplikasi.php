@@ -14,12 +14,6 @@ class RekapAplikasi extends Model
 
     protected $table = 'rekap_aplikasi';
 
-    // Untuk Sotf delete
-    //
-    // start
-    protected $dates = ['deleted_at'];
-    // end
-
     protected $fillable = [
         'nama',
         'opd_id',
@@ -44,10 +38,23 @@ class RekapAplikasi extends Model
         'permohonan',
         'undangan_terakhir',
         'laporan_perbaikan',
-        'status_server',
         'open_akses',
         'close_akses',
-        'urgensi'
+        'urgensi',
+        'status_server',
+        'jenis_assessment',
+        'jenis_jawaban'
+    ];
+
+     protected $dates = [
+        'tanggal_masuk_ba',
+        'assesment_terakhir',
+        'permohonan',
+        'undangan_terakhir',
+        'laporan_perbaikan',
+        'open_akses',
+        'close_akses',
+        'deleted_at',
     ];
 
     public function opd()
@@ -62,6 +69,8 @@ class RekapAplikasi extends Model
             'web' => 'Website',
             default => '-',
         };
+
+        return $tipeMap[$this->tipe] ?? $this->tipe;
     }
 
     public function getStatusLabelAttribute()
@@ -77,5 +86,15 @@ class RekapAplikasi extends Model
             'batal' => 'Batal',
             default => '-',
         };
+
+        $statusMap = [
+            'diproses' => 'Diproses',
+            'assessment' => 'Assessment',
+            'development' => 'Development',
+            'selesai' => 'Selesai',
+            'ditolak' => 'Ditolak'
+        ];
+
+        return $statusMap[$this->status] ?? $this->status;
     }
 }

@@ -51,26 +51,13 @@ $detailData = [
            <strong>Urgensi:</strong> ' . ($apk->urgensi ?? '-')
         : '-'],
 
-    ['label' => 'Aksi', 'value' =>
-        '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '">Edit</a><br>
-         <form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">
-             ' . csrf_field() . '
-             ' . method_field('DELETE') . '
-             <button type="submit" style="color: red">Hapus</button>
-         </form>'
-    ],
 ];
 @endphp
 
 @include('components.template-tabel-2', ['data' => $detailData])
 
 <div class="mt-4">
-    @if($apk->status === 'selesai')
-        <a>Buat Undangan</a>
-    @endif
-
-<div class="mt-4">
-        <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">← Kembali</a>
+        <a href="{{ route('opd.daftar-pengajuan-assessment') }}" class="btn btn-secondary">← Kembali</a>
 </div>
 
 @endsection

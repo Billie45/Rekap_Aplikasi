@@ -160,6 +160,8 @@ class RekapAplikasiController extends Controller
             'tipe' => $request->tipe,
             'jenis' => 'baru',
             'status' => 'diproses',
+            'jenis_assessment' => 'Pertama',
+            'jenis_jawaban' => null,
             // 'server' => '',
             // 'keterangan' => '-',
             // 'last_update' => '-',
@@ -183,6 +185,85 @@ class RekapAplikasiController extends Controller
         ]);
 
         return redirect()->route('rekap-aplikasi.indexAssessment');
+    }
+    //
+    // end
+
+    // ======================================================================
+    // Fungsi untuk verifikasi pengajuan assessment oleh admin
+    // ======================================================================
+    //
+    // Start
+    public function terima($id) {
+        $item = RekapAplikasi::findOrFail($id);
+        $item->status = 'assessment1';
+        $item->jenis_jawaban = 'Diterima';
+        $item->save();
+
+        // Determine redirect route based on user role
+        $redirectRoute = Auth::user()->role == 'admin'
+            ? 'opd.daftar-pengajuan-assessment'
+            : 'opd.daftar-pengajuan-assessment';
+
+        return redirect()->route($redirectRoute)->with('success', 'Assessment telah diterima');
+    }
+
+    public function tolak($id) {
+        $item = RekapAplikasi::findOrFail($id);
+        $item->status = 'perbaikan';
+        $item->jenis_jawaban = 'Ditolak';
+        $item->save();
+
+        // Determine redirect route based on user role
+        $redirectRoute = Auth::user()->role == 'admin'
+            ? 'opd.daftar-pengajuan-assessment'
+            : 'opd.daftar-pengajuan-assessment';
+
+        return redirect()->route($redirectRoute)->with('success', 'Assessment telah ditolak');
+    }
+
+    public function showRevisiForm($id) {
+        $item = RekapAplikasi::with('opd')->findOrFail($id);
+
+        $user = Auth::user();
+
+        $opd = $user->opd;
+
+        return view('opd.form-revisi-assessment', [
+            'apk' => $item,
+            'namaOpd' => $opd?->nama_opd ?? '',
+        ]);
+    }
+
+    public function submitRevisi(Request $request, $id) {
+
+        $validated = $request->validate([
+            'nama' => 'required',
+            'opd_id' => 'required',
+            'subdomain' => 'nullable',
+            'tipe' => 'required',
+            'last_update' => 'nullable',
+            'jenis_permohonan' => 'required',
+            'permohonan' => 'required|date',
+            'link_dokumentasi' => 'nullable|url',
+            'akun_link' => 'nullable|url',
+            'akun_username' => 'nullable',
+            'akun_password' => 'nullable',
+            'cp_opd_nama' => 'nullable',
+            'cp_opd_no_telepon' => 'nullable',
+            'cp_pengembang_nama' => 'nullable',
+            'cp_pengembang_no_telepon' => 'nullable',
+        ]);
+
+        $item = RekapAplikasi::findOrFail($id);
+
+        $item->update($validated);
+        $item->status = 'perbaikan';
+        $item->jenis_assessment = 'Revisi';
+        $item->jenis_jawaban = null;
+        $item->save();
+
+        return redirect()->route('opd.daftar-pengajuan-assessment')->with('success', 'Revisi telah diajukan');
     }
     //
     // end

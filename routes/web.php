@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\OpdController;
 use App\Http\Controllers\RekapAplikasiController;
 use App\Http\Controllers\ViewAplikasiController;
 use App\Models\RekapAplikasi;
@@ -81,6 +81,10 @@ Route::get('/admin/list-apk', [AdminController::class, 'listApk'])
 Route::get('/admin/show-apk/{id}', [AdminController::class, 'showApk'])
     ->name('admin.show-apk')
     ->middleware(['auth', 'role:admin']);
+
+Route::get('/opd/show-apk/{id}', [OpdController::class, 'showApk'])
+    ->name('opd.show-apk')
+    ->middleware(['auth', 'role:opd']);
 //
 //end
 
@@ -138,6 +142,34 @@ Route::get('/opd.form-pengajuan-assessment', [\App\Http\Controllers\OpdControlle
 //
 //end
 
+// ======================================================================
+// Fungsi untuk verifikasi pengajuan assessment oleh admin
+// ======================================================================
+//
+// Start
+//
+// Verifikasi oleh admin
+Route::post('/rekap-aplikasi/verifikasi/{id}', [RekapAplikasiController::class, 'verifikasi'])->name('rekap-aplikasi.verifikasi');
+Route::post('/aplikasi/verifikasi/{id}', [RekapAplikasiController::class, 'verifikasi'])->name('aplikasi.verifikasi');
+
+// Ajukan revisi oleh OPD
+Route::get('/aplikasi/revisi/{id}', [RekapAplikasiController::class, 'ajukanRevisi'])->name('aplikasi.revisi');
+
+Route::post('/assessment/{id}/terima', [RekapAplikasiController::class, 'terima'])->name('assessment.terima');
+Route::post('/assessment/{id}/tolak', [RekapAplikasiController::class, 'tolak'])->name('assessment.tolak');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Route untuk menampilkan form revisi (GET)
+    Route::get('/assessment/{id}/revisi', [RekapAplikasiController::class, 'showRevisiForm'])
+         ->name('assessment.revisi');
+
+    // Route untuk menyimpan revisi (PUT)
+    Route::put('/assessment/{id}/revisi', [RekapAplikasiController::class, 'submitRevisi'])
+         ->name('assessment.revisi.submit');
+});
+//
+// end
+
 // ============================================================
 // bagian ini untuk melihat daftar pengajuan assessment
 // ============================================================
@@ -145,7 +177,7 @@ Route::get('/opd.form-pengajuan-assessment', [\App\Http\Controllers\OpdControlle
 // start
 Route::get('/opd.daftar-pengajuan-assessment', [\App\Http\Controllers\OpdController::class, 'daftarPengajuan'])
     ->name('opd.daftar-pengajuan-assessment')
-    ->middleware(['auth', 'role:admin, opd']);
+    ->middleware([]);
 //
 //end
 
