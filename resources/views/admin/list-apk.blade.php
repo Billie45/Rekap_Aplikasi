@@ -12,6 +12,8 @@
         }
     </style>
 
+    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Assessment Aplikasi</h4>
+
     {{-- Tombol Tambah --}}
     <div class="mb-3 my-2">
         <a href="{{ route('admin.edit-apk') }}" class="btn btn-light px-4 py-2 rounded-4 shadow border">

@@ -18,7 +18,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Form Pengajuan Assessment</div>
+                <div class="card-header">Formulir Pengajuan Assessment Aplikasi</div>
 
                 <div class="card-body">
                     <form action="{{ route('pengajuan-assessment.storeAssessment') }}" method="POST">

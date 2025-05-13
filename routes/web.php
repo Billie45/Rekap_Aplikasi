@@ -282,6 +282,8 @@ Route::resource('undangan', UndanganController::class);
 //
 // end
 
+Route::get('/rekap-terbaru', [RekapAplikasiController::class, 'latestRekap'])->name('rekap-aplikasi.latest');
+
 // ============================================================
 // bagian ini untuk mencoba melakukan soft delete
 // ============================================================

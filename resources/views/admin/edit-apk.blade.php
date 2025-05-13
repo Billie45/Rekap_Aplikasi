@@ -71,7 +71,7 @@
                         <option value="development" {{ ($apk->status ?? '') == 'development' ? 'selected' : '' }}>4. development</option>
                         <option value="prosesBA" {{ ($apk->status ?? '') == 'prosesBA' ? 'selected' : '' }}>5. proses BA</option>
                         <option value="selesai" {{ ($apk->status ?? '') == 'selesai' ? 'selected' : '' }}>6. selesai</option>
-                        <option value="batal" {{ ($apk->status ?? '') == 'batal' ? 'selected' : '' }}>7. cancel</option>
+                        <option value="batal" {{ ($apk->status ?? '') == 'batal' ? 'selected' : '' }}>7. batal</option>
                     </select>
                     @error('status')
                         <div class="text-danger">{{ $message }}</div>

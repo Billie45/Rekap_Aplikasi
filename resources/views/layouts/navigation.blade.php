@@ -24,17 +24,20 @@
                 @if (Auth::user()->role == 'admin')
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <a href="{{ route('admin.list-apk') }}">
-                            <i>Kelola Aplikasi</i>
+                            <i>Kelola Assessment Aplikasi</i>
                             {{-- <span>Kelola Aplikasi</span> --}}
                         </a>
+
+                        <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
+                            <i>Kelola Pengajuan Assessment</i>
+                            {{-- <span>Daftar Pengajuan Assessment</span> --}}
+                        </a>
+
                         <a href="{{ route('admin.edit-role') }}">
                             <i>Kelola Akun</i>
                             {{-- <span>Kelola Akun</span> --}}
                         </a>
-                        <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
-                            <i>Daftar Pengajuan Assessment</i>
-                            {{-- <span>Daftar Pengajuan Assessment</span> --}}
-                        </a>
+
                         {{-- <a href="{{ route('admin.pengajuan-opd') }}">
                             <i>Daftar Pengajuan OPD</i>
                             <span>Daftar Pengajuan OPD</span>
@@ -45,11 +48,11 @@
                 @if (Auth::user()->role == 'opd')
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <a href="{{ route('opd.form-pengajuan-assessment') }}">
-                            <i>Buat Pengajuan Assessment</i>
+                            <i>Formulir Pengajuan Assessment</i>
                             {{-- <span>Tambah Pengajuan Assessment</span> --}}
                         </a>
                         <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
-                            <i>Daftar Pengajuan Assessment</i>
+                            <i>Kelola Pengajuan Assessment</i>
                             {{-- <span>Daftar Pengajuan Assessment</span> --}}
                         </a>
                     </div>

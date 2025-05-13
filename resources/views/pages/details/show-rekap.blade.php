@@ -17,6 +17,7 @@
     ];
 @endphp
 
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail  Rekap Assessment Aplikasi</h4>
 @include('components.template-tabel-2', ['data' => $detailData])
 
 <div class="mt-4">

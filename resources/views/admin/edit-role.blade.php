@@ -3,6 +3,8 @@
 @section('content')
 @include('components.template-tabel')
 
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Pengguna</h4>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">

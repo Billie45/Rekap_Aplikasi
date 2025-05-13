@@ -3,6 +3,8 @@
 @section('content')
     @include('components.template-tabel')
 
+    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Pengajuan Assessment Aplikasi</h4>
+
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -46,7 +48,12 @@
                             @endif
                         </td> --}}
                         <td>
-                            @if(Auth::user()->role == 'opd')
+                            {{-- Khusus jika status adalah "batal", tampilkan prioritas teratas --}}
+                            @if($apk->status === 'batal')
+                                <span class="btn btn-danger btn-sm">Assessment ditolak</span>
+
+                            {{-- Jika role user adalah OPD --}}
+                            @elseif(Auth::user()->role == 'opd')
                                 @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan' || $apk->jenis_jawaban === null)
                                     <span class="btn btn-warning btn-sm">Menunggu verifikasi admin</span>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
@@ -57,6 +64,8 @@
                                         <button class="btn btn-warning btn-sm" type="submit">Ajukan Revisi</button>
                                     </form>
                                 @endif
+
+                            {{-- Jika role user adalah Admin --}}
                             @elseif(Auth::user()->role == 'admin')
                                 @if($apk->jenis_jawaban === null)
                                     <form action="{{ route('assessment.terima', $apk->id) }}" method="POST" class="d-inline">
@@ -74,6 +83,7 @@
                                 @endif
                             @endif
                         </td>
+
                         <td>
                             @php
                                 $routeName = Auth::user()->role === 'admin' ? 'admin.show-apk' : 'opd.show-apk';

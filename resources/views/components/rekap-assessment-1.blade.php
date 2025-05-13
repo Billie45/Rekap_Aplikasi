@@ -52,10 +52,13 @@
     }
 </style>
 
-<div class="container py-4">
-    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Rekap Aplikasi</h4>
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Rekap Aplikasi</h4>
+
+<div class="container">
+
+
     <p class="text-muted">
-        <strong>Rekap update data S.D Tgl:</strong> {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+        <strong>Rekap update data S.D:</strong> {{ $rekap->updated_at->translatedFormat('l, d F Y H:i:s') }}
     </p>
 
     {{-- Tabel Jenis Pengajuan & Jenis Permohonan --}}

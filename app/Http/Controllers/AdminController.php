@@ -18,7 +18,9 @@ class AdminController extends Controller
     public function dashboard()
     {
         $aplikasis = RekapAplikasi::all();
-        return view('admin.dashboard', compact('aplikasis'));
+        $rekap = RekapAplikasi::latest('updated_at')->first();
+        
+        return view('admin.dashboard', compact('aplikasis', 'rekap'));
     }
 
     public function listApk()

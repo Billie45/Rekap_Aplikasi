@@ -18,7 +18,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Form Revisi Assessment</div>
+                <div class="card-header">Formulir Revisi Assessment Aplikasi</div>
 
                 <div class="card-body">
                     <form action="{{ route('assessment.revisi.submit', $apk->id) }}" method="POST">

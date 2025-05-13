@@ -5,6 +5,8 @@
     {{-- Template tabel --}}
     @include('components.template-tabel')
 
+    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Rekapitulasi Status Hosting dan Akses Server Aplikasi</h4>
+
     <div class="table-wrapper mt-3">
         <table class="compact-table">
             <thead>

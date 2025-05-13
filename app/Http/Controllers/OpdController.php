@@ -21,7 +21,9 @@ class OpdController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('opd.dashboard', compact('aplikasis'));
+        $rekap = RekapAplikasi::latest('updated_at')->first();
+
+        return view('opd.dashboard', compact('aplikasis', 'rekap'));
     }
 
     // ================================================================

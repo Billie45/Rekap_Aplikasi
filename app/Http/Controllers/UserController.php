@@ -13,7 +13,9 @@ class UserController extends Controller
     public function dashboard()
     {
         $aplikasis = RekapAplikasi::all();
-        return view('user.dashboard', compact('aplikasis'));
+        $rekap = RekapAplikasi::latest('updated_at')->first();
+
+        return view('user.dashboard', compact('aplikasis', 'rekap'));
     }
 
     // ============================================================

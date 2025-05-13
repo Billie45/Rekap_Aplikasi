@@ -62,8 +62,9 @@ class RekapAplikasiController extends Controller
     {
         $aplikasis = RekapAplikasi::with('opd')->get();
         $opds = Opd::all();
+        $rekap = RekapAplikasi::latest('updated_at')->first();
 
-        return view('./opd/dashboard', compact('aplikasis', 'opds'));
+        return view('./opd/dashboard', compact('aplikasis', 'opds', 'rekap'));
     }
 
     public function createAssessment()
