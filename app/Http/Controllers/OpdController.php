@@ -26,6 +26,13 @@ class OpdController extends Controller
         return view('opd.dashboard', compact('aplikasis', 'rekap'));
     }
 
+    public function dashboard_view(){
+        $aplikasis = RekapAplikasi::all();
+        $rekap = RekapAplikasi::latest('updated_at')->first();
+
+        return view('opd.dashboard', compact('aplikasis', 'rekap'));
+    }
+
     // ================================================================
     // Bagian ini digunakan untuk 'form-pengajuan-assessment' dari OPD
     // ================================================================
@@ -92,7 +99,7 @@ class OpdController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Paginate the results
-        $aplikasis = $query->paginate(10);
+        $aplikasis = $query->paginate(25);
 
         return view('opd.daftar-pengajuan-assessment', compact('aplikasis'));
     }

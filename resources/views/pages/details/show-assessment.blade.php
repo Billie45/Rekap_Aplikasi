@@ -19,7 +19,7 @@
         ['label' => 'Jenis Pengajuan Aplikasi', 'value' => $apk->tipe_label ?? '-'],
         ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
         ['label' => 'Jenis Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
-        ['label' => 'Jenis Permohonan', 'value' => $apk->permohonan ?? '-'],
+        ['label' => 'Tanggal Permohonan', 'value' => $apk->permohonan ?? '-'],
         ['label' => 'Tanggal Undangan Terakhir', 'value' => $apk->undangan_terakhir ?? '-'],
         ['label' => 'Tanggal Rekom Terakhir', 'value' => $apk->tanggal_masuk_ba ?? '-'],
         ['label' => 'Tanggal Laporan Perbaikan', 'value' => $apk->laporan_perbaikan ?? '-'],

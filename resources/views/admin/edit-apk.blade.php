@@ -23,11 +23,14 @@
             <div class="contentBx active">
                 <div class="label">Informasi Mengenai Aplikasi</div>
                 <div class="content">
-                    <label>Nama Aplikasi:</label>
-                    <input type="text" name="nama" value="{{ $apk->nama ?? '' }}">
-                    @error('nama')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <label>Tanggal Permohonan:</label>
+                    <div>
+                        <input id="permohonan" type="date" class="form-control" name="permohonan"
+                            value="{{ old('permohonan', isset($apk) && $apk->permohonan ? $apk->permohonan : \Carbon\Carbon::now()->format('Y-m-d')) }}">
+                        @error('permohonan')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <label>Organisasi Pemerintah Daerah:</label>
                     <select name="opd_id">
@@ -38,6 +41,12 @@
                         @endforeach
                     </select>
                     @error('opd_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+
+                    <label>Nama Aplikasi:</label>
+                    <input type="text" name="nama" value="{{ $apk->nama ?? '' }}">
+                    @error('nama')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
@@ -77,9 +86,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Server Hosting:</label>
-                    <input type="text" name="server" value="{{ $apk->server ?? '' }}">
-
                     <label>Keterangan:</label>
                     <textarea name="keterangan">{{ $apk->keterangan ?? '' }}</textarea>
 
@@ -95,7 +101,7 @@
                     <label>Tanggal Masuk / BA:</label>
                     <input type="date" name="tanggal_masuk_ba" value="{{ $apk->tanggal_masuk_ba ?? '' }}">
 
-                    <label>>Dokumentasi Teknis:</label>
+                    <label>Dokumentasi Teknis:</label>
                     <input type="text" name="link_dokumentasi" value="{{ $apk->link_dokumentasi ?? '' }}">
                 </div>
             </div>
@@ -150,7 +156,10 @@
                 <div class="label">Informasi Tambahan Rekap Aplikasi</div>
                 <div class="content">
                     <label>Tanggal Assessment Terakhir:</label>
-                    <input type="date" name="assesment_terakhir" value="{{ $apk->assesment_terakhir ?? '' }}">
+                    <input type="date" name="assesment_terakhir"
+                        value="{{ isset($apk) ? ($apk->updated_at ? $apk->updated_at->format('Y-m-d') : now()->format('Y-m-d')) : now()->format('Y-m-d') }}"
+                        readonly
+                        class="form-control bg-light">
                 </div>
             </div>
 
@@ -158,9 +167,6 @@
             <div class="contentBx active">
                 <div class="label">Informasi Tambahan Assessment</div>
                 <div class="content">
-                    <label>Tanggal Permohonan:</label>
-                    <input type="date" name="permohonan" value="{{ $apk->permohonan ?? '' }}">
-
                     <label>Tanggal Undangan Terakhir:</label>
                     <input type="date" name="undangan_terakhir" value="{{ $apk->undangan_terakhir ?? '' }}">
 
@@ -173,6 +179,9 @@
             <div class="contentBx active">
                 <div class="label">Detail Akses Server</div>
                 <div class="content">
+                    <label>Server Hosting:</label>
+                    <input type="text" name="server" value="{{ $apk->server ?? '' }}">
+
                     <label>Status Server:</label>
                     <select name="status_server">
                         <option value="CLOSE" {{ ($apk->status_server ?? '') == 'CLOSE' ? 'selected' : '' }}>CLOSE</option>

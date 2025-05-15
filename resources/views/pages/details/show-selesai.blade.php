@@ -20,7 +20,7 @@ $detailData = [
 @include('components.template-tabel-2', ['data' => $detailData])
 
 <div class="mt-4">
-        <a href="{{ url('/selesai') }}" class="btn btn-secondary">← Kembali</a>
+        <a href="{{ url('/selesai') }}" class="btn btn-secondary">Kembali</a>
 </div>
 
 @endsection

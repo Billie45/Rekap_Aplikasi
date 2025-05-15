@@ -27,6 +27,17 @@
 
                         <!-- Utama -->
                         <div class="form-group row">
+                            <label for="permohonan" class="col-md-3 col-form-label text-md-right">Tanggal Perbaikan</label>
+                            <div class="col-md-9">
+                                <input id="permohonan" type="date" class="form-control" name="permohonan"
+                                    value="{{ old('permohonan', isset($apk->permohonan) ? (is_string($apk->permohonan) ? $apk->permohonan : $apk->permohonan->format('Y-m-d')) : date('Y-m-d')) }}" >
+                                @error('permohonan')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
                             <label for="opd" class="col-md-3 col-form-label text-md-right">Organisasi Pemerintah Daerah</label>
                             <div class="col-md-9">
                                 <input type="hidden" name="opd_id" value="{{ Auth::user()->opd_id}}">
@@ -90,17 +101,6 @@
                                     <option value="permohonan" {{ old('jenis_permohonan', $apk->jenis_permohonan) == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
                                 </select>
                                 @error('jenis_permohonan')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="permohonan" class="col-md-3 col-form-label text-md-right">Tanggal Perbaikan</label>
-                            <div class="col-md-9">
-                                <input id="permohonan" type="date" class="form-control" name="permohonan"
-                                    value="{{ old('permohonan', isset($apk->permohonan) ? (is_string($apk->permohonan) ? $apk->permohonan : $apk->permohonan->format('Y-m-d')) : date('Y-m-d')) }}" >
-                                @error('permohonan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

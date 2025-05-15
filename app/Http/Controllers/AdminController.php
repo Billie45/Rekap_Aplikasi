@@ -19,7 +19,7 @@ class AdminController extends Controller
     {
         $aplikasis = RekapAplikasi::all();
         $rekap = RekapAplikasi::latest('updated_at')->first();
-        
+
         return view('admin.dashboard', compact('aplikasis', 'rekap'));
     }
 
@@ -49,7 +49,7 @@ class AdminController extends Controller
     // Start
     public function editRole()
     {
-        $users = User::paginate(20);;
+        $users = User::paginate(25);;
         $opds = Opd::all();
         return view('admin.edit-role', compact('users', 'opds'));
     }

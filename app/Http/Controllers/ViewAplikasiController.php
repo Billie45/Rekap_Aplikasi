@@ -21,7 +21,7 @@ class ViewAplikasiController extends Controller
     // Start
     public function rekap()
     {
-        $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(20);
+        $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(25);
         $opds = Opd::all();
         return view('pages.rekap',  compact('aplikasis', 'opds'));
     }
@@ -31,7 +31,7 @@ class ViewAplikasiController extends Controller
         $aplikasis = RekapAplikasi::with('opd')
                           ->whereIn('status', ['perbaikan', 'assessment1', 'assessment2'])
                           ->orderBy('created_at', 'desc')
-                          ->paginate(20);
+                          ->paginate(25);
         $opds = Opd::all();
         return view('pages.assessment',  compact('aplikasis', 'opds'));
     }
@@ -42,7 +42,7 @@ class ViewAplikasiController extends Controller
         $aplikasis = RekapAplikasi::with('opd')
                           ->whereIn('status', ['development', 'prosesBA'])
                           ->orderBy('created_at', 'desc')
-                          ->paginate(20);
+                          ->paginate(25);
         $opds = Opd::all();
         return view('pages.development',  compact('aplikasis', 'opds'));
     }
@@ -52,14 +52,14 @@ class ViewAplikasiController extends Controller
         $aplikasis = RekapAplikasi::with('opd')
                           ->whereIn('status', ['selesai', 'batal'])
                           ->orderBy('created_at', 'desc')
-                          ->paginate(20);
+                          ->paginate(25);
         $opds = Opd::all();
         return view('pages.selesai',  compact('aplikasis', 'opds'));
     }
 
     public function aksesServer()
     {
-        $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(20);
+        $aplikasis = RekapAplikasi::with('opd')->orderBy('created_at', 'desc')->paginate(25);
         $opds = Opd::all();
         return view('pages.server',  compact('aplikasis', 'opds'));
     }

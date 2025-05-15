@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Tanggal Pengajuan/Revisi</th>
                     <th>Organisasi Pemerintah Daerah</th>
                     <th>Nama Aplikasi</th>
                     <th>Status Assessment</th>
@@ -32,6 +33,7 @@
                 @foreach($aplikasis as $apk)
                     <tr>
                         <td>{{ $n++ }}</td>
+                        <td>{{ $apk->permohonan ?? '-' }}</td>
                         <td>{{ $apk->opd->nama_opd ?? '-' }}</td>
                         <td>{{ $apk->nama }}</td>
                         <td>{{ $apk->status_label }}</td>
@@ -70,11 +72,15 @@
                                 @if($apk->jenis_jawaban === null)
                                     <form action="{{ route('assessment.terima', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-primary btn-sm">Diterima</button>
+                                        <button class="btn btn-success btn-sm">Terima</button>
+                                    </form>
+                                    <form action="{{ route('assessment.revisi_tombol', $apk->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button class="btn btn-warning btn-sm">Revisi</button>
                                     </form>
                                     <form action="{{ route('assessment.tolak', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-danger btn-sm">Ditolak</button>
+                                        <button class="btn btn-danger btn-sm">Tolak</button>
                                     </form>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
                                     <span class="btn btn-success btn-sm">Assessment diterima</span>

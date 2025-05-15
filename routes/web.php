@@ -31,7 +31,7 @@ Route::get('/', function () {
 Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])
     ->name('admin.dashboard')
     ->middleware(['auth', 'role:admin']);
-Route::get('/opd/dashboard', [\App\Http\Controllers\OpdController::class, 'dashboard'])
+Route::get('/opd/dashboard', [\App\Http\Controllers\OpdController::class, 'dashboard_view'])
     ->name('opd.dashboard')
     ->middleware(['auth', 'role:opd']);
 Route::get('/user/dashboard', [\App\Http\Controllers\UserController::class, 'dashboard'])
@@ -157,6 +157,7 @@ Route::post('/aplikasi/verifikasi/{id}', [RekapAplikasiController::class, 'verif
 Route::get('/aplikasi/revisi/{id}', [RekapAplikasiController::class, 'ajukanRevisi'])->name('aplikasi.revisi');
 
 Route::post('/assessment/{id}/terima', [RekapAplikasiController::class, 'terima'])->name('assessment.terima');
+Route::post('/assessment/{id}/revisi_tombol', [RekapAplikasiController::class, 'revisi_tombol'])->name('assessment.revisi_tombol');
 Route::post('/assessment/{id}/tolak', [RekapAplikasiController::class, 'tolak'])->name('assessment.tolak');
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -25,6 +25,19 @@
                         @csrf
 
                         <!-- Utama -->
+                        {{-- REVISI TANGGAL 08-05-2025 --}}
+
+                        <div class="form-group row">
+                            <label for="permohonan" class="col-md-3 col-form-label text-md-right">Tanggal Permohonan</label>
+                            <div class="col-md-9">
+                                <input id="permohonan" type="date" class="form-control" name="permohonan"
+                                    value="{{ old('permohonan', date('Y-m-d')) }}">
+                                @error('permohonan')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="opd" class="col-md-3 col-form-label text-md-right">Organisasi Pemerintah Daerah</label>
                             <div class="col-md-9">
@@ -89,19 +102,6 @@
                                     <option value="permohonan" {{ old('jenis_permohonan') == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
                                 </select>
                                 @error('jenis_permohonan')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- REVISI TANGGAL 08-05-2025 --}}
-
-                        <div class="form-group row">
-                            <label for="permohonan" class="col-md-3 col-form-label text-md-right">Tanggal Permohonan</label>
-                            <div class="col-md-9">
-                                <input id="permohonan" type="date" class="form-control" name="permohonan"
-                                    value="{{ old('permohonan', date('Y-m-d')) }}">
-                                @error('permohonan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

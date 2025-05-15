@@ -38,7 +38,7 @@ class RekapAplikasiController extends Controller
             $query->where('server', 'like', '%' . $request->input('server') . '%');
         }
 
-        $aplikasis = $query->orderBy('created_at', 'desc')->paginate(15);
+        $aplikasis = $query->orderBy('created_at', 'desc')->paginate(25);
         $opds = Opd::all();
 
         return view('./admin/list-apk', compact('aplikasis', 'opds'));
@@ -97,23 +97,63 @@ class RekapAplikasiController extends Controller
             'tipe' => 'required',
             'jenis' => 'required',
             'status' => 'required',
+            'permohonan' => 'required|date',
         ], [
             'nama.required' => 'Nama aplikasi wajib diisi.',
             'opd_id.required' => 'OPD wajib dipilih.',
             'tipe.required' => 'Tipe aplikasi wajib diisi.',
             'jenis.required' => 'Jenis aplikasi wajib diisi.',
             'status.required' => 'Status aplikasi wajib diisi.',
+            'permohonan.required' => 'Tanggal permohonan wajib diisi.',
+            'permohonan.date' => 'Tanggal permohonan harus berformat tanggal yang valid.',
         ]);
 
+         $validated['assesment_terakhir'] = $request->assesment_terakhir ?? ($apk->updated_at ?? now())->format('Y-m-d');
+
+        // Create new application record with all form fields
         RekapAplikasi::create([
-            'nama' => $request->nama,
-            'opd_id' => $request->opd_id,
-            'tipe' => $request->tipe,
-            'jenis' => $request->jenis,
-            'status' => $request->status,
+            // Informasi Umum
+            'permohonan' => $request->input('permohonan'),
+            'opd_id' => $request->input('opd_id'),
+            'nama' => $request->input('nama'),
+            'subdomain' => $request->input('subdomain'),
+            'tipe' => $request->input('tipe'),
+            'jenis' => $request->input('jenis'),
+            'status' => $request->input('status'),
+            'keterangan' => $request->input('keterangan'),
+            'last_update' => $request->input('last_update'),
+            'jenis_permohonan' => $request->input('jenis_permohonan'),
+            'tanggal_masuk_ba' => $request->input('tanggal_masuk_ba'),
+            'link_dokumentasi' => $request->input('link_dokumentasi'),
+
+            // Informasi Akun
+            'akun_link' => $request->input('akun_link'),
+            'akun_username' => $request->input('akun_username'),
+            'akun_password' => $request->input('akun_password'),
+
+            // Contact Person OPD
+            'cp_opd_nama' => $request->input('cp_opd_nama'),
+            'cp_opd_no_telepon' => $request->input('cp_opd_no_telepon'),
+
+            // Contact Person Pengembang
+            'cp_pengembang_nama' => $request->input('cp_pengembang_nama'),
+            'cp_pengembang_no_telepon' => $request->input('cp_pengembang_no_telepon'),
+
+            // Rekap Laporan Progres
+            'assesment_terakhir' => $request->input('assesment_terakhir'),
+            'undangan_terakhir' => $request->input('undangan_terakhir'),
+            'laporan_perbaikan' => $request->input('laporan_perbaikan'),
+
+            // Detail Akses Server
+            'server' => $request->input('server'), // Using input() here to avoid ServerBag object
+            'status_server' => $request->input('status_server'),
+            'open_akses' => $request->input('open_akses'),
+            'close_akses' => $request->input('close_akses'),
+            'urgensi' => $request->input('urgensi'),
         ]);
 
-        return redirect()->route('rekap-aplikasi.index')->with('success', 'Aplikasi berhasil ditambahkan.');
+        return redirect()->route('rekap-aplikasi.index')
+            ->with('success', 'Aplikasi berhasil ditambahkan.');
     }
 
     public function create()
@@ -192,7 +232,7 @@ class RekapAplikasiController extends Controller
             // 'urgensi' => '-',
         ]);
 
-        return redirect()->route('rekap-aplikasi.indexAssessment');
+        return redirect()->route('opd.daftar-pengajuan-assessment');
     }
     //
     // end
@@ -216,9 +256,23 @@ class RekapAplikasiController extends Controller
         return redirect()->route($redirectRoute)->with('success', 'Assessment telah diterima');
     }
 
-    public function tolak($id) {
+    public function revisi_tombol($id) {
         $item = RekapAplikasi::findOrFail($id);
         $item->status = 'perbaikan';
+        $item->jenis_jawaban = 'Ditolak';
+        $item->save();
+
+        // Determine redirect route based on user role
+        $redirectRoute = Auth::user()->role == 'admin'
+            ? 'opd.daftar-pengajuan-assessment'
+            : 'opd.daftar-pengajuan-assessment';
+
+        return redirect()->route($redirectRoute)->with('success', 'Assessment diminta revisi');
+    }
+
+    public function tolak($id) {
+        $item = RekapAplikasi::findOrFail($id);
+        $item->status = 'batal';
         $item->jenis_jawaban = 'Ditolak';
         $item->save();
 

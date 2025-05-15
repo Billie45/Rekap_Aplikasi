@@ -57,9 +57,15 @@
 <div class="container">
 
 
-    <p class="text-muted">
-        <strong>Rekap update data S.D:</strong> {{ $rekap->updated_at->translatedFormat('l, d F Y H:i:s') }}
-    </p>
+    @if ($rekap)
+        <p class="text-muted">
+            <strong>Rekap update data S.D:</strong> {{ $rekap->updated_at->translatedFormat('l, d F Y H:i:s') }}
+        </p>
+    @else
+        <p class="text-muted">
+            <strong>Rekap update data S.D:</strong> Data belum tersedia
+        </p>
+    @endif
 
     {{-- Tabel Jenis Pengajuan & Jenis Permohonan --}}
     @php
