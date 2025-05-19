@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterRekapAplikasi;
 use Illuminate\Http\Request;
 use App\Models\RekapAplikasi;
+
 use App\Models\Opd;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -170,6 +172,17 @@ class RekapAplikasiController extends Controller
     // ======================================================================
     //
     // Start
+    public function formAssessment()
+    {
+        $opd_id = auth::user()->opd_id;
+
+        // Ambil aplikasi yang sudah ada dengan opd_id dan jenis 'baru' (misal)
+        $apps = \App\Models\MasterRekapAplikasi::where('opd_id', $opd_id)
+            ->where('jenis', 'baru')
+            ->get();
+
+        return view('opd.form-pengajuan-assessment', compact('apps'));
+    }
     public function storeAssessment(Request $request)
     {
         $request->validate([
@@ -201,12 +214,20 @@ class RekapAplikasiController extends Controller
             // 'urgensi' => 'nullable',
         ]);
 
+        $nama = $request->nama;
+        $opdId = $request->opd_id;
+
+        $master = MasterRekapAplikasi::firstOrCreate(
+            ['opd_id' => $opdId, 'nama' => $nama],
+            ['created_at' => now(), 'updated_at' => now()]
+        );
+
         RekapAplikasi::create([
             'nama' => $request->nama,
             'opd_id' => $request->opd_id,
             'subdomain' => $request->subdomain,
             'tipe' => $request->tipe,
-            'jenis' => 'baru',
+            'jenis' => $request->jenis,
             'status' => 'diproses',
             'jenis_assessment' => 'Pertama',
             'jenis_jawaban' => null,
@@ -230,6 +251,7 @@ class RekapAplikasiController extends Controller
             // 'open_akses' => '-',
             // 'close_akses' => '-',
             // 'urgensi' => '-',
+            'master_rekap_aplikasi_id' => $master->id,
         ]);
 
         return redirect()->route('opd.daftar-pengajuan-assessment');

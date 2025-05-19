@@ -16,7 +16,7 @@
                 $apk->nama ?? '-',
                 $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>' : '-',
                 in_array($apk->status, ['assessment1', 'assessment2']) ? 'assessment' : ($apk->status == 'perbaikan' ? 'perbaikan' : '-'),
-                '<a href="' . route('pages.details.show-assessment', $apk->id) . '">Detail</a>',
+                '<div class="text-center"><a href="' . route('pages.details.show-assessment', $apk->id) . '" title="Detail"><i class="bx bxs-show" style="font-size: 1.5rem;"></i></a></div>',
             ];
         }
     @endphp

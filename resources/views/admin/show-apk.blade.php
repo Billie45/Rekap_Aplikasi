@@ -12,7 +12,7 @@ $detailData = [
     ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],
     ['label' => 'Keterangan', 'value' => $apk->keterangan ?? '-'],
     ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
-    ['label' => 'Jenis Pengembangan', 'value' => $apk->jenis_permohonan ?? '-'],
+    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
     ['label' => 'Tanggal Rekom Lulus / BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
     ['label' => 'Link Dokumentasi', 'value' => $apk->link_dokumentasi ? '<a href="' . $apk->link_dokumentasi . '" target="_blank">LINK</a>' : '-' ],
     ['label' => 'Akun untuk Diskominfo', 'value' =>
@@ -135,8 +135,41 @@ $detailData = [
         </table>
     </div>
 
-<div class="mt-4">
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Riwayat Pengembangan aplikasi</h4>
+<!-- Tabel Riwayat -->
+<div class="bg-white rounded shadow p-4 mt-4">
 
+@if($riwayatPengembangan->isEmpty())
+    <p>Belum ada riwayat pengembangan untuk aplikasi ini.</p>
+@else
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal Pengajuan</th>
+                <th>Deskripsi</th>
+                <th>Status</th>
+                <th>detail</th>
+                <!-- Tambahkan kolom lain yang diperlukan -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($riwayatPengembangan as $index => $riwayat)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $riwayat->permohonan ?? '-' }}</td>
+                    <td>{{ $riwayat->jenis ?? '-' }}</td>
+                    <td>{{ $riwayat->status ?? '-' }}</td>
+                    <td><a href="{{ route('admin.show-apk', $riwayat->id) }}">Detail</a></td>
+                    <!-- Isi sesuai kolom tabel master_rekap_aplikasi -->
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endif
+</div>
+
+<div class="mt-4">
     <a href="{{ route('admin.list-apk') }}" class="btn btn-secondary">Kembali</a>
 </div>
 

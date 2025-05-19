@@ -62,7 +62,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Jenis Permohonan:</label>
+                    <label>Jenis Pengembagan:</label>
                     <select name="jenis">
                         <option value="pengembangan" {{ ($apk->jenis ?? '') == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
                         <option value="baru" {{ ($apk->jenis ?? '') == 'baru' ? 'selected' : '' }}>Baru</option>
@@ -92,7 +92,7 @@
                     <label>Deskripsi Singkat Last Update:</label>
                     <textarea name="last_update">{{ $apk->last_update ?? '' }}</textarea>
 
-                    <label>Jenis Pengembangan:</label>
+                    <label>Jenis Permohonan:</label>
                     <select name="jenis_permohonan">
                         <option value="subdomain" {{ ($apk->jenis_permohonan ?? '') == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
                         <option value="permohonan" {{ ($apk->jenis_permohonan ?? '') == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>

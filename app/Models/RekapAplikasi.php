@@ -43,7 +43,8 @@ class RekapAplikasi extends Model
         'urgensi',
         'status_server',
         'jenis_assessment',
-        'jenis_jawaban'
+        'jenis_jawaban',
+        'master_rekap_aplikasi_id',
     ];
 
      protected $dates = [
@@ -65,6 +66,11 @@ class RekapAplikasi extends Model
     public function undangan()
     {
         return $this->hasMany(Undangan::class, 'rekap_aplikasi_id');
+    }
+
+    public function master()
+    {
+        return $this->belongsTo(MasterRekapAplikasi::class, 'master_rekap_aplikasi_id');
     }
 
     public function getTipeLabelAttribute()

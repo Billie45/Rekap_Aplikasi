@@ -238,6 +238,7 @@ require __DIR__.'/auth.php';
 // Untuk Role OPD
 // ============================================================
 //
+Route::get('opd/form-pengajuan-assessment', [RekapAplikasiController::class, 'formAssessment'])->name('pengajuan-assessment.form');
 Route::post('/rekap-aplikasi/storeAssessment', [RekapAplikasiController::class, 'storeAssessment'])->name('rekap-aplikasi.storeAssessment');
 //
 Route::middleware(['auth', 'role:opd'])->group(function () {

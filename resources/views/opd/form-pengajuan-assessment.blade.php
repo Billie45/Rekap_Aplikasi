@@ -50,10 +50,37 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="jenis" class="col-md-3 col-form-label text-md-right">jenis pengembangan</label>
+                            <div class="col-md-9">
+                                <select id="tipe" class="form-control" name="jenis" required>
+                                    <option value="baru" {{ old('jenis') == 'baru' ? 'selected' : '' }}>Baru</option>
+                                    <option value="pengembangan" {{ old('jenis') == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
+                                </select>
+                                @error('jenis')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="nama" class="col-md-3 col-form-label text-md-right">Nama Aplikasi</label>
                             <div class="col-md-9">
-                                <input id="nama" type="text" class="form-control" name="nama" required
-                                    value="{{ old('nama') }}">
+                                {{-- Input teks untuk "baru" --}}
+                                <input id="nama_text" type="text" class="form-control" style="display: none;" value="{{ old('nama') }}">
+
+                                {{-- Dropdown untuk "pengembangan" --}}
+                                <select id="nama_select" class="form-control" style="display: none;">
+                                    <option value="">-- Pilih aplikasi --</option>
+                                    @foreach($apps as $app)
+                                        <option value="{{ $app->nama }}" {{ old('nama') == $app->nama ? 'selected' : '' }}>
+                                            {{ $app->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                {{-- Input hidden final yang dikirim ke server --}}
+                                <input type="hidden" name="nama" id="nama_final" value="{{ old('nama') }}">
+
                                 @error('nama')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -84,7 +111,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="last_update" class="col-md-3 col-form-label text-md-right">Deskripsi Singkat Last Update</label>
                             <div class="col-md-9">
                                 <textarea id="last_update" class="form-control" name="last_update" rows="2">{{ old('last_update') }}</textarea>
@@ -92,10 +119,10 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group row">
-                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>
+                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Permohonan</label>
                             <div class="col-md-9">
                                 <select id="jenis_permohonan" class="form-control" name="jenis_permohonan" required>
                                     <option value="subdomain" {{ old('jenis_permohonan') == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
@@ -261,4 +288,53 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Get references to the elements
+    const jenisSelect = document.querySelector('select[name="jenis"]');
+    const inputText = document.getElementById('nama_text');
+    const selectDropdown = document.getElementById('nama_select');
+    const finalInput = document.getElementById('nama_final');
+
+    function toggleNamaInput() {
+        const jenis = jenisSelect.value;
+
+        if (jenis === 'pengembangan') {
+            inputText.style.display = 'none';
+            inputText.removeAttribute('required');
+
+            selectDropdown.style.display = 'block';
+            selectDropdown.setAttribute('required', 'required');
+
+            // Update the hidden input with the selected option value
+            finalInput.value = selectDropdown.value;
+        } else {
+            inputText.style.display = 'block';
+            inputText.setAttribute('required', 'required');
+
+            selectDropdown.style.display = 'none';
+            selectDropdown.removeAttribute('required');
+
+            // Update the hidden input with the text input value
+            finalInput.value = inputText.value;
+        }
+    }
+
+    // Event listeners to update the hidden field when inputs change
+    inputText.addEventListener('input', function() {
+        finalInput.value = this.value;
+    });
+
+    selectDropdown.addEventListener('change', function() {
+        finalInput.value = this.value;
+    });
+
+    // Initialize the form
+    toggleNamaInput();
+
+    // Run when jenis selection changes
+    jenisSelect.addEventListener('change', toggleNamaInput);
+});
+</script>
 @endsection

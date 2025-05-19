@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterRekapAplikasi;
 use Illuminate\Http\Request;
 use App\Models\RekapAplikasi;
 
@@ -32,7 +33,12 @@ class AdminController extends Controller
     public function showApk($id)
     {
         $apk = RekapAplikasi::with('opd')->findOrFail($id);
-        return view('admin.show-apk', compact('apk'));
+
+        $riwayatPengembangan = RekapAplikasi::where('master_rekap_aplikasi_id', $apk->master_rekap_aplikasi_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.show-apk', compact('apk', 'riwayatPengembangan'));
     }
 
     public function editApk()

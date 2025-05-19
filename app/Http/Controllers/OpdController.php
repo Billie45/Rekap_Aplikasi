@@ -46,14 +46,19 @@ class OpdController extends Controller
 
         // return view('opd.form-pengajuan-assessment', compact('namaOpd'));
         $user = Auth::user();
+
         if (!$user || !$user->opd) {
             abort(403, 'You must be associated with an OPD to submit this form.');
         }
+
         $opd = $user->opd;
+
+        $apps = \App\Models\MasterRekapAplikasi::where('opd_id', $opd->id)->get();
 
         return view('opd.form-pengajuan-assessment', [
             'opdId' => $opd?->id,
             'namaOpd' => $opd?->nama_opd ?? '',
+            'apps' => $apps,
         ]);
     }
     //
@@ -109,6 +114,11 @@ class OpdController extends Controller
     public function showApk($id)
     {
         $apk = RekapAplikasi::with('opd')->findOrFail($id);
-        return view('opd.show-apk', compact('apk'));
+
+        $riwayatPengembangan = RekapAplikasi::where('master_rekap_aplikasi_id', $apk->master_rekap_aplikasi_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('opd.show-apk', compact('apk', 'riwayatPengembangan'));
     }
 }

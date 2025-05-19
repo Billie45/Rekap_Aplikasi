@@ -90,11 +90,13 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center">
                             @php
                                 $routeName = Auth::user()->role === 'admin' ? 'admin.show-apk' : 'opd.show-apk';
                             @endphp
-                            <a href="{{ route($routeName, $apk->id) }}">Detail</a>
+                            <a href="{{ route($routeName, $apk->id) }}" title="Detail">
+                                <i class="bx bxs-show" style="font-size: 1.5rem;"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

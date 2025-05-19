@@ -36,7 +36,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label for="opd" class="col-md-3 col-form-label text-md-right">Organisasi Pemerintah Daerah</label>
                             <div class="col-md-9">
@@ -49,15 +49,27 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="jenis" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>
+                            <div class="col-md-9">
+                                <input id="jenis" type="text" class="form-control" name="jenis"
+                                    value="{{ old('jenis', $apk->jenis ?? '') }}" readonly>
+                                @error('jenis')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="nama" class="col-md-3 col-form-label text-md-right">Nama Aplikasi</label>
                             <div class="col-md-9">
-                                <input id="nama" type="text" class="form-control" name="nama" required
-                                    value="{{ old('nama', $apk->nama) }}">
+                                <input id="nama" type="text" class="form-control" name="nama"
+                                    value="{{ old('nama', $apk->nama ?? '') }}" readonly>
                                 @error('nama')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
+
 
                         <div class="form-group row">
                             <label for="subdomain" class="col-md-3 col-form-label text-md-right">Nama Subdomain</label>

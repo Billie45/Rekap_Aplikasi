@@ -15,7 +15,7 @@
                 $apk->nama ?? '-',
                 $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>' : '-',
                 $apk->status_label ?? '-',
-                '<a href="' . route('pages.details.show-rekap', $apk->id) . '">Detail</a>',
+                '<div class="text-center"><a href="' . route('pages.details.show-rekap', $apk->id) . '" title="Detail"><i class="bx bxs-show" style="font-size: 1.5rem;"></i></a></div>',
             ];
         }
     @endphp
