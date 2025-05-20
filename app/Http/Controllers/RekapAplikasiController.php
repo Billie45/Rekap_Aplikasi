@@ -502,9 +502,9 @@ class RekapAplikasiController extends Controller
         $item->jenis_jawaban = 'Diterima';
         $item->save();
 
-        // Determine redirect route based on user role
+        // Redirect sesuai role
         $redirectRoute = Auth::user()->role == 'admin'
-            ? 'opd.daftar-pengajuan-assessment'
+            ? 'admin.daftar-pengajuan-assessment'
             : 'opd.daftar-pengajuan-assessment';
 
         return redirect()->route($redirectRoute)->with('success', 'Assessment telah diterima');
@@ -516,9 +516,9 @@ class RekapAplikasiController extends Controller
         $item->jenis_jawaban = 'Ditolak';
         $item->save();
 
-        // Determine redirect route based on user role
+        // Redirect sesuai role
         $redirectRoute = Auth::user()->role == 'admin'
-            ? 'opd.daftar-pengajuan-assessment'
+            ? 'admin.daftar-pengajuan-assessment'
             : 'opd.daftar-pengajuan-assessment';
 
         return redirect()->route($redirectRoute)->with('success', 'Assessment diminta revisi');
@@ -530,9 +530,9 @@ class RekapAplikasiController extends Controller
         $item->jenis_jawaban = 'Ditolak';
         $item->save();
 
-        // Determine redirect route based on user role
+        // Redirect sesuai role
         $redirectRoute = Auth::user()->role == 'admin'
-            ? 'opd.daftar-pengajuan-assessment'
+            ? 'admin.daftar-pengajuan-assessment'
             : 'opd.daftar-pengajuan-assessment';
 
         return redirect()->route($redirectRoute)->with('success', 'Assessment telah ditolak');

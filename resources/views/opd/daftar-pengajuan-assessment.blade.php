@@ -52,18 +52,17 @@
                         <td>
                             {{-- Khusus jika status adalah "batal", tampilkan prioritas teratas --}}
                             @if($apk->status === 'batal')
-                                <span class="btn btn-danger btn-sm">Assessment ditolak</span>
-
+                                {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
                             {{-- Jika role user adalah OPD --}}
                             @elseif(Auth::user()->role == 'opd')
                                 @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan' || $apk->jenis_jawaban === null)
-                                    <span class="btn btn-warning btn-sm">Menunggu verifikasi admin</span>
+                                    <span class="btn btn-danger btn-sm">Menunggu verifikasi admin</span>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="btn btn-success btn-sm">Assessment diterima</span>
+                                    <span class="btn btn-primary btn-sm">Assessment diterima</span>
                                 @elseif($apk->jenis_jawaban == 'Ditolak')
                                     <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-warning btn-sm" type="submit">Ajukan Revisi</button>
+                                        <button class="btn btn-danger btn-sm" type="submit">Ajukan Revisi</button>
                                     </form>
                                 @endif
 
@@ -72,20 +71,20 @@
                                 @if($apk->jenis_jawaban === null)
                                     <form action="{{ route('assessment.terima', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-success btn-sm">Terima</button>
+                                        <button class="btn btn-primary btn-sm">Terima</button>
                                     </form>
                                     <form action="{{ route('assessment.revisi_tombol', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button class="btn btn-warning btn-sm">Revisi</button>
+                                        <button class="btn btn-danger btn-sm">Revisi</button>
                                     </form>
-                                    <form action="{{ route('assessment.tolak', $apk->id) }}" method="POST" class="d-inline">
+                                    {{-- <form action="{{ route('assessment.tolak', $apk->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button class="btn btn-danger btn-sm">Tolak</button>
-                                    </form>
+                                    </form> --}}
                                 @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="btn btn-success btn-sm">Assessment diterima</span>
+                                    <span class="btn btn-primary btn-sm">Assessment diterima</span>
                                 @elseif($apk->jenis_jawaban == 'Ditolak')
-                                    <span class="btn btn-warning btn-sm">Assessment ditunda</span>
+                                    <span class="btn btn-danger btn-sm">Assessment ditunda</span>
                                 @endif
                             @endif
                         </td>
