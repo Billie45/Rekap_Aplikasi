@@ -13,5 +13,5 @@
     </div> --}}
 
     @include('components.rekap-assessment-1', ['aplikasis' => $aplikasis])
-    
+
 @endsection

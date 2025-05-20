@@ -28,7 +28,7 @@
                             {{-- <span>Kelola Aplikasi</span> --}}
                         </a>
 
-                        <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
+                        <a href="{{ route('admin.daftar-pengajuan-assessment') }}">
                             <i>Kelola Pengajuan Assessment</i>
                             {{-- <span>Daftar Pengajuan Assessment</span> --}}
                         </a>

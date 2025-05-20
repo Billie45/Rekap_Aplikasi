@@ -10,6 +10,33 @@
             border: 1px solid #ced4da;
             background-color: #fff;
         }
+        /* Samakan style Select2 dengan input-like-select */
+        .select2-container--default .select2-selection--single {
+            height: calc(2.375rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+            background-color: #fff;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5 !important;
+            padding-left: 0 !important;
+            color: #000000;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100% !important;
+            right: 10px !important;
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .btn, .form-control, .form-select {
+            border-radius: 5px !important;
+        }
     </style>
 
     <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Assessment Aplikasi</h4>
@@ -28,7 +55,7 @@
         </div>
 
         <div class="col-md-2">
-            <select name="opd_id" class="form-select input-like-select">
+            <select name="opd_id" class="form-select input-like-select select2">
                 <option value="">-- Pilih OPD --</option>
                 @foreach($opds as $opd)
                     <option value="{{ $opd->id }}" {{ request('opd_id') == $opd->id ? 'selected' : '' }}>
@@ -111,4 +138,22 @@
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
     </script>
+
+    @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @endpush
+
+    @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "-- Pilih OPD --",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+    @endpush
 @endsection

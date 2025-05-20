@@ -51,7 +51,9 @@
                             </td>
                             <td class="align-middle p-1">
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-sm btn-success">Update</button>
+                                    <button type="submit" class="btn btn-sm btn-success" title="Update" style="padding: 4px 8px;">
+                                        <i class="bx bx-refresh" style="font-size: 1.2rem;"></i>
+                                    </button>
                                 </div>
                                 </form>
                             </td>

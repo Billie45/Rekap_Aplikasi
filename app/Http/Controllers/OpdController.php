@@ -71,24 +71,7 @@ class OpdController extends Controller
     // Start
     public function daftarPengajuan(Request $request)
     {
-        // $user =  Auth::user();
-
-        // $opds = Opd::all();
-
-        // if ($user->role === 'admin') {
-        //     $aplikasis = RekapAplikasi::with('opd')
-        //         ->orderBy('created_at', 'desc')
-        //         ->paginate(15);
-        // } else {
-        //     $aplikasis = RekapAplikasi::with('opd')
-        //         ->where('opd_id', $user->opd_id)
-        //         ->orderBy('created_at', 'desc')
-        //         ->paginate(15);
-        // }
-
-        // return view('./opd.daftar-pengajuan-assessment', compact('aplikasis', 'opds'));
-
-         $query = RekapAplikasi::with('opd');
+        $query = RekapAplikasi::with('opd');
 
         // Filter by OPD if user is OPD role
         if (Auth::user()->role == 'opd' && Auth::user()->opd) {

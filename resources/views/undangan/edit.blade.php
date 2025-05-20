@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card-body">
             <form action="{{ route('undangan.update', $undangan->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf

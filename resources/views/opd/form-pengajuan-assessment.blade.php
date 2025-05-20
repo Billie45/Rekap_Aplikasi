@@ -52,7 +52,7 @@
                         <div class="form-group row">
                             <label for="jenis" class="col-md-3 col-form-label text-md-right">jenis pengembangan</label>
                             <div class="col-md-9">
-                                <select id="tipe" class="form-control" name="jenis" required>
+                                <select id="jenis" class="form-control" name="jenis" required>
                                     <option value="baru" {{ old('jenis') == 'baru' ? 'selected' : '' }}>Baru</option>
                                     <option value="pengembangan" {{ old('jenis') == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
                                 </select>
@@ -66,7 +66,7 @@
                             <label for="nama" class="col-md-3 col-form-label text-md-right">Nama Aplikasi</label>
                             <div class="col-md-9">
                                 {{-- Input teks untuk "baru" --}}
-                                <input id="nama_text" type="text" class="form-control" style="display: none;" value="{{ old('nama') }}">
+                                <input id="nama_text" name="nama" type="text" class="form-control" style="display: none;" value="{{ old('nama') }}">
 
                                 {{-- Dropdown untuk "pengembangan" --}}
                                 <select id="nama_select" class="form-control" style="display: none;">
@@ -290,12 +290,44 @@
 </div>
 
 <script>
+    const rekapApps = @json($apps);
+
     document.addEventListener('DOMContentLoaded', function () {
     // Get references to the elements
     const jenisSelect = document.querySelector('select[name="jenis"]');
     const inputText = document.getElementById('nama_text');
     const selectDropdown = document.getElementById('nama_select');
     const finalInput = document.getElementById('nama_final');
+
+    const tipeInput = document.querySelector('select[name="tipe"]');
+    const jenisPermohonanInput = document.querySelector('select[name="jenis_permohonan"]');
+    const subdomainInput = document.querySelector('input[name="subdomain"]');
+    const akunLinkInput = document.querySelector('input[name="akun_link"]');
+    const akunUsernameInput = document.querySelector('input[name="akun_username"]');
+    const akunPasswordInput = document.querySelector('input[name="akun_password"]');
+
+    function isiFieldOtomatis(nama) {
+        const found = rekapApps.find(item =>
+            item.nama === nama && item.opd_id == {{ Auth::user()->opd_id }}
+        );
+
+        if (found) {
+            tipeInput.value = found.tipe;
+            jenisPermohonanInput.value = found.jenis_permohonan;
+            subdomainInput.value = found.subdomain;
+            akunLinkInput.value = found.akun_link;
+            akunUsernameInput.value = found.akun_username;
+            akunPasswordInput.value = found.akun_password;
+        } else {
+            // reset jika tidak ditemukan
+            tipeInput.value = '';
+            jenisPermohonanInput.value = '';
+            subdomainInput.value = '';
+            akunLinkInput.value = '';
+            akunUsernameInput.value = '';
+            akunPasswordInput.value = '';
+        }
+    }
 
     function toggleNamaInput() {
         const jenis = jenisSelect.value;
@@ -309,6 +341,7 @@
 
             // Update the hidden input with the selected option value
             finalInput.value = selectDropdown.value;
+            isiFieldOtomatis(selectDropdown.value);
         } else {
             inputText.style.display = 'block';
             inputText.setAttribute('required', 'required');
@@ -318,23 +351,33 @@
 
             // Update the hidden input with the text input value
             finalInput.value = inputText.value;
+
+            // reset jika bukan pengembangan
+            tipeInput.value = '';
+            jenisPermohonanInput.value = '';
+            subdomainInput.value = '';
+            akunLinkInput.value = '';
+            akunUsernameInput.value = '';
+            akunPasswordInput.value = '';
         }
     }
 
-    // Event listeners to update the hidden field when inputs change
-    inputText.addEventListener('input', function() {
-        finalInput.value = this.value;
+        // Event listener saat jenis pengembangan berubah
+        jenisSelect.addEventListener('change', toggleNamaInput);
+
+        // Event listener saat dropdown aplikasi berubah
+        selectDropdown.addEventListener('change', function () {
+            finalInput.value = this.value;
+            isiFieldOtomatis(this.value);
+        });
+
+        // Event listener saat input text berubah
+        inputText.addEventListener('input', function () {
+            finalInput.value = this.value;
+        });
+
+        // Panggil saat halaman load
+        toggleNamaInput();
     });
-
-    selectDropdown.addEventListener('change', function() {
-        finalInput.value = this.value;
-    });
-
-    // Initialize the form
-    toggleNamaInput();
-
-    // Run when jenis selection changes
-    jenisSelect.addEventListener('change', toggleNamaInput);
-});
 </script>
 @endsection

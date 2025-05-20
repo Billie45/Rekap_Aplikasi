@@ -60,17 +60,20 @@ $detailData = [
             ])
             : '-'
     ],
-    ['label' => 'Tools', 'value' =>
-        implode('', [
-            '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '">Edit</a><br>',
-            '<form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" class="d-inline" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">',
-                csrf_field(),
-                method_field('DELETE'),
-                '<button type="submit" style="color: red">Hapus</button>',
-            '</form>',
-        ])
+    ['label' => 'Edit', 'value' => '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '"><i class="bx bxs-edit" style="font-size: 1.5rem;"></i></a>'],
+    ['label' => 'Hapus', 'value' =>
+        '<form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">
+            ' . csrf_field() . '
+            ' . method_field('DELETE') . '
+            <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;"><i class="bx bxs-trash" style="font-size: 1.5rem; color: red;"></i></button>
+        </form>'
     ],
 ];
+
+    // Tambahkan ini untuk mencegah error undefined variable
+    if (!isset($riwayatPengembangan)) {
+        $riwayatPengembangan = collect();
+    }
 @endphp
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Assessment Aplikasi</h4>
@@ -104,7 +107,9 @@ $detailData = [
                         <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
                         <td>
                             @if($undangan->assessment_dokumentasi)
-                                <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank">Lihat</a>
+                                <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank" title="Lihat Dokumen">
+                                    <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
+                                </a>
                             @else
                                 -
                             @endif
@@ -112,17 +117,23 @@ $detailData = [
                         <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
                         <td>
                             @if($undangan->surat_rekomendasi)
-                                <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank">Lihat</a>
+                                <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank" title="Lihat Surat">
+                                    <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
+                                </a>
                             @else
                                 -
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('undangan.edit', $undangan->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ route('undangan.edit', $undangan->id) }}">
+                                <i class="bx bxs-edit" style="font-size: 1.5rem;"></i>
+                            </a>
                             <form action="{{ route('undangan.destroy', $undangan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus undangan ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    <i class="bx bxs-trash" style="font-size: 1.5rem; color: red;"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -138,10 +149,6 @@ $detailData = [
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Riwayat Pengembangan aplikasi</h4>
 <!-- Tabel Riwayat -->
 <div class="bg-white rounded shadow p-4 mt-4">
-
-@if($riwayatPengembangan->isEmpty())
-    <p>Belum ada riwayat pengembangan untuk aplikasi ini.</p>
-@else
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -160,13 +167,12 @@ $detailData = [
                     <td>{{ $riwayat->permohonan ?? '-' }}</td>
                     <td>{{ $riwayat->jenis ?? '-' }}</td>
                     <td>{{ $riwayat->status ?? '-' }}</td>
-                    <td><a href="{{ route('admin.show-apk', $riwayat->id) }}">Detail</a></td>
+                    <td><a href="{{ route('admin.show-apk', $riwayat->id) }}"><i class="bx bxs-show" style="font-size: 1.5rem; color:blue"></a></td>
                     <!-- Isi sesuai kolom tabel master_rekap_aplikasi -->
                 </tr>
             @endforeach
         </tbody>
     </table>
-@endif
 </div>
 
 <div class="mt-4">

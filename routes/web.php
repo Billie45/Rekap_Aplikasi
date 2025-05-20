@@ -179,7 +179,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // start
 Route::get('/opd.daftar-pengajuan-assessment', [\App\Http\Controllers\OpdController::class, 'daftarPengajuan'])
     ->name('opd.daftar-pengajuan-assessment')
-    ->middleware([]);
+    ->middleware(['auth', 'role:opd']);
+
+Route::get('/admin/daftar-pengajuan-assessment', [\App\Http\Controllers\AdminController::class, 'daftarPengajuan'])
+    ->name('admin.daftar-pengajuan-assessment')
+    ->middleware(['auth', 'role:admin']);
 //
 //end
 
@@ -285,6 +289,8 @@ Route::resource('undangan', UndanganController::class);
 // end
 
 Route::get('/rekap-terbaru', [RekapAplikasiController::class, 'latestRekap'])->name('rekap-aplikasi.latest');
+Route::get('admin/get-master-apps/{opd}', [RekapAplikasiController::class, 'getMasterApps']);
+Route::get('/admin/get-master-app-details', [\App\Http\Controllers\AdminController::class, 'getMasterAppDetails']);
 
 // ============================================================
 // bagian ini untuk mencoba melakukan soft delete

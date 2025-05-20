@@ -87,7 +87,9 @@ $detailData = [
                     <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
                     <td>
                         @if($undangan->assessment_dokumentasi)
-                            <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank">Lihat</a>
+                            <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank" title="Lihat Dokumen">
+                                <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
+                            </a>
                         @else
                             -
                         @endif
@@ -95,7 +97,9 @@ $detailData = [
                     <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
                     <td>
                         @if($undangan->surat_rekomendasi)
-                            <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank">Lihat</a>
+                            <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank" title="Lihat Surat">
+                                <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
+                            </a>
                         @else
                             -
                         @endif
@@ -135,7 +139,7 @@ $detailData = [
                     <td>{{ $riwayat->permohonan ?? '-' }}</td>
                     <td>{{ $riwayat->jenis ?? '-' }}</td>
                     <td>{{ $riwayat->status ?? '-' }}</td>
-                    <td><a href="{{ route('opd.show-apk', $riwayat->id) }}">Detail</a></td>
+                    <td><a href="{{ route('opd.show-apk', $riwayat->id) }}"><i class="bx bxs-show" style="font-size: 1.5rem; color:blue"></a></td>
                     <!-- Isi sesuai kolom tabel master_rekap_aplikasi -->
                 </tr>
             @endforeach

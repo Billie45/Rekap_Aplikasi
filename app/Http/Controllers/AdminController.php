@@ -116,6 +116,40 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
     }
+
+    public function getMasterAppDetails(Request $request)
+    {
+        $nama = $request->query('nama');
+        $opdId = $request->query('opd_id');
+
+        $masterApp = MasterRekapAplikasi::where('nama', $nama)
+            ->where('opd_id', $opdId)
+            ->first();
+
+        if ($masterApp) {
+            return response()->json($masterApp);
+        }
+
+        return response()->json(null);
+    }
+
+    public function daftarPengajuan(Request $request)
+    {
+        $query = RekapAplikasi::with('opd');
+
+        // Add additional filters if needed
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Order by latest first
+        $query->orderBy('created_at', 'desc');
+
+        // Paginate the results
+        $aplikasis = $query->paginate(25);
+
+        return view('admin.daftar-pengajuan-assessment', compact('aplikasis'));
+    }
     //
     // end
 }
