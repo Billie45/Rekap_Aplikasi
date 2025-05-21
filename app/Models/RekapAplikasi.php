@@ -73,6 +73,11 @@ class RekapAplikasi extends Model
         return $this->belongsTo(MasterRekapAplikasi::class, 'master_rekap_aplikasi_id');
     }
 
+    public function riwayatRevisiAssessments()
+    {
+        return $this->hasMany(RiwayatRevisiAssessment::class);
+    }
+
     public function getTipeLabelAttribute()
     {
         return match ($this->tipe) {

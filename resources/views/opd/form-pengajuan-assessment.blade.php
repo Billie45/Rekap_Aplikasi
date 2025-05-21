@@ -39,6 +39,16 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="surat_permohonan" class="col-md-3 col-form-label text-md-right">Surat Permohonan</label>
+                            <div class="col-md-9">
+                                <input id="surat_permohonan" type="file" class="form-control" name="surat_permohonan" style="border: 1px solid #ced4da; padding: .375rem .75rem;">
+                                @error('surat_permohonan')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="opd" class="col-md-3 col-form-label text-md-right">Organisasi Pemerintah Daerah</label>
                             <div class="col-md-9">
                                 <input type="hidden" name="opd_id" value="{{ Auth::user()->opd_id}}">
