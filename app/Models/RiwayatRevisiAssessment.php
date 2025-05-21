@@ -30,6 +30,7 @@ class RiwayatRevisiAssessment extends Model
         'cp_pengembang_no_telepon',
         'surat_permohonan',
         'tanggal_pengajuan',
+        'catatan',
     ];
 
     public function rekapAplikasi()

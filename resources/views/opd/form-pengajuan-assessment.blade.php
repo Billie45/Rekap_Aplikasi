@@ -21,7 +21,7 @@
                 <div class="card-header">Formulir Pengajuan Assessment Aplikasi</div>
 
                 <div class="card-body">
-                    <form action="{{ route('pengajuan-assessment.storeAssessment') }}" method="POST">
+                    <form action="{{ route('pengajuan-assessment.storeAssessment') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Utama -->

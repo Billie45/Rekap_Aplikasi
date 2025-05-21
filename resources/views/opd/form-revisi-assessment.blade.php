@@ -21,7 +21,7 @@
                 <div class="card-header">Formulir Revisi Assessment Aplikasi</div>
 
                 <div class="card-body">
-                    <form action="{{ route('assessment.revisi.submit', $apk->id) }}" method="POST">
+                    <form action="{{ route('assessment.revisi.submit', $apk->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

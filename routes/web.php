@@ -157,7 +157,7 @@ Route::post('/aplikasi/verifikasi/{id}', [RekapAplikasiController::class, 'verif
 Route::get('/aplikasi/revisi/{id}', [RekapAplikasiController::class, 'ajukanRevisi'])->name('aplikasi.revisi');
 
 Route::post('/assessment/{id}/terima', [RekapAplikasiController::class, 'terima'])->name('assessment.terima');
-Route::post('/assessment/{id}/revisi_tombol', [RekapAplikasiController::class, 'revisi_tombol'])->name('assessment.revisi_tombol');
+Route::post('/assessment/revisi_tombol/{id}', [RekapAplikasiController::class, 'revisiTombol'])->name('assessment.revisi_tombol');
 Route::post('/assessment/{id}/tolak', [RekapAplikasiController::class, 'tolak'])->name('assessment.tolak');
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -409,7 +409,7 @@ class RekapAplikasiController extends Controller
             'permohonan' => 'nullable',
             'undangan_terakhir' => 'nullable',
             'laporan_perbaikan' => 'nullable',
-            'surat_permohonan' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048', // Validasi file
+            'surat_permohonan' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:102400', // Validasi file
         ]);
 
         $opdId = auth::user()->opd_id;
@@ -525,7 +525,7 @@ class RekapAplikasiController extends Controller
             'cp_opd_no_telepon' => 'nullable',
             'cp_pengembang_nama' => 'nullable',
             'cp_pengembang_no_telepon' => 'nullable',
-            'surat_permohonan' => 'nullable|files|mimes:pdf,doc,docx,jpg,jpeg,png',
+            'surat_permohonan' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
         $item = RekapAplikasi::findOrFail($id);
@@ -590,11 +590,27 @@ class RekapAplikasiController extends Controller
         return redirect()->route($redirectRoute)->with('success', 'Assessment telah diterima');
     }
 
-    public function revisi_tombol($id) {
+    public function revisiTombol(Request $request, $id) {
+        $request->validate([
+            'catatan' => 'required|string',
+        ]);
+
         $item = RekapAplikasi::findOrFail($id);
         $item->status = 'perbaikan';
         $item->jenis_jawaban = 'Ditolak';
         $item->save();
+
+        // Update RiwayatRevisiAssessment with catatan
+        $riwayatRevisi = RiwayatRevisiAssessment::where('rekap_aplikasi_id', $id)->latest()->first();
+
+        if ($riwayatRevisi) {
+            $riwayatRevisi->update(['catatan' => $request->catatan]);
+        } else {
+        RiwayatRevisiAssessment::create([
+            'rekap_aplikasi_id' => $id,
+            'catatan' => $request->catatan,
+        ]);
+    }
 
         // Redirect sesuai role
         $redirectRoute = Auth::user()->role == 'admin'
