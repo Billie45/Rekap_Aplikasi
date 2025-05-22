@@ -298,6 +298,10 @@
         const akunLinkInput = document.getElementById('akun_link');
         const akunUsernameInput = document.getElementById('akun_username');
         const akunPasswordInput = document.getElementById('akun_password');
+        const cpOpdNamaInput = document.querySelector('input[name="cp_opd_nama"]');
+        const cpOpdNoTeleponInput = document.querySelector('input[name="cp_opd_no_telepon"]');
+        const cpPengembangNamaInput = document.querySelector('input[name="cp_pengembang_nama"]');
+        const cpPengembangNoTeleponInput = document.querySelector('input[name="cp_pengembang_no_telepon"]');
 
         // Function untuk memuat daftar aplikasi berdasarkan OPD terpilih
         function loadApps(opd_id) {
@@ -330,6 +334,10 @@
             akunLinkInput.value = '';
             akunUsernameInput.value = '';
             akunPasswordInput.value = '';
+            cpOpdNamaInput.value = '';
+            cpOpdNoTeleponInput.value = '';
+            cpPengembangNamaInput.value = '';
+            cpPengembangNoTeleponInput.value = '';
 
             // Fetch data from server
             fetch(`/admin/get-master-app-details?nama=${encodeURIComponent(nama)}&opd_id=${opd_id}`)
@@ -343,6 +351,10 @@
                         akunLinkInput.value = data.akun_link || '';
                         akunUsernameInput.value = data.akun_username || '';
                         akunPasswordInput.value = data.akun_password || '';
+                        cpOpdNamaInput.value = data.cp_opd_nama || '';
+                        cpOpdNoTeleponInput.value = data.cp_opd_no_telepon || '';
+                        cpPengembangNamaInput.value = data.cp_pengembang_nama || '';
+                        cpPengembangNoTeleponInput.value = data.cp_pengembang_no_telepon || '';
                     } else {
                         // reset jika tidak ditemukan
                         tipeSelect.value = '';
@@ -351,6 +363,10 @@
                         akunLinkInput.value = '';
                         akunUsernameInput.value = '';
                         akunPasswordInput.value = '';
+                        cpOpdNamaInput.value = '';
+                        cpOpdNoTeleponInput.value = '';
+                        cpPengembangNamaInput.value = '';
+                        cpPengembangNoTeleponInput.value = '';
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -389,6 +405,10 @@
                 akunLinkInput.value = '';
                 akunUsernameInput.value = '';
                 akunPasswordInput.value = '';
+                cpOpdNamaInput.value = '';
+                cpOpdNoTeleponInput.value = '';
+                cpPengembangNamaInput.value = '';
+                cpPengembangNoTeleponInput.value = '';
             }
         }
 
@@ -407,6 +427,10 @@
                 akunLinkInput.value = '';
                 akunUsernameInput.value = '';
                 akunPasswordInput.value = '';
+                cpOpdNamaInput.value = '';
+                cpOpdNoTeleponInput.value = '';
+                cpPengembangNamaInput.value = '';
+                cpPengembangNoTeleponInput.value = '';
 
                 fillAppData('', this.value);
             }
@@ -428,6 +452,10 @@
             akunLinkInput.value = '';
             akunUsernameInput.value = '';
             akunPasswordInput.value = '';
+            cpOpdNamaInput.value = '';
+            cpOpdNoTeleponInput.value = '';
+            cpPengembangNamaInput.value = '';
+            cpPengembangNoTeleponInput.value = '';
 
             if (this.value) {
                 fillAppData(this.value, opdSelect.value);

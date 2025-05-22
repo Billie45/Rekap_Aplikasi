@@ -17,6 +17,10 @@ class MasterRekapAplikasi extends Model
         'akun_link',
         'akun_username',
         'akun_password',
+        'cp_opd_nama',
+        'cp_opd_no_telepon',
+        'cp_pengembang_nama',
+        'cp_pengembang_no_telepon',
     ];
 
 

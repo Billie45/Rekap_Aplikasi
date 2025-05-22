@@ -56,23 +56,59 @@
                             @endif
                         </td> --}}
                         <td>
-                            {{-- Khusus jika status adalah "batal", tampilkan prioritas teratas --}}
                             @if($apk->status === 'batal')
                                 {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
-                            {{-- Jika role user adalah OPD --}}
                             @elseif(Auth::user()->role == 'opd')
                                 @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan' || $apk->jenis_jawaban === null)
-                                    <span class="btn btn-danger btn-sm">Menunggu verifikasi admin</span>
+                                    <span class="btn btn-secondary btn-sm">Menunggu verifikasi admin</span>
                                 @elseif($apk->jenis_jawaban == 'Diterima')
                                     <span class="btn btn-primary btn-sm">Assessment diterima</span>
-                                @elseif($apk->jenis_jawaban == 'Ditolak')
-                                    <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
-                                        @csrf
-                                        <button class="btn btn-danger btn-sm" type="submit">Ajukan Revisi</button>
-                                    </form>
+                                @else
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#assessmentDitolakModal{{ $apk->id }}">
+                                        Assessment ditolak
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="assessmentDitolakModal{{ $apk->id }}" tabindex="-1" role="dialog" aria-labelledby="assessmentDitolakModalLabel{{ $apk->id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="assessmentDitolakModalLabel{{ $apk->id }}">Catatan Perbaikan dari Admin</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @php
+                                                        // Ambil revisi terbaru langsung dari query builder
+                                                        $latestRevision = $apk->riwayatRevisiAssessments()
+                                                            ->orderByDesc('tanggal_pengajuan')
+                                                            ->first();
+                                                    @endphp
+
+                                                    @if($latestRevision)
+                                                        <div class="mb-2">
+                                                            <span>{{ $latestRevision->catatan ?? 'Tidak ada catatan.' }}</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="mb-2">
+                                                            <strong>Undangan:</strong>
+                                                            <span>Tidak ada data revisi.</span>
+                                                        </div>
+                                                    @endif
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                    <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger">Ajukan Revisi</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             @endif
-                            {{-- Jika role user adalah admin --}}
                         </td>
 
                         <td class="text-center">

@@ -80,7 +80,6 @@
                             </div>
                         </div>
 
-
                         <div class="form-group row">
                             <label for="subdomain" class="col-md-3 col-form-label text-md-right">Nama Subdomain</label>
                             <div class="col-md-9">
@@ -104,16 +103,6 @@
                                 @enderror
                             </div>
                         </div>
-
-                        {{-- <div class="form-group row">
-                            <label for="last_update" class="col-md-3 col-form-label text-md-right">Deskripsi Singkat Last Update</label>
-                            <div class="col-md-9">
-                                <textarea id="last_update" class="form-control" name="last_update" rows="2">{{ old('last_update', $apk->last_update) }}</textarea>
-                                @error('last_update')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div> --}}
 
                         <div class="form-group row">
                             <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>

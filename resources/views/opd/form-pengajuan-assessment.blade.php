@@ -316,6 +316,10 @@
     const akunLinkInput = document.querySelector('input[name="akun_link"]');
     const akunUsernameInput = document.querySelector('input[name="akun_username"]');
     const akunPasswordInput = document.querySelector('input[name="akun_password"]');
+    const cpOpdNamaInput = document.querySelector('input[name="cp_opd_nama"]');
+    const cpOpdNoTeleponInput = document.querySelector('input[name="cp_opd_no_telepon"]');
+    const cpPengembangNamaInput = document.querySelector('input[name="cp_pengembang_nama"]');
+    const cpPengembangNoTeleponInput = document.querySelector('input[name="cp_pengembang_no_telepon"]');
 
     function isiFieldOtomatis(nama) {
         const found = rekapApps.find(item =>
@@ -329,6 +333,10 @@
             akunLinkInput.value = found.akun_link;
             akunUsernameInput.value = found.akun_username;
             akunPasswordInput.value = found.akun_password;
+            cpOpdNamaInput.value = found.cp_opd_nama;
+            cpOpdNoTeleponInput.value = found.cp_opd_no_telepon;
+            cpPengembangNamaInput.value = found.cp_pengembang_nama;
+            cpPengembangNoTeleponInput.value = found.cp_pengembang_no_telepon;
         } else {
             // reset jika tidak ditemukan
             tipeInput.value = '';
@@ -337,6 +345,10 @@
             akunLinkInput.value = '';
             akunUsernameInput.value = '';
             akunPasswordInput.value = '';
+            cpOpdNamaInput.value = '';
+            cpOpdNoTeleponInput.value = '';
+            cpPengembangNamaInput.value = '';
+            cpPengembangNoTeleponInput.value = '';
         }
     }
 
@@ -370,6 +382,10 @@
             akunLinkInput.value = '';
             akunUsernameInput.value = '';
             akunPasswordInput.value = '';
+            cpOpdNamaInput.value = '';
+            cpOpdNoTeleponInput.value = '';
+            cpPengembangNamaInput.value = '';
+            cpPengembangNoTeleponInput.value = '';
         }
     }
 

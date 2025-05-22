@@ -82,6 +82,10 @@ class RekapAplikasiController extends Controller
             'jenis' => 'required',
             'status' => 'required',
             'permohonan' => 'required|date',
+            'cp_opd_nama' => 'nullable',
+            'cp_opd_no_telepon' => 'nullable',
+            'cp_pengembang_nama' => 'nullable',
+            'cp_pengembang_no_telepon' => 'nullable',
         ], [
             'nama.required' => 'Nama aplikasi wajib diisi.',
             'opd_id.required' => 'OPD wajib dipilih.',
@@ -111,6 +115,10 @@ class RekapAplikasiController extends Controller
             'akun_link' => $request->akun_link,
             'akun_username' => $request->akun_username,
             'akun_password' => $request->akun_password,
+            'cp_opd_nama' => $request->cp_opd_nama,
+            'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
+            'cp_pengembang_nama' => $request->cp_pengembang_nama,
+            'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
         ]);
 
         $master->updated_at = now();
@@ -260,6 +268,10 @@ class RekapAplikasiController extends Controller
                 'akun_link' => $request->akun_link,
                 'akun_username' => $request->akun_username,
                 'akun_password' => $request->akun_password,
+                'cp_opd_nama' => $request->cp_opd_nama,
+                'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
+                'cp_pengembang_nama' => $request->cp_pengembang_nama,
+                'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
             ]);
 
             $master->updated_at = now();
@@ -329,6 +341,10 @@ class RekapAplikasiController extends Controller
             'akun_link' => $app->akun_link,
             'akun_username' => $app->akun_username,
             'akun_password' => $app->akun_password,
+            'cp_opd_nama' => $app->cp_opd_nama,
+            'cp_opd_no_telepon' => $app->cp_opd_no_telepon,
+            'cp_pengembang_nama' => $app->cp_pengembang_nama,
+            'cp_pengembang_no_telepon' => $app->cp_pengembang_no_telepon,
         ]);
     }
     //
@@ -440,6 +456,10 @@ class RekapAplikasiController extends Controller
                 'akun_link' => $request->akun_link,
                 'akun_username' => $request->akun_username,
                 'akun_password' => $request->akun_password,
+                'cp_opd_nama' => $request->cp_opd_nama,
+                'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
+                'cp_pengembang_nama' => $request->cp_pengembang_nama,
+                'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
         ]);
 
         $master->updated_at = now();
