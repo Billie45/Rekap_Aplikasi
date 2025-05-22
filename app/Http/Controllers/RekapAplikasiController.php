@@ -409,7 +409,7 @@ class RekapAplikasiController extends Controller
             'permohonan' => 'nullable',
             'undangan_terakhir' => 'nullable',
             'laporan_perbaikan' => 'nullable',
-            'surat_permohonan' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:102400', // Validasi file
+            'surat_permohonan' => 'required|mimes:pdf,doc,docx,jpg,jpeg,png|max:102400', // Validasi file
         ]);
 
         $opdId = auth::user()->opd_id;
@@ -455,7 +455,7 @@ class RekapAplikasiController extends Controller
             'subdomain' => $request->subdomain,
             'tipe' => $request->tipe,
             'jenis' => $request->jenis,
-            'status' => 'diproses',
+            'status' => 'assessment1',
             'jenis_assessment' => 'Pertama',
             'jenis_jawaban' => null,
             'jenis_permohonan' => $request->jenis_permohonan,
@@ -478,7 +478,7 @@ class RekapAplikasiController extends Controller
         if ($request->hasFile('surat_permohonan')) {
             $file = $request->file('surat_permohonan');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('surat_permohonan'), $fileName); // Simpan di folder public/surat_permohonan
+            $file->move(public_path('storage/surat_permohonan'), $fileName); // Simpan di folder public/storage/surat_permohonan
             $suratPermohonanPath = 'surat_permohonan/' . $fileName; // Simpan path ke database
         } else {
             $suratPermohonanPath = null;
@@ -525,13 +525,13 @@ class RekapAplikasiController extends Controller
             'cp_opd_no_telepon' => 'nullable',
             'cp_pengembang_nama' => 'nullable',
             'cp_pengembang_no_telepon' => 'nullable',
-            'surat_permohonan' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png',
+            'surat_permohonan' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png',
         ]);
 
         $item = RekapAplikasi::findOrFail($id);
 
         $item->update($validated);
-        $item->status = 'perbaikan';
+        $item->status = 'assessment2';
         $item->jenis_assessment = 'Revisi';
         $item->jenis_jawaban = null;
         $item->save();
@@ -540,7 +540,7 @@ class RekapAplikasiController extends Controller
         if ($request->hasFile('surat_permohonan')) {
             $file = $request->file('surat_permohonan');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('surat_permohonan'), $fileName); // Simpan di folder public/surat_permohonan
+            $file->move(public_path('storage/surat_permohonan'), $fileName); // Simpan di folder public/storage/surat_permohonan
             $suratPermohonanPath = 'surat_permohonan/' . $fileName; // Simpan path ke database
         } else {
             $suratPermohonanPath = null;
@@ -578,7 +578,7 @@ class RekapAplikasiController extends Controller
     // Start
     public function terima($id) {
         $item = RekapAplikasi::findOrFail($id);
-        $item->status = 'assessment1';
+        $item->status = 'assessment2';
         $item->jenis_jawaban = 'Diterima';
         $item->save();
 

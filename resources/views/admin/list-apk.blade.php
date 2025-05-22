@@ -84,7 +84,7 @@
         <div class="col-md-2">
             <select name="status" class="form-select input-like-select">
                 <option value="">-- Pilih Status --</option>
-                <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                {{-- <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option> --}}
                 <option value="perbaikan" {{ request('status') == 'perbaikan' ? 'selected' : '' }}>Perbaikan</option>
                 <option value="assessment1" {{ request('status') == 'assessment1' ? 'selected' : '' }}>Assessment 1</option>
                 <option value="assessment2" {{ request('status') == 'assessment2' ? 'selected' : '' }}>Assessment 2</option>

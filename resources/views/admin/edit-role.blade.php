@@ -40,7 +40,7 @@
                                     </select>
                             </td>
                             <td class="align-middle p-1">
-                                <select name="opd_id" class="form-control form-control-sm">
+                                <select name="opd_id" class="form-control form-control-sm select2">
                                     <option value="">-- Pilih OPD --</option>
                                     @foreach($opds as $opd)
                                         <option value="{{ $opd->id }}" {{ $user->opd_id == $opd->id ? 'selected' : '' }}>
@@ -70,3 +70,20 @@
     {{ $users->links('pagination::tailwind') }}
 </div>
 @endsection
+
+@push('scripts')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').each(function() {
+            if (!$(this).hasClass('select2-hidden-accessible')) {
+                $(this).select2({
+                    placeholder: '-- Pilih OPD --',
+                    allowClear: true
+                });
+            }
+        });
+    });
+</script>
+@endpush

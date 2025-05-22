@@ -93,7 +93,7 @@
 
                     <label>Status Assessment:</label>
                     <select name="status">
-                        <option value="diproses" {{ (old('status', $apk->status ?? '')) == 'diproses' ? 'selected' : '' }}>0. diproses</option>
+                        {{-- <option value="diproses" {{ (old('status', $apk->status ?? '')) == 'diproses' ? 'selected' : '' }}>0. diproses</option> --}}
                         <option value="perbaikan" {{ (old('status', $apk->status ?? '')) == 'perbaikan' ? 'selected' : '' }}>1. perbaikan</option>
                         <option value="assessment1" {{ (old('status', $apk->status ?? '')) == 'assessment1' ? 'selected' : '' }}>2. assessment 1</option>
                         <option value="assessment2" {{ (old('status', $apk->status ?? '')) == 'assessment2' ? 'selected' : '' }}>3. assessment 2</option>

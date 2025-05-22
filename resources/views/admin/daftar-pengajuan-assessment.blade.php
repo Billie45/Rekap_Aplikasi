@@ -55,7 +55,7 @@
                                         @csrf
                                         <button class="btn btn-primary btn-sm">Terima</button>
                                     </form>
-                                    <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal">Revisi</button>
+                                    <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal">Tolak</button>
                                     {{-- <form action="{{ route('assessment.tolak', [$apk->id, 'redirect' => route('admin.daftar-pengajuan-assessment')]) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button class="btn btn-danger btn-sm">Tolak</button>
@@ -86,11 +86,16 @@
 
                                 @if($riwayat && $riwayat->count() > 0)
                                     {{-- Riwayat Terbaru (tampilkan semua data secara detail dalam 1 tabel) --}}
-                                    @php
-                                        $latest = $riwayat->first(); // ambil data terbaru
-                                        $others = $riwayat->slice(1); // sisanya
-                                    @endphp
+                                @php
+                                    // Urutkan semua data berdasarkan tanggal_pengajuan terbaru
+                                    $sorted = $riwayat->sortByDesc('tanggal_pengajuan');
 
+                                    // Ambil data terbaru (pertama)
+                                    $latest = $sorted->first();
+
+                                    // Ambil sisanya, kecuali yang pertama
+                                    $others = $sorted->slice(1); // slice mulai dari index ke-1
+                                @endphp
                                     {{-- Tabel Detail Riwayat Terbaru --}}
                                     <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse;">
                                         <tbody>
@@ -106,7 +111,13 @@
                                                 </td></tr>
                                             <tr><th style="text-align: left;">Tipe</th><td>{{ $latest->tipe ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Jenis Permohonan</th><td>{{ $latest->jenis_permohonan ?? '-' }}</td></tr>
-                                            <tr><th style="text-align: left;">Link Dokumentasi</th><td>{{ $latest->link_dokumentasi ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">Link Dokumentasi</th><td>
+                                                    @if($latest->link_dokumentasi)
+                                                        <a href="{{ $latest->link_dokumentasi }}" target="_blank">{{ $latest->link_dokumentasi }}</a>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td></tr>
                                             <tr><th style="text-align: left;">Akun Link</th><td>
                                                     @if($latest->akun_link)
                                                         <a href="{{ $latest->akun_link }}" target="_blank">{{ $latest->akun_link }}</a>
@@ -125,36 +136,36 @@
                                                 <td>
                                                     @if($latest->surat_permohonan)
                                                         <a href="{{ asset('storage/' . $latest->surat_permohonan) }}" target="_blank" title="Lihat PDF">
-                                                            <i class='bx bxs-file-pdf' style="font-size: 1.5rem;"></i>
+                                                            <i class='bx bxs-file-pdf' style="font-size: 1.5rem; color: red;"></i>
                                                         </a>
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
                                             </tr>
-                                            <tr><th style="text-align: left;">Catatan</th><td>{{ $latest->catatan ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">Catatan Perbaikan dari Admin</th><td>{{ $latest->catatan ?? '-' }}</td></tr>
                                         </tbody>
                                     </table>
 
                                     {{-- Tabel Riwayat Lama --}}
                                     <strong>Assessment Lama:</strong>
                                     @if(count($others) > 0)
-                                        @foreach($others as $rev)
-                                            <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse; background: #fff;">
-                                                <thead style="background: #e5e7eb;">
-                                                    <tr>
-                                                        <th style="text-align:left; width:20%;">Tanggal Pengajuan</th>
-                                                        <th style="text-align:left; width:5%;">Surat</th>
-                                                        <th style="text-align:left; width:75%;">Catatan</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                        <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse; background: #fff;">
+                                            <thead style="background: #e5e7eb;">
+                                                <tr>
+                                                    <th style="text-align:left; width:20%;">Tanggal Pengajuan</th>
+                                                    <th style="text-align:left; width:5%;">Surat Permohonan</th>
+                                                    <th style="text-align:left; width:75%;">Catatan Perbaikan dari Admin</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($others as $rev)
                                                     <tr>
                                                         <td>{{ $rev->tanggal_pengajuan ?? '-' }}</td>
                                                         <td>
                                                             @if($rev->surat_permohonan)
                                                                 <a href="{{ asset('storage/' . $rev->surat_permohonan) }}" target="_blank" title="Lihat PDF">
-                                                                    <i class='bx bxs-file-pdf' style="font-size: 1.5rem;"></i>
+                                                                    <i class='bx bxs-file-pdf' style="font-size: 1.5rem; color: red;"></i>
                                                                 </a>
                                                             @else
                                                                 -
@@ -162,11 +173,11 @@
                                                         </td>
                                                         <td>{{ $rev->catatan ?? '-' }}</td>
                                                     </tr>
-                                                </tbody>
-                                            </table>
-                                        @endforeach
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     @endif
-
+                                    {{-- Tombol Revisi --}}
                                 @else
                                     <em>Tidak ada riwayat revisi.</em>
                                 @endif

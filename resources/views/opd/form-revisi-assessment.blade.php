@@ -168,7 +168,8 @@
                                 <div class="form-group row">
                                     <label for="akun_password" class="col-md-3 col-form-label text-md-right">Password</label>
                                     <div class="col-md-9">
-                                        <input id="akun_password" type="password" class="form-control" name="akun_password" placeholder="Kosongkan jika tidak ingin mengubah">
+                                        <input id="akun_password" type="password" class="form-control" name="akun_password"
+                                            value="{{ old('akun_password', $apk->akun_password) }}">
                                         @error('akun_password')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
