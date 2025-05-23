@@ -129,7 +129,8 @@ class RekapAplikasiController extends Controller
         $master->save();
 
         // 2. Create rekap_aplikasi record with all form fields and link to master
-        RekapAplikasi::create([
+        // RekapAplikasi::create([
+        $rekapAplikasi = RekapAplikasi::create([
             // Informasi Umum
             'permohonan' => $request->input('permohonan'),
             'opd_id' => $opdId,
@@ -171,6 +172,25 @@ class RekapAplikasiController extends Controller
 
             // Link to master record
             'master_rekap_aplikasi_id' => $master->id,
+        ]);
+
+        RiwayatRevisiAssessment::create([
+            'rekap_aplikasi_id' => $rekapAplikasi->id,
+            'permohonan' => $request->input('permohonan'),
+            'opd_id' => $opdId,
+            'jenis' => $request->input('jenis'),
+            'nama' => $nama,
+            'subdomain' => $request->input('subdomain'),
+            'tipe' => $request->input('tipe'),
+            'jenis_permohonan' => $request->input('jenis_permohonan'),
+            'link_dokumentasi' => $request->input('link_dokumentasi'),
+            'akun_link' => $request->input('akun_link'),
+            'akun_username' => $request->input('akun_username'),
+            'akun_password' => $request->input('akun_password'),
+            'cp_opd_nama' => $request->input('cp_opd_nama'),
+            'cp_opd_no_telepon' => $request->input('cp_opd_no_telepon'),
+            'cp_pengembang_nama' => $request->input('cp_pengembang_nama'),
+            'cp_pengembang_no_telepon' => $request->input('cp_pengembang_no_telepon'),
         ]);
 
         return redirect()->route('rekap-aplikasi.index')
@@ -592,7 +612,7 @@ class RekapAplikasiController extends Controller
 
     RiwayatRevisiAssessment::create([
         'rekap_aplikasi_id' => $item->id,
-        'permohonan' => $validated['permohonan'], 
+        'permohonan' => $validated['permohonan'],
         'opd_id' => $validated['opd_id'],
         'jenis' => $item->jenis,
         'nama' => $validated['nama'],

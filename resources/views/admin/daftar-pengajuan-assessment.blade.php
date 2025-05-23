@@ -18,7 +18,7 @@
                 <tr>
                     <th>No</th>
                     <th>Riwayat</th>
-                    <th>Tanggal Pengajuan/Revisi</th>
+                    <th>Tanggal Pengajuan</th>
                     <th>Organisasi Pemerintah Daerah</th>
                     <th>Nama Aplikasi</th>
                     <th>Status Assessment</th>

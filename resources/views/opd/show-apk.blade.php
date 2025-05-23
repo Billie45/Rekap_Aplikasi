@@ -5,7 +5,7 @@
 $assessmentData = [
     ['label' => 'Tanggal Permohonan', 'value' => $apk->permohonan ?? '-'],
     ['label' => 'Status Assessment', 'value' => $apk->status_label ?? '-'],
-    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis ?? '-'],
+    ['label' => 'Jenis Pengajuan', 'value' => $apk->jenis ?? '-'],
     ['label' => 'Organisasi Pemerintah Daerah', 'value' => $apk->opd->nama_opd ?? '-'],
     ['label' => 'Nama Aplikasi', 'value' => $apk->nama ?? '-'],
     ['label' => 'Nama Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>': '-'],
