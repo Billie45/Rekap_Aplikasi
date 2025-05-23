@@ -550,11 +550,35 @@ class RekapAplikasiController extends Controller
 
         $item = RekapAplikasi::findOrFail($id);
 
-        $item->update($validated);
+         $item->update([
+            'nama' => $validated['nama'],
+            'opd_id' => $validated['opd_id'],
+            'subdomain' => $validated['subdomain'],
+            'tipe' => $validated['tipe'],
+            'jenis_permohonan' => $validated['jenis_permohonan'],
+            'link_dokumentasi' => $validated['link_dokumentasi'],
+            'akun_link' => $validated['akun_link'],
+            'akun_username' => $validated['akun_username'],
+            'akun_password' => $validated['akun_password'],
+            'cp_opd_nama' => $validated['cp_opd_nama'],
+            'cp_opd_no_telepon' => $validated['cp_opd_no_telepon'],
+            'cp_pengembang_nama' => $validated['cp_pengembang_nama'],
+            'cp_pengembang_no_telepon' => $validated['cp_pengembang_no_telepon'],
+        ]);
+
         $item->status = 'assessment2';
         $item->jenis_assessment = 'Revisi';
         $item->jenis_jawaban = null;
-        $item->save();
+
+        // PENTING: Hanya set permohonan jika masih null (belum pernah diisi)
+            if (is_null($item->permohonan)) {
+                $item->permohonan = $validated['permohonan'];
+            }
+
+            // Selalu update laporan_perbaikan dengan tanggal permohonan revisi terbaru
+            $item->laporan_perbaikan = $validated['permohonan'];
+
+            $item->save();
 
         // Handle file upload
         if ($request->hasFile('surat_permohonan')) {
@@ -566,25 +590,25 @@ class RekapAplikasiController extends Controller
             $suratPermohonanPath = null;
         }
 
-        RiwayatRevisiAssessment::create([
-            'rekap_aplikasi_id' => $item->id,
-            'permohonan' => $request->permohonan,
-            'opd_id' => $request->opd_id,
-            'jenis' => $item->jenis,
-            'nama' => $request->nama,
-            'subdomain' => $request->subdomain,
-            'tipe' => $request->tipe,
-            'jenis_permohonan' => $request->jenis_permohonan,
-            'link_dokumentasi' => $request->link_dokumentasi,
-            'akun_link' => $request->akun_link,
-            'akun_username' => $request->akun_username,
-            'akun_password' => $request->akun_password,
-            'cp_opd_nama' => $request->cp_opd_nama,
-            'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
-            'cp_pengembang_nama' => $request->cp_pengembang_nama,
-            'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
-            'surat_permohonan' => $suratPermohonanPath, // Simpan path file
-        ]);
+    RiwayatRevisiAssessment::create([
+        'rekap_aplikasi_id' => $item->id,
+        'permohonan' => $validated['permohonan'], 
+        'opd_id' => $validated['opd_id'],
+        'jenis' => $item->jenis,
+        'nama' => $validated['nama'],
+        'subdomain' => $validated['subdomain'],
+        'tipe' => $validated['tipe'],
+        'jenis_permohonan' => $validated['jenis_permohonan'],
+        'link_dokumentasi' => $validated['link_dokumentasi'],
+        'akun_link' => $validated['akun_link'],
+        'akun_username' => $validated['akun_username'],
+        'akun_password' => $validated['akun_password'],
+        'cp_opd_nama' => $validated['cp_opd_nama'],
+        'cp_opd_no_telepon' => $validated['cp_opd_no_telepon'],
+        'cp_pengembang_nama' => $validated['cp_pengembang_nama'],
+        'cp_pengembang_no_telepon' => $validated['cp_pengembang_no_telepon'],
+        'surat_permohonan' => $suratPermohonanPath,
+    ]);
 
         return redirect()->route('opd.daftar-pengajuan-assessment')->with('success', 'Revisi telah diajukan');
     }

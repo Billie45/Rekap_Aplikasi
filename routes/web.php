@@ -108,6 +108,10 @@ Route::post('/admin/aplikasi', [\App\Http\Controllers\AdminController::class, 's
 Route::get('/admin/edit-apk', [\App\Http\Controllers\AdminController::class, 'editApk'])
     ->name('admin.edit-apk')
     ->middleware(['auth', 'role:admin']);
+
+Route::get('/admin/create-apk', [\App\Http\Controllers\AdminController::class, 'editApk'])
+    ->name('admin.create-apk')
+    ->middleware(['auth', 'role:admin']);
 //
 //end
 

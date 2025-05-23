@@ -53,6 +53,11 @@ class UndanganController extends Controller
 
         Undangan::create($validated);
 
+        // Update kolom `undangan_terakhir` di tabel rekap_aplikasi
+        $rekap = RekapAplikasi::find($validated['rekap_aplikasi_id']);
+        $rekap->undangan_terakhir = $rekap->undangan()->latest('tanggal_undangan')->value('tanggal_undangan');
+        $rekap->save();
+
         return redirect()->route('rekap-aplikasi.show', $validated['rekap_aplikasi_id'])
             ->with('success', 'Undangan berhasil dibuat!');
     }

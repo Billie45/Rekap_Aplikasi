@@ -32,13 +32,17 @@ class AdminController extends Controller
 
     public function showApk($id)
     {
-        $apk = RekapAplikasi::with('opd')->findOrFail($id);
+        $apk = RekapAplikasi::with(['opd', 'riwayatRevisiAssessments'])->findOrFail($id);
+
+        $riwayatRevisiAssessment = $apk->riwayatRevisiAssessments->last(); // atau filter lebih spesifik
+        $riwayatPertama = $apk->riwayatRevisiAssessments()->orderBy('permohonan', 'asc')->first();
+        $riwayatTerakhir = $apk->riwayatRevisiAssessments()->orderBy('permohonan', 'desc')->first();
 
         $riwayatPengembangan = RekapAplikasi::where('master_rekap_aplikasi_id', $apk->master_rekap_aplikasi_id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.show-apk', compact('apk', 'riwayatPengembangan'));
+        return view('admin.show-apk', compact('apk', 'riwayatPengembangan', 'riwayatRevisiAssessment', 'riwayatPertama', 'riwayatTerakhir'));
     }
 
     public function editApk()

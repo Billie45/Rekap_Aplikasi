@@ -2,18 +2,15 @@
 @section('content')
 
 @php
-$detailData = [
+$assessmentData = [
+    ['label' => 'Tanggal Permohonan', 'value' => $apk->permohonan ?? '-'],
+    ['label' => 'Status Assessment', 'value' => $apk->status_label ?? '-'],
+    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis ?? '-'],
     ['label' => 'Organisasi Pemerintah Daerah', 'value' => $apk->opd->nama_opd ?? '-'],
     ['label' => 'Nama Aplikasi', 'value' => $apk->nama ?? '-'],
     ['label' => 'Nama Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>': '-'],
-    ['label' => 'Status Assessment', 'value' => $apk->status_label ?? '-'],
-    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis ?? '-'],
     ['label' => 'Jenis Pengajuan Aplikasi', 'value' => $apk->tipe_label ?? '-'],
-    ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],
-    ['label' => 'Keterangan', 'value' => $apk->keterangan ?? '-'],
-    ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
     ['label' => 'Jenis Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
-    ['label' => 'Tanggal Rekom Lulus / BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
     ['label' => 'Link Dokumentasi', 'value' => $apk->link_dokumentasi ? '<a href="' . $apk->link_dokumentasi . '" target="_blank">LINK</a>' : '-' ],
     ['label' => 'Akun untuk Diskominfo', 'value' =>
         $apk->akun_link && $apk->akun_username && $apk->akun_password
@@ -40,26 +37,37 @@ $detailData = [
             ])
             : '-'
     ],
-    ['label' => 'Informasi Rekap Aplikasi', 'value' =>
-        $apk->assesment_terakhir || $apk->permohonan || $apk->undangan_terakhir || $apk->laporan_perbaikan
-            ? implode('<br>', [
-                '<strong>Tanggal Assessment Terakhir    :</strong> ' . ($apk->assesment_terakhir ?? '-'),
-                '<strong>Tanggal Permohonan             :</strong> ' . ($apk->permohonan ?? '-'),
-                '<strong>Tanggal Undangan Terakhir      :</strong> ' . ($apk->undangan_terakhir ?? '-'),
-                '<strong>Tanggal Laporan Perbaikan      :</strong> ' . ($apk->laporan_perbaikan ?? '-'),
-            ])
-            : '-'
+    ['label' => 'Surat Permohonan', 'value' => isset($riwayatRevisiAssessment->surat_permohonan) ? '<a href="' . asset('storage/' . $riwayatRevisiAssessment->surat_permohonan) . '" target="_blank"><i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i></a>' : '-'],
+    ['label' => 'Catatan Perbaikan dari Admin', 'value' => $riwayatRevisiAssessment->catatan ?? '-'],
+];
+
+$pengembanganData = [
+    [
+        'label' => 'Tanggal Permohonan',
+        // 'value' => $riwayatPertama?->permohonan ?? $apk->permohonan ?? '-',
+        'value' => $apk->permohonan ?? '-',
     ],
-    ['label' => 'Detail Akses Server', 'value' =>
-        $apk->status_server || $apk->open_akses || $apk->close_akses || $apk->urgensi
-            ? implode('<br>', [
-                '<strong>Status             :</strong> ' . ($apk->status_server ?? '-'),
-                '<strong>Tanggal Open Akses :</strong> ' . ($apk->open_akses ?? '-'),
-                '<strong>Tanggal Close Akses:</strong> ' . ($apk->close_akses ?? '-'),
-                '<strong>Urgensi            :</strong> ' . ($apk->urgensi ?? '-'),
-            ])
-            : '-'
+    [
+        'label' => 'Tanggal Laporan Perbaikan',
+        // 'value' => $riwayatTerakhir?->permohonan ?? $apk->laporan_perbaikan ?? '-',
+        'value' => $apk->laporan_perbaikan ?? '-',
     ],
+    ['label' => 'Tanggal Assessment Terakhir', 'value' => $apk->updated_at ?? '-'],
+    ['label' => 'Tanggal Undangan Terakhir', 'value' => $apk->undangan_terakhir ?? '-'],
+    ['label' => 'Tanggal Masuk BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
+    ['label' => 'Keterangan', 'value' => $apk->keterangan ?? '-'],
+    ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
+];
+
+$serverHostingData = [
+    ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],
+    ['label' => 'Status Server', 'value' => $apk->status_server ?? '-'],
+    ['label' => 'Tanggal Open Akses', 'value' => $apk->open_akses ?? '-'],
+    ['label' => 'Tanggal Close Akses', 'value' => $apk->close_akses ?? '-'],
+    ['label' => 'Urgensi', 'value' =>  $apk->urgensi ?? '-'],
+];
+
+$actionsData = [
     ['label' => 'Edit', 'value' => '<a href="' . route('rekap-aplikasi.edit', $apk->id) . '"><i class="bx bxs-edit" style="font-size: 1.5rem;"></i></a>'],
     ['label' => 'Hapus', 'value' =>
         '<form action="' . route('rekap-aplikasi.destroy', $apk->id) . '" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus aplikasi ini?\')">
@@ -77,7 +85,16 @@ $detailData = [
 @endphp
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Assessment Aplikasi</h4>
-@include('components.template-tabel-2', ['data' => $detailData])
+@include('components.template-tabel-2', ['data' => $assessmentData])
+
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Pengembangan</h4>
+@include('components.template-tabel-2', ['data' => $pengembanganData])
+
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Server Hosting</h4>
+@include('components.template-tabel-2', ['data' => $serverHostingData])
+
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Aksi</h4>
+@include('components.template-tabel-2', ['data' => $actionsData])
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Daftar Undangan</h4>
 

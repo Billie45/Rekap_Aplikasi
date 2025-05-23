@@ -78,6 +78,16 @@ class RekapAplikasi extends Model
         return $this->hasMany(RiwayatRevisiAssessment::class);
     }
 
+    public function riwayatRevisiPertama()
+    {
+        return $this->hasOne(RiwayatRevisiAssessment::class)->orderBy('permohonan', 'asc');
+    }
+
+    public function riwayatRevisiTerakhir()
+    {
+        return $this->hasOne(RiwayatRevisiAssessment::class)->orderBy('permohonan', 'desc');
+    }
+
     public function getTipeLabelAttribute()
     {
         return match ($this->tipe) {

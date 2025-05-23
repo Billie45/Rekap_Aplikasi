@@ -88,7 +88,7 @@
                                     {{-- Riwayat Terbaru (tampilkan semua data secara detail dalam 1 tabel) --}}
                                 @php
                                     // Urutkan semua data berdasarkan tanggal_pengajuan terbaru
-                                    $sorted = $riwayat->sortByDesc('tanggal_pengajuan');
+                                    $sorted = $riwayat->sortByDesc('permohonan');
 
                                     // Ambil data terbaru (pertama)
                                     $latest = $sorted->first();
@@ -99,7 +99,7 @@
                                     {{-- Tabel Detail Riwayat Terbaru --}}
                                     <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse;">
                                         <tbody>
-                                            <tr><th style="text-align: left;">Tanggal Pengajuan</th><td>{{ $latest->tanggal_pengajuan ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">Tanggal Pengajuan</th><td>{{ $latest->permohonan ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Jenis</th><td>{{ $latest->jenis ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Nama</th><td>{{ $latest->nama ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Subdomain</th><td>
@@ -161,7 +161,7 @@
                                             <tbody>
                                                 @foreach($others as $rev)
                                                     <tr>
-                                                        <td>{{ $rev->tanggal_pengajuan ?? '-' }}</td>
+                                                        <td>{{ $rev->permohonan ?? '-' }}</td>
                                                         <td>
                                                             @if($rev->surat_permohonan)
                                                                 <a href="{{ asset('storage/' . $rev->surat_permohonan) }}" target="_blank" title="Lihat PDF">

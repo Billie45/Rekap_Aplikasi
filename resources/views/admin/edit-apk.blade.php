@@ -20,9 +20,9 @@
     <div class="card mb-4">
         <div class="card-header">Informasi Umum</div>
         <div class="accordion">
-            <!-- Informasi -->
+            <!-- Assessment -->
             <div class="contentBx active">
-                <div class="label">Informasi Mengenai Aplikasi</div>
+                <div class="label">Informasi Assessment</div>
                 <div class="content">
                     <label>Tanggal Permohonan:</label>
                     <div>
@@ -33,6 +33,30 @@
                         @enderror
                     </div>
 
+                    <label>Status Assessment:</label>
+                    <select name="status">
+                        {{-- <option value="diproses" {{ (old('status', $apk->status ?? '')) == 'diproses' ? 'selected' : '' }}>0. diproses</option> --}}
+                        <option value="perbaikan" {{ (old('status', $apk->status ?? '')) == 'perbaikan' ? 'selected' : '' }}>1. perbaikan</option>
+                        <option value="assessment1" {{ (old('status', $apk->status ?? '')) == 'assessment1' ? 'selected' : '' }}>2. assessment 1</option>
+                        <option value="assessment2" {{ (old('status', $apk->status ?? '')) == 'assessment2' ? 'selected' : '' }}>3. assessment 2</option>
+                        <option value="development" {{ (old('status', $apk->status ?? '')) == 'development' ? 'selected' : '' }}>4. development</option>
+                        <option value="prosesBA" {{ (old('status', $apk->status ?? '')) == 'prosesBA' ? 'selected' : '' }}>5. proses BA</option>
+                        <option value="selesai" {{ (old('status', $apk->status ?? '')) == 'selesai' ? 'selected' : '' }}>6. selesai</option>
+                        <option value="batal" {{ (old('status', $apk->status ?? '')) == 'batal' ? 'selected' : '' }}>7. batal</option>
+                    </select>
+                    @error('status')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+
+                    <label>Jenis Pengembangan:</label>
+                    <select name="jenis" id="jenis">
+                        <option value="baru" {{ (old('jenis', $apk->jenis ?? '')) == 'baru' ? 'selected' : '' }}>Baru</option>
+                        <option value="pengembangan" {{ (old('jenis', $apk->jenis ?? '')) == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
+                    </select>
+                    @error('jenis')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+
                     <label>Organisasi Pemerintah Daerah:</label>
                     <select name="opd_id" id="opd_id" class="select2" style="width:100%">
                         @foreach($opds as $opd)
@@ -42,18 +66,6 @@
                         @endforeach
                     </select>
                     @error('opd_id')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-
-                    <!-- Tambahkan margin bawah agar ada jarak -->
-                    <div style="margin-bottom: 1rem;"></div>
-
-                    <label>Jenis Pengembangan:</label>
-                    <select name="jenis" id="jenis">
-                        <option value="baru" {{ (old('jenis', $apk->jenis ?? '')) == 'baru' ? 'selected' : '' }}>Baru</option>
-                        <option value="pengembangan" {{ (old('jenis', $apk->jenis ?? '')) == 'pengembangan' ? 'selected' : '' }}>Pengembangan</option>
-                    </select>
-                    @error('jenis')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
@@ -91,39 +103,12 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Status Assessment:</label>
-                    <select name="status">
-                        {{-- <option value="diproses" {{ (old('status', $apk->status ?? '')) == 'diproses' ? 'selected' : '' }}>0. diproses</option> --}}
-                        <option value="perbaikan" {{ (old('status', $apk->status ?? '')) == 'perbaikan' ? 'selected' : '' }}>1. perbaikan</option>
-                        <option value="assessment1" {{ (old('status', $apk->status ?? '')) == 'assessment1' ? 'selected' : '' }}>2. assessment 1</option>
-                        <option value="assessment2" {{ (old('status', $apk->status ?? '')) == 'assessment2' ? 'selected' : '' }}>3. assessment 2</option>
-                        <option value="development" {{ (old('status', $apk->status ?? '')) == 'development' ? 'selected' : '' }}>4. development</option>
-                        <option value="prosesBA" {{ (old('status', $apk->status ?? '')) == 'prosesBA' ? 'selected' : '' }}>5. proses BA</option>
-                        <option value="selesai" {{ (old('status', $apk->status ?? '')) == 'selesai' ? 'selected' : '' }}>6. selesai</option>
-                        <option value="batal" {{ (old('status', $apk->status ?? '')) == 'batal' ? 'selected' : '' }}>7. batal</option>
-                    </select>
-                    @error('status')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-
-                    <label>Keterangan:</label>
-                    <textarea name="keterangan">{{ old('keterangan', $apk->keterangan ?? '') }}</textarea>
-
-                    <label>Deskripsi Singkat Last Update:</label>
-                    <textarea name="last_update">{{ old('last_update', $apk->last_update ?? '') }}</textarea>
-
                     <label>Jenis Permohonan:</label>
                     <select name="jenis_permohonan" id="jenis_permohonan">
                         <option value="subdomain" {{ (old('jenis_permohonan', $apk->jenis_permohonan ?? '')) == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
                         <option value="permohonan" {{ (old('jenis_permohonan', $apk->jenis_permohonan ?? '')) == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
                     </select>
                     @error('jenis_permohonan')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-
-                    <label>Tanggal Masuk / BA:</label>
-                    <input type="date" name="tanggal_masuk_ba" value="{{ old('tanggal_masuk_ba', $apk->tanggal_masuk_ba ?? '') }}">
-                    @error('tanggal_masuk_ba')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
@@ -203,31 +188,43 @@
         <div class="accordion">
             <!-- Rekap Aplikasi -->
             <div class="contentBx active">
-                <div class="label">Informasi Tambahan Rekap Aplikasi</div>
+                <div class="label">Informasi Pengembangan Aplikasi</div>
                 <div class="content">
                     <label>Tanggal Assessment Terakhir:</label>
                     <input type="date" name="assesment_terakhir"
                         value="{{ isset($apk) ? ($apk->updated_at ? $apk->updated_at->format('Y-m-d') : now()->format('Y-m-d')) : now()->format('Y-m-d') }}"
                         readonly
                         class="form-control bg-light">
-                </div>
-            </div>
 
-            <!-- Assessment -->
-            <div class="contentBx active">
-                <div class="label">Informasi Tambahan Assessment</div>
-                <div class="content">
-                    <label>Tanggal Undangan Terakhir:</label>
+                    {{-- <label>Tanggal Permohonan:</label>
+                    <input type="date" name="permohonan" value="{{ old('permohonan', $apk->permohonan ?? '') }}">
+                    @error('permohonan')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror --}}
+
+                    {{-- <label>Tanggal Undangan Terakhir:</label>
                     <input type="date" name="undangan_terakhir" value="{{ old('undangan_terakhir', $apk->undangan_terakhir ?? '') }}">
                     @error('undangan_terakhir')
                         <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    @enderror --}}
 
                     <label>Tanggal Laporan Perbaikan:</label>
                     <input type="date" name="laporan_perbaikan" value="{{ old('laporan_perbaikan', $apk->laporan_perbaikan ?? '') }}">
                     @error('laporan_perbaikan')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
+
+                    <label>Tanggal Masuk / BA:</label>
+                    <input type="date" name="tanggal_masuk_ba" value="{{ old('tanggal_masuk_ba', $apk->tanggal_masuk_ba ?? '') }}">
+                    @error('tanggal_masuk_ba')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+
+                    <label>Keterangan:</label>
+                    <textarea name="keterangan">{{ old('keterangan', $apk->keterangan ?? '') }}</textarea>
+
+                    <label>Deskripsi Singkat Last Update:</label>
+                    <textarea name="last_update">{{ old('last_update', $apk->last_update ?? '') }}</textarea>
                 </div>
             </div>
 
@@ -409,6 +406,10 @@
                 cpOpdNoTeleponInput.value = '';
                 cpPengembangNamaInput.value = '';
                 cpPengembangNoTeleponInput.value = '';
+
+                if (namaText.value.trim()) {
+                    fillAppData(namaText.value.trim(), opdId);
+                }
             }
         }
 

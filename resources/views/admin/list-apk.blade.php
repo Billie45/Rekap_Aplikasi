@@ -43,7 +43,7 @@
 
     {{-- Tombol Tambah --}}
     <div class="mb-3 my-2">
-        <a href="{{ route('admin.edit-apk') }}" class="btn btn-light px-4 py-2 rounded-4 shadow border">
+        <a href="{{ route('admin.create-apk') }}" class="btn btn-light px-4 py-2 rounded-4 shadow border">
             Tambah Aplikasi
         </a>
     </div>
