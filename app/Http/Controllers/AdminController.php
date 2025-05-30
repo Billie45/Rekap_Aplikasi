@@ -8,6 +8,8 @@ use App\Models\RekapAplikasi;
 
 use App\Models\User;
 use App\Models\Opd;
+use App\Models\Undangan;
+use App\Models\Penilaian;
 
 class AdminController extends Controller
 {
@@ -19,9 +21,11 @@ class AdminController extends Controller
     public function dashboard()
     {
         $aplikasis = RekapAplikasi::all();
+        $undangans = Undangan::with(['rekapAplikasi.opd'])->paginate(10);
+        $penilaians = Penilaian::with(['rekapAplikasi.opd'])->paginate(10);
         $rekap = RekapAplikasi::latest('updated_at')->first();
 
-        return view('admin.dashboard', compact('aplikasis', 'rekap'));
+        return view('admin.dashboard', compact('aplikasis', 'undangans', 'penilaians', 'rekap'));
     }
 
     public function listApk()
@@ -139,7 +143,7 @@ class AdminController extends Controller
 
     public function daftarPengajuan(Request $request)
     {
-        $query = RekapAplikasi::with('opd');
+        $query = RekapAplikasi::with('opd', 'latestPenilaian');
 
         // Add additional filters if needed
         if ($request->filled('status')) {

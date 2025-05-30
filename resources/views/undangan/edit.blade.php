@@ -7,7 +7,6 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <strong>{{ $apk->nama }}</strong>
-                    </p>
                 </div>
             </div>
         </div>
@@ -17,52 +16,71 @@
                 @csrf
                 @method('PUT')
 
-                <div class="form-group mb-3">
-                    <label for="tanggal_undangan" class="form-label fw-bold">Tanggal Undangan</label>
-                    <input type="date" class="form-control @error('tanggal_undangan') is-invalid @enderror"
-                        id="tanggal_undangan" name="tanggal_undangan" value="{{ old('tanggal_undangan', $undangan->tanggal_undangan) }}" required>
-                    @error('tanggal_undangan')
+                <div class="mb-3">
+                    <label for="tanggal_assessment" class="form-label fw-bold">Tanggal Assessment</label>
+                    <input type="date" class="form-control @error('tanggal_assessment') is-invalid @enderror"
+                        id="tanggal_assessment" name="tanggal_assessment" value="{{ old('tanggal_assessment', $undangan->tanggal_assessment) }}" required>
+                    @error('tanggal_assessment')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="form-group mb-3">
-                    <label for="assessment_dokumentasi" class="form-label fw-bold">Assessment Dokumentasi</label>
-                    @if($undangan->assessment_dokumentasi)
+                <div class="mb-3">
+                    <label for="surat_undangan" class="form-label fw-bold">Surat Undangan (PDF)</label>
+                    @if($undangan->surat_undangan)
                         <p class="text-muted">File saat ini:
-                            <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank" class="text-primary">
+                            <a href="{{ asset('storage/' . $undangan->surat_undangan) }}" target="_blank" class="text-primary" accept="application/pdf>
                                 <i class="fas fa-file-pdf"></i> Lihat Dokumen
                             </a>
                         </p>
                     @endif
-                    <input type="file" class="form-control @error('assessment_dokumentasi') is-invalid @enderror"
-                        id="assessment_dokumentasi" name="assessment_dokumentasi">
-                    @error('assessment_dokumentasi')
+                    <input type="file" class="form-control @error('surat_undangan') is-invalid @enderror"
+                        id="surat_undangan" name="surat_undangan" accept=".pdf,.doc,.docx">
+                    @error('surat_undangan')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="form-group mb-3">
-                    <label for="catatan_assessment" class="form-label fw-bold">Catatan Assessment</label>
-                    <textarea class="form-control @error('catatan_assessment') is-invalid @enderror"
-                        id="catatan_assessment" name="catatan_assessment" rows="3">{{ old('catatan_assessment', $undangan->catatan_assessment) }}</textarea>
-                    @error('catatan_assessment')
+                <div class="mb-3">
+                    <label for="link_zoom_meeting" class="form-label fw-bold">Link Zoom Meeting</label>
+                    <input type="url" class="form-control @error('link_zoom_meeting') is-invalid @enderror"
+                        id="link_zoom_meeting" name="link_zoom_meeting" value="{{ old('link_zoom_meeting', $undangan->link_zoom_meeting) }}">
+                    @error('link_zoom_meeting')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="surat_rekomendasi" class="form-label fw-bold">Surat Rekomendasi</label>
-                    @if($undangan->surat_rekomendasi)
-                        <p class="text-muted">File saat ini:
-                            <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank" class="text-primary">
-                                <i class="fas fa-file-pdf"></i> Lihat Dokumen
-                            </a>
-                        </p>
-                    @endif
-                    <input type="file" class="form-control @error('surat_rekomendasi') is-invalid @enderror"
-                        id="surat_rekomendasi" name="surat_rekomendasi">
-                    @error('surat_rekomendasi')
+                <div class="mb-3">
+                    <label for="tanggal_zoom_meeting" class="form-label fw-bold">Tanggal Zoom Meeting</label>
+                    <input type="date" class="form-control @error('tanggal_zoom_meeting') is-invalid @enderror"
+                        id="tanggal_zoom_meeting" name="tanggal_zoom_meeting" value="{{ old('tanggal_zoom_meeting', $undangan->tanggal_zoom_meeting) }}">
+                    @error('tanggal_zoom_meeting')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Waktu Zoom Meeting</label>
+                    <div class="d-flex gap-2">
+                        <input type="time" id="start_time" class="form-control" required>
+                        <span class="align-self-center">sampai</span>
+                        <input type="time" id="end_time" class="form-control" required>
+                    </div>
+
+                    <!-- Hidden input to store combined string -->
+                    <input type="hidden" name="waktu_zoom_meeting" id="waktu_zoom_meeting"
+                        value="{{ old('waktu_zoom_meeting') }}">
+
+                    @error('waktu_zoom_meeting')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="tempat" class="form-label fw-bold">Tempat</label>
+                    <input type="text" class="form-control @error('tempat') is-invalid @enderror"
+                        id="tempat" name="tempat" value="{{ old('tempat', $undangan->tempat) }}">
+                    @error('tempat')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -97,4 +115,21 @@
     }
 </style>
 
+<script>
+    const startInput = document.getElementById('start_time');
+    const endInput = document.getElementById('end_time');
+    const hiddenInput = document.getElementById('waktu_zoom_meeting');
+
+    function updateZoomTime() {
+        if (startInput.value && endInput.value) {
+            // Ubah format dari HH:MM menjadi 10.00
+            const startFormatted = startInput.value.replace(':', '.');
+            const endFormatted = endInput.value.replace(':', '.');
+            hiddenInput.value = `${startFormatted}-${endFormatted}`;
+        }
+    }
+
+    startInput.addEventListener('change', updateZoomTime);
+    endInput.addEventListener('change', updateZoomTime);
+</script>
 @endsection

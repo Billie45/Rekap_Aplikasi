@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label for="surat_permohonan" class="col-md-3 col-form-label text-md-right">Surat Permohonan</label>
                             <div class="col-md-9">
-                                <input id="surat_permohonan" type="file" class="form-control" name="surat_permohonan" style="border: 1px solid #ced4da; padding: .375rem .75rem;">
+                                <input id="surat_permohonan" type="file" class="form-control" name="surat_permohonan" style="border: 1px solid #ced4da; padding: .375rem .75rem;" accept="application/pdf">
                                 @error('surat_permohonan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -107,15 +107,14 @@
                         <div class="form-group row">
                             <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>
                             <div class="col-md-9">
-                                <select id="jenis_permohonan" class="form-control" name="jenis_permohonan" required>
-                                    <option value="subdomain" {{ old('jenis_permohonan', $apk->jenis_permohonan) == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
-                                    <option value="permohonan" {{ old('jenis_permohonan', $apk->jenis_permohonan) == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
-                                </select>
+                                <input type="text" id="jenis_permohonan" class="form-control" name="jenis_permohonan"
+                                    value="{{ old('jenis_permohonan', $apk->jenis_permohonan ?? '') }}" required>
                                 @error('jenis_permohonan')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
+
 
                         <div class="form-group row">
                             <label for="link_dokumentasi" class="col-md-3 col-form-label text-md-right">Dokumentasi Teknis</label>

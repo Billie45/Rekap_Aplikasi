@@ -46,24 +46,21 @@
                         <td>{{ $apk->jenis_assessment == 'Pertama' ? 'Pengajuan Pertama' : 'Pengajuan Revisi' }}</td>
                         <td>
                             {{-- Khusus jika status adalah "batal", tampilkan prioritas teratas --}}
-                            @if($apk->status === 'batal')
+                            @if($apk->status === 'diproses')
                                 {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
                             {{-- Jika role user adalah Admin --}}
                             @elseif(Auth::user()->role == 'admin')
-                                @if($apk->jenis_jawaban === null)
-                                    <form action="{{ route('assessment.terima', [$apk->id, 'redirect' => route('admin.daftar-pengajuan-assessment')]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button class="btn btn-primary btn-sm">Terima</button>
-                                    </form>
+                                @if((is_null($apk->jenis_jawaban) && $apk->status === 'assessment1' ) || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
+                                    <button class="btn btn-primary btn-sm terima-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#terimaModal">Terima</button>
                                     <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal">Tolak</button>
-                                    {{-- <form action="{{ route('assessment.tolak', [$apk->id, 'redirect' => route('admin.daftar-pengajuan-assessment')]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button class="btn btn-danger btn-sm">Tolak</button>
-                                    </form> --}}
-                                @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="btn btn-primary btn-sm">Assessment diterima</span>
-                                @elseif($apk->jenis_jawaban == 'Ditolak')
+                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2'))
+                                    <a href="{{ route('penilaian.create') }}?rekap_aplikasi_id={{ $apk->id }}" class="btn btn-sm" style="background-color: yellow; color: black;">Buat Penilaian</a>
+                                @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
                                     <span class="btn btn-danger btn-sm">Assessment ditunda</span>
+                                @elseif($apk->status == 'prosesBA'|| $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
+                                    @if($apk->latestPenilaian)
+                                        <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
+                                    @endif
                                 @endif
                             @endif
                         </td>
@@ -87,14 +84,9 @@
                                 @if($riwayat && $riwayat->count() > 0)
                                     {{-- Riwayat Terbaru (tampilkan semua data secara detail dalam 1 tabel) --}}
                                 @php
-                                    // Urutkan semua data berdasarkan tanggal_pengajuan terbaru
                                     $sorted = $riwayat->sortByDesc('permohonan');
-
-                                    // Ambil data terbaru (pertama)
                                     $latest = $sorted->first();
-
-                                    // Ambil sisanya, kecuali yang pertama
-                                    $others = $sorted->slice(1); // slice mulai dari index ke-1
+                                    $others = $sorted->slice(1);
                                 @endphp
                                     {{-- Tabel Detail Riwayat Terbaru --}}
                                     <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse;">
@@ -193,7 +185,7 @@
         {{ $aplikasis->links('pagination::tailwind') }}
     </div>
 
-        <!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="revisiModal" tabindex="-1" role="dialog" aria-labelledby="revisiModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -220,9 +212,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for Terima -->
+    <div class="modal fade" id="terimaModal" tabindex="-1" role="dialog" aria-labelledby="terimaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="terimaModalLabel">Selamat!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Assessment diterima, anda akan dialihkan menuju halaman pembuatan undangan assessment</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="buatUndanganLink" class="btn btn-primary">Buat Undangan</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Script -->
     <script>
         $(document).ready(function() {
+            $('.terima-button').click(function() {
+                var apkId = $(this).data('id');
+                $('#buatUndanganLink').attr('href', '/undangan/create?apk_id=' + apkId);
+            });
+
             $('.revisi-button').click(function() {
                 var apkId = $(this).data('id');
                 $('#revisiForm').attr('action', '/assessment/revisi_tombol/' + apkId);

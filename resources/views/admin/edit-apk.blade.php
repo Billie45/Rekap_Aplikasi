@@ -104,10 +104,7 @@
                     @enderror
 
                     <label>Jenis Permohonan:</label>
-                    <select name="jenis_permohonan" id="jenis_permohonan">
-                        <option value="subdomain" {{ (old('jenis_permohonan', $apk->jenis_permohonan ?? '')) == 'subdomain' ? 'selected' : '' }}>Subdomain</option>
-                        <option value="permohonan" {{ (old('jenis_permohonan', $apk->jenis_permohonan ?? '')) == 'permohonan' ? 'selected' : '' }}>Pengembangan</option>
-                    </select>
+                    <input type="text" name="jenis_permohonan" id="jenis_permohonan" value="{{ old('jenis_permohonan', $apk->jenis_permohonan ?? '') }}">
                     @error('jenis_permohonan')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror

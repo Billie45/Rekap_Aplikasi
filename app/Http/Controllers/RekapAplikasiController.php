@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MasterRekapAplikasi;
+use App\Models\Penilaian;
 use App\Models\RiwayatRevisiAssessment;
 use Illuminate\Http\Request;
 use App\Models\RekapAplikasi;
@@ -13,12 +14,12 @@ use Illuminate\Support\Facades\Log;
 
 class RekapAplikasiController extends Controller
 {
-    // ============================================================
+    // ===================================================================
     // Digunakan untuk 'tambah' di halaman 'admin/list-apk'
-    // ============================================================
+    // ===================================================================
     // Sebagai admin, kita bisa melakukan filtering data
     // berdasarkan nama, opd_id, tipe, jenis, status, dan server
-    // ============================================================
+    // ===================================================================
     //
     // Start
     public function index(Request $request)
@@ -52,9 +53,9 @@ class RekapAplikasiController extends Controller
     //
     // end
 
-    // ============================================================
+    // ==============================================================================
     // Digunakan untuk melihat undangan pada rekap aplikasi (admin/show-apk)
-    // ============================================================
+    // ==============================================================================
     //
     // Start
     public function show($id)
@@ -66,11 +67,11 @@ class RekapAplikasiController extends Controller
     //
     // end
 
-// ============================================================
+// ===================================================================================
     // Digunakan untuk create rekap aplikasi untuk admin di halaman 'admin/list-apk'
-    // ============================================================
+    // ===============================================================================
     // Ini adalah controller untuk Admin
-    // =======================================================================
+    // ===============================================================================
     //
     // Start
     public function store(Request $request)
@@ -129,7 +130,6 @@ class RekapAplikasiController extends Controller
         $master->save();
 
         // 2. Create rekap_aplikasi record with all form fields and link to master
-        // RekapAplikasi::create([
         $rekapAplikasi = RekapAplikasi::create([
             // Informasi Umum
             'permohonan' => $request->input('permohonan'),
@@ -445,7 +445,7 @@ class RekapAplikasiController extends Controller
             'permohonan' => 'nullable',
             'undangan_terakhir' => 'nullable',
             'laporan_perbaikan' => 'nullable',
-            'surat_permohonan' => 'required|mimes:pdf,doc,docx,jpg,jpeg,png|max:102400', // Validasi file
+            'surat_permohonan' => 'required|mimes:pdf',
         ]);
 
         $opdId = auth::user()->opd_id;
@@ -518,8 +518,8 @@ class RekapAplikasiController extends Controller
         if ($request->hasFile('surat_permohonan')) {
             $file = $request->file('surat_permohonan');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/surat_permohonan'), $fileName); // Simpan di folder public/storage/surat_permohonan
-            $suratPermohonanPath = 'surat_permohonan/' . $fileName; // Simpan path ke database
+            $file->move(public_path('storage/surat_permohonan'), $fileName);
+            $suratPermohonanPath = 'surat_permohonan/' . $fileName;
         } else {
             $suratPermohonanPath = null;
         }
@@ -541,7 +541,7 @@ class RekapAplikasiController extends Controller
             'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
             'cp_pengembang_nama' => $request->cp_pengembang_nama,
             'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
-            'surat_permohonan' => $suratPermohonanPath, // Simpan path file
+            'surat_permohonan' => $suratPermohonanPath,
         ]);
 
         return redirect()->route('opd.daftar-pengajuan-assessment');
@@ -565,7 +565,7 @@ class RekapAplikasiController extends Controller
             'cp_opd_no_telepon' => 'nullable',
             'cp_pengembang_nama' => 'nullable',
             'cp_pengembang_no_telepon' => 'nullable',
-            'surat_permohonan' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png',
+            'surat_permohonan' => 'required|file|mimes:pdf',
         ]);
 
         $item = RekapAplikasi::findOrFail($id);
@@ -586,29 +586,62 @@ class RekapAplikasiController extends Controller
             'cp_pengembang_no_telepon' => $validated['cp_pengembang_no_telepon'],
         ]);
 
-        $item->status = 'assessment2';
+        if ($item->penilaian()->exists()) {
+            $item->status = 'assessment2';
+            $item->jenis_jawaban = 'Diproses';
+        } else {
+            $item->status = 'assessment1';
+            $item->jenis_jawaban = null;
+        }
+
         $item->jenis_assessment = 'Revisi';
-        $item->jenis_jawaban = null;
+
 
         // PENTING: Hanya set permohonan jika masih null (belum pernah diisi)
             if (is_null($item->permohonan)) {
                 $item->permohonan = $validated['permohonan'];
             }
 
-            // Selalu update laporan_perbaikan dengan tanggal permohonan revisi terbaru
             $item->laporan_perbaikan = $validated['permohonan'];
-
             $item->save();
 
         // Handle file upload
         if ($request->hasFile('surat_permohonan')) {
             $file = $request->file('surat_permohonan');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/surat_permohonan'), $fileName); // Simpan di folder public/storage/surat_permohonan
-            $suratPermohonanPath = 'surat_permohonan/' . $fileName; // Simpan path ke database
+            $file->move(public_path('storage/surat_permohonan'), $fileName);
+            $suratPermohonanPath = 'surat_permohonan/' . $fileName;
         } else {
             $suratPermohonanPath = null;
         }
+
+        $nama = $request->nama;
+        $opdId = $request->opd_id;
+
+        $master = MasterRekapAplikasi::firstOrNew([
+            'opd_id' => $opdId, 'nama' => $nama
+        ]);
+
+        $master->fill([
+                'tipe' => $request->tipe,
+                'jenis' => $request->jenis,
+                'jenis_permohonan' => $request->jenis_permohonan,
+                'subdomain' => $request->subdomain,
+                'akun_link' => $request->akun_link,
+                'akun_username' => $request->akun_username,
+                'akun_password' => $request->akun_password,
+                'cp_opd_nama' => $request->cp_opd_nama,
+                'cp_opd_no_telepon' => $request->cp_opd_no_telepon,
+                'cp_pengembang_nama' => $request->cp_pengembang_nama,
+                'cp_pengembang_no_telepon' => $request->cp_pengembang_no_telepon,
+        ]);
+
+        $master->updated_at = now();
+            if (!$master->exists) {
+                $master->created_at = now();
+            }
+
+        $master->save();
 
     RiwayatRevisiAssessment::create([
         'rekap_aplikasi_id' => $item->id,
@@ -642,8 +675,15 @@ class RekapAplikasiController extends Controller
     // Start
     public function terima($id) {
         $item = RekapAplikasi::findOrFail($id);
-        $item->status = 'assessment2';
+
+        if ($item->penilaian()->exists()) {
+            $item->status = 'assessment2';
+        } else {
+            $item->status = 'assessment1';
+        }
+
         $item->jenis_jawaban = 'Diterima';
+
         $item->save();
 
         // Redirect sesuai role

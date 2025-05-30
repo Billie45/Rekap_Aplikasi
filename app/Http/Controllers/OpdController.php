@@ -71,7 +71,7 @@ class OpdController extends Controller
     // Start
     public function daftarPengajuan(Request $request)
     {
-        $query = RekapAplikasi::with('opd');
+        $query = RekapAplikasi::with('opd', 'latestPenilaian');
 
         // Filter by OPD if user is OPD role
         if (Auth::user()->role == 'opd' && Auth::user()->opd) {

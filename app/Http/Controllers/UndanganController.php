@@ -25,6 +25,15 @@ class UndanganController extends Controller
         $apk_id = $request->apk_id;
         $apk = RekapAplikasi::findOrFail($apk_id);
 
+        // Untuk menghindari duplikasi undangan
+        if ($apk->penilaian()->exists()) {
+            $apk->status = 'assessment2';
+        } else {
+            $apk->status = 'assessment1';
+        }
+        $apk->jenis_jawaban = 'Diterima';
+        $apk->save();
+
         return view('undangan.create', compact('apk'));
     }
 
@@ -35,27 +44,24 @@ class UndanganController extends Controller
     {
         $validated = $request->validate([
             'rekap_aplikasi_id' => 'required|exists:rekap_aplikasi,id',
-            'tanggal_undangan' => 'required|date',
-            'assessment_dokumentasi' => 'nullable|file|mimes:pdf,doc,docx',
-            'catatan_assessment' => 'nullable|string',
-            'surat_rekomendasi' => 'nullable|file|mimes:pdf,doc,docx'
+            'tanggal_assessment' => 'required|date',
+            'surat_undangan' => 'nullable|file|mimes:pdf,doc,docx',
+            'link_zoom_meeting' => 'nullable|string',
+            'tanggal_zoom_meeting' => 'nullable|date',
+            'waktu_zoom_meeting' => 'nullable|string',
+            'tempat' => 'nullable|string',
         ]);
 
-        if ($request->hasFile('assessment_dokumentasi')) {
-            $validated['assessment_dokumentasi'] = $request->file('assessment_dokumentasi')
-                ->store('undangan/assessment', 'public');
-        }
-
-        if ($request->hasFile('surat_rekomendasi')) {
-            $validated['surat_rekomendasi'] = $request->file('surat_rekomendasi')
-                ->store('undangan/rekomendasi', 'public');
+        if ($request->hasFile('surat_undangan')) {
+            $validated['surat_undangan'] = $request->file('surat_undangan')
+                ->store('undangan/surat', 'public');
         }
 
         Undangan::create($validated);
 
         // Update kolom `undangan_terakhir` di tabel rekap_aplikasi
         $rekap = RekapAplikasi::find($validated['rekap_aplikasi_id']);
-        $rekap->undangan_terakhir = $rekap->undangan()->latest('tanggal_undangan')->value('tanggal_undangan');
+        $rekap->undangan_terakhir = $rekap->undangan()->latest('tanggal_assessment')->value('tanggal_assessment');
         $rekap->save();
 
         return redirect()->route('rekap-aplikasi.show', $validated['rekap_aplikasi_id'])
@@ -85,26 +91,20 @@ class UndanganController extends Controller
     public function update(Request $request, Undangan $undangan)
     {
         $validated = $request->validate([
-            'tanggal_undangan' => 'required|date',
-            'assessment_dokumentasi' => 'nullable|file|mimes:pdf,doc,docx',
-            'catatan_assessment' => 'nullable|string',
-            'surat_rekomendasi' => 'nullable|file|mimes:pdf,doc,docx'
+            'tanggal_assessment' => 'required|date',
+            'surat_undangan' => 'nullable|file|mimes:pdf,doc,docx',
+            'link_zoom_meeting' => 'nullable|string',
+            'tanggal_zoom_meeting' => 'nullable|date',
+            'waktu_zoom_meeting' => 'nullable|string',
+            'tempat' => 'nullable|string',
         ]);
 
-        if ($request->hasFile('assessment_dokumentasi')) {
-            if ($undangan->assessment_dokumentasi) {
-                Storage::disk('public')->delete($undangan->assessment_dokumentasi);
+        if ($request->hasFile('surat_undangan')) {
+            if ($undangan->surat_undangan) {
+                Storage::disk('public')->delete($undangan->surat_undangan);
             }
-            $validated['assessment_dokumentasi'] = $request->file('assessment_dokumentasi')
-                ->store('undangan/assessment', 'public');
-        }
-
-        if ($request->hasFile('surat_rekomendasi')) {
-            if ($undangan->surat_rekomendasi) {
-                Storage::disk('public')->delete($undangan->surat_rekomendasi);
-            }
-            $validated['surat_rekomendasi'] = $request->file('surat_rekomendasi')
-                ->store('undangan/rekomendasi', 'public');
+            $validated['surat_undangan'] = $request->file('surat_undangan')
+                ->store('undangan/surat', 'public');
         }
 
         $undangan->update($validated);
@@ -120,12 +120,8 @@ class UndanganController extends Controller
     {
         $apk_id = $undangan->rekap_aplikasi_id;
 
-        if ($undangan->assessment_dokumentasi) {
-            Storage::disk('public')->delete($undangan->assessment_dokumentasi);
-        }
-
-        if ($undangan->surat_rekomendasi) {
-            Storage::disk('public')->delete($undangan->surat_rekomendasi);
+        if ($undangan->surat_undangan) {
+            Storage::disk('public')->delete($undangan->surat_undangan);
         }
 
         $undangan->delete();

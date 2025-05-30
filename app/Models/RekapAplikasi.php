@@ -63,6 +63,16 @@ class RekapAplikasi extends Model
         return $this->belongsTo(Opd::class);
     }
 
+    public function penilaian()
+    {
+        return $this->hasMany(Penilaian::class);
+    }
+
+    public function latestPenilaian()
+    {
+        return $this->hasOne(Penilaian::class, 'rekap_aplikasi_id')->latestOfMany(); // Laravel 8+
+    }
+
     public function undangan()
     {
         return $this->hasMany(Undangan::class, 'rekap_aplikasi_id');

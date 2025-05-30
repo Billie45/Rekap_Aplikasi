@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('undangans', function (Blueprint $table) {
+        Schema::create('penilaians', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rekap_aplikasi_id')->constrained('rekap_aplikasi')->onDelete('cascade');
-            $table->date('tanggal_assessment');
-            $table->string('surat_undangan')->nullable();
-            $table->string('link_zoom_meeting')->nullable();
-            $table->date('tanggal_zoom_meeting')->nullable();
-            $table->string('waktu_zoom_meeting')->nullable();
-            $table->string('tempat')->nullable();
+            $table->string('dokumen_hasil_assessment')->nullable();
+            $table->date('tanggal_deadline_perbaikan')->nullable();
+            $table->enum('keputusan_assessment', ['lulus_tanpa_revisi', 'lulus_dengan_revisi', 'assessment_ulang', 'tidak_lulus'])->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('undangans');
+        Schema::dropIfExists('penilaians');
     }
 };

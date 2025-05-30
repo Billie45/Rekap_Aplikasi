@@ -76,54 +76,59 @@ $serverHostingData = [
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Assessment Aplikasi</h4>
 @include('components.template-tabel-2', ['data' => $assessmentData])
 
-<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Pengembangan</h4>
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Riwayat Assessment</h4>
 @include('components.template-tabel-2', ['data' => $pengembanganData])
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Server Hosting</h4>
 @include('components.template-tabel-2', ['data' => $serverHostingData])
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Daftar Undangan</h4>
+
 <!-- Tabel Undangan -->
 <div class="bg-white rounded shadow p-4 mt-4">
-
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Tanggal Undangan</th>
-                <th>Assessment Dokumentasi</th>
-                <th>Catatan Assessment</th>
-                <th>Surat Rekomendasi</th>
+                <th>Tanggal Assessment</th>
+                <th>Surat Undangan</th>
+                <th>Link Zoom Meeting</th>
+                <th>Tanggal Zoom Meeting</th>
+                <th>Waktu Zoom Meeting</th>
+                <th>Tempat</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($apk->undangan as $index => $undangan)
+            @forelse($apk->undangan ?? [] as $index => $undangan)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
+                    <td>{{ $undangan->tanggal_assessment ?? '-' }}</td>
                     <td>
-                        @if($undangan->assessment_dokumentasi)
-                            <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank" title="Lihat Dokumen">
+                        @if($undangan->surat_undangan)
+                            <a href="{{ asset('storage/' . $undangan->surat_undangan) }}" target="_blank" title="Lihat Dokumen">
                                 <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
                             </a>
                         @else
                             -
                         @endif
                     </td>
-                    <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
                     <td>
-                        @if($undangan->surat_rekomendasi)
-                            <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank" title="Lihat Surat">
-                                <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
+                        @if ($undangan->link_zoom_meeting)
+                            <a href="{{ $undangan->link_zoom_meeting }}" target="_blank" style="color: blue; text-decoration: none;">
+                                <i class='bx bx-link-external' style="vertical-align: middle;"></i>
+                                External Link
                             </a>
                         @else
                             -
                         @endif
                     </td>
+                    <td>{{ $undangan->tanggal_zoom_meeting ?? '-' }}</td>
+                    <td>{{ $undangan->waktu_zoom_meeting ?? '-' }}</td>
+                    <td>{{ $undangan->tempat ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">Belum ada data undangan</td>
+                    <td colspan="7" class="text-center">Belum ada data undangan</td>
                 </tr>
             @endforelse
         </tbody>

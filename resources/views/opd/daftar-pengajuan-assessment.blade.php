@@ -56,14 +56,18 @@
                             @endif
                         </td> --}}
                         <td>
-                            @if($apk->status === 'batal')
+                            @if($apk->status === 'diproses')
                                 {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
                             @elseif(Auth::user()->role == 'opd')
-                                @if($apk->jenis_jawaban === null && $apk->status == 'perbaikan' || $apk->jenis_jawaban === null)
-                                    <span class="btn btn-secondary btn-sm">Menunggu verifikasi admin</span>
-                                @elseif($apk->jenis_jawaban == 'Diterima')
-                                    <span class="btn btn-primary btn-sm">Assessment diterima</span>
-                                @else
+                                @if(is_null($apk->jenis_jawaban) && ($apk->status === 'assessment1' || $apk->status === 'perbaikan') || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
+                                    <span class="btn btn-secondary btn-sm">Menunggu Verifikasi</span>
+                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2'))
+                                    <span class="btn btn-secondary btn-sm">Menunggu Penilaian</span>
+                                @elseif($apk->status == 'prosesBA' || $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
+                                    @if($apk->latestPenilaian)
+                                        <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
+                                    @endif
+                                @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#assessmentDitolakModal{{ $apk->id }}">
                                         Assessment ditolak
                                     </button>

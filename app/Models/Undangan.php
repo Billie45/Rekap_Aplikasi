@@ -11,10 +11,12 @@ class Undangan extends Model
 
     protected $fillable = [
         'rekap_aplikasi_id',
-        'tanggal_undangan',
-        'assessment_dokumentasi',
-        'catatan_assessment',
-        'surat_rekomendasi'
+        'tanggal_assessment',
+        'surat_undangan',
+        'link_zoom_meeting',
+        'tanggal_zoom_meeting',
+        'waktu_zoom_meeting',
+        'tempat',
     ];
 
     public function rekapAplikasi()

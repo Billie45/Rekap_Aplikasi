@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('server')->nullable();
             $table->text('keterangan')->nullable();
             $table->text('last_update')->nullable();
-            $table->enum('jenis_permohonan', ['subdomain', 'permohonan'])->nullable();
+            $table->string('jenis_permohonan')->nullable();
             $table->date('tanggal_masuk_ba')->nullable();
             $table->string('link_dokumentasi')->nullable();
 

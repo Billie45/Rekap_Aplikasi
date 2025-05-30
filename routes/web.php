@@ -10,7 +10,10 @@ use App\Http\Controllers\OpdController;
 use App\Http\Controllers\RekapAplikasiController;
 use App\Http\Controllers\UndanganController;
 use App\Http\Controllers\ViewAplikasiController;
+use App\Http\Controllers\BAController;
 use App\Models\RekapAplikasi;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\RevisiPenilaianController;
 
 // ============================================================
 // Landing Page
@@ -289,6 +292,13 @@ Route::middleware('auth', 'role:admin')->group(function () {
 // Start
 Route::resource('rekap-aplikasi', RekapAplikasiController::class);
 Route::resource('undangan', UndanganController::class);
+Route::resource('penilaian', PenilaianController::class);
+Route::resource('revisi-penilaian', RevisiPenilaianController::class);
+
+Route::put('/penilaian/{penilaian}', [PenilaianController::class, 'update'])->name('penilaian.update');
+
+// Route untuk delete foto penilaian
+Route::delete('/penilaian/foto/{penilaianFoto}', [PenilaianController::class, 'destroyFoto'])->name('penilaian.foto.destroy');
 //
 // end
 
@@ -315,3 +325,21 @@ Route::post('/rekap-aplikasi/{id}/restore', [RekapAplikasiController::class, 're
 Route::delete('/rekap-aplikasi/{id}/force-delete', [RekapAplikasiController::class, 'forceDelete'])->name('rekap-aplikasi.force-delete');
 //
 // end
+
+// ============================================================
+// Bagian ini untuk Berita Acara (BA)
+// ============================================================
+//
+// Start
+Route::resource('ba', BAController::class);
+//
+// end
+
+Route::middleware(['auth', 'role:opd'])->group(function () {
+    Route::resource('penilaian.revisi-penilaian', RevisiPenilaianController::class);
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::post('penilaian/{penilaian}/revisi-penilaian/verdict', [RevisiPenilaianController::class, 'verdict'])
+        ->name('penilaian.revisi-penilaian.verdict');
+});

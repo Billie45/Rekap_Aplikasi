@@ -87,7 +87,7 @@ $actionsData = [
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Assessment Aplikasi</h4>
 @include('components.template-tabel-2', ['data' => $assessmentData])
 
-<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Pengembangan</h4>
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Riwayat Assessment</h4>
 @include('components.template-tabel-2', ['data' => $pengembanganData])
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Server Hosting</h4>
@@ -98,70 +98,69 @@ $actionsData = [
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Daftar Undangan</h4>
 
-<div class="mt-4">
-    @if($apk->status === 'selesai')
-        <a href="{{ route('undangan.create', ['apk_id' => $apk->id]) }}" class="btn btn-primary">Buat Undangan</a>
-    @endif
-</div>
 <!-- Tabel Undangan -->
-@include('components.template-tabel')
-    <div class="bg-white rounded shadow p-4 mt-4">
-        <table class="table table-bordered">
-            <thead>
+<div class="bg-white rounded shadow p-4 mt-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal Assessment</th>
+                <th>Surat Undangan</th>
+                <th>Link Zoom Meeting</th>
+                <th>Tanggal Zoom Meeting</th>
+                <th>Waktu Zoom Meeting</th>
+                <th>Tempat</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($apk->undangan ?? [] as $index => $undangan)
                 <tr>
-                    <th>No</th>
-                    <th>Tanggal Undangan</th>
-                    <th>Assessment Dokumentasi</th>
-                    <th>Catatan Assessment</th>
-                    <th>Surat Rekomendasi</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($apk->undangan as $index => $undangan)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $undangan->tanggal_undangan ?? '-' }}</td>
-                        <td>
-                            @if($undangan->assessment_dokumentasi)
-                                <a href="{{ asset('storage/' . $undangan->assessment_dokumentasi) }}" target="_blank" title="Lihat Dokumen">
-                                    <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td>{{ $undangan->catatan_assessment ?? '-' }}</td>
-                        <td>
-                            @if($undangan->surat_rekomendasi)
-                                <a href="{{ asset('storage/' . $undangan->surat_rekomendasi) }}" target="_blank" title="Lihat Surat">
-                                    <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
-                                </a>
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('undangan.edit', $undangan->id) }}">
-                                <i class="bx bxs-edit" style="font-size: 1.5rem;"></i>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $undangan->tanggal_assessment ?? '-' }}</td>
+                    <td>
+                        @if($undangan->surat_undangan)
+                            <a href="{{ asset('storage/' . $undangan->surat_undangan) }}" target="_blank" title="Lihat Dokumen">
+                                <i class="bx bxs-file-pdf" style="font-size: 1.5rem; color: red;"></i>
                             </a>
-                            <form action="{{ route('undangan.destroy', $undangan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus undangan ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
-                                    <i class="bx bxs-trash" style="font-size: 1.5rem; color: red;"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Belum ada data undangan</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if ($undangan->link_zoom_meeting)
+                            <a href="{{ $undangan->link_zoom_meeting }}" target="_blank" style="color: blue; text-decoration: none;">
+                                <i class='bx bx-link-external' style="vertical-align: middle;"></i>
+                                External Link
+                            </a>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>{{ $undangan->tanggal_zoom_meeting ?? '-' }}</td>
+                    <td>{{ $undangan->waktu_zoom_meeting ?? '-' }}</td>
+                    <td>{{ $undangan->tempat ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('undangan.edit', $undangan->id) }}">
+                            <i class="bx bxs-edit" style="font-size: 1.5rem;"></i>
+                        </a>
+                        <form action="{{ route('undangan.destroy', $undangan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus undangan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                <i class="bx bxs-trash" style="font-size: 1.5rem; color: red;"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center">Belum ada data undangan</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Riwayat Pengembangan aplikasi</h4>
 <!-- Tabel Riwayat -->
