@@ -11,7 +11,7 @@
                 ['label' => 'Tanggal Masuk / BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
                 ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],
                 ['label' => 'Deskripsi Singkat Last Update', 'value' => $apk->last_update ?? '-'],
-                ['label' => 'Jenis Pengembangan', 'value' => $apk->jenis_permohonan ?? '-'],
+                ['label' => 'Perihal Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
                 ['label' => 'Akun untuk Diskominfo', 'value' =>
                     $apk->akun_link && $apk->akun_username && $apk->akun_password
                         ? implode('<br>', [

@@ -31,7 +31,7 @@
                         {{-- Catatan Revisi --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="catatan_revisi">
-                                Catatan Revisi <span class="text-danger">*</span>
+                                Catatan Singkat <span class="text-danger">*</span>
                             </label>
                             <textarea name="catatan_revisi"
                                     id="catatan_revisi"
@@ -49,7 +49,7 @@
                         {{-- Dokumen Revisi --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_revisi">
-                                Dokumen Revisi <span class="text-danger">*</span>
+                                Surat Perbaikan <span class="text-danger">*</span>
                             </label>
                             <div class="input-group">
                                 <input type="file"
@@ -73,7 +73,7 @@
                         {{-- Dokumen Laporan --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_laporan">
-                                Dokumen Laporan <span class="text-danger">*</span>
+                                Lampiran Perbaikan <span class="text-danger">*</span>
                             </label>
                             <div class="input-group">
                                 <input type="file"

@@ -45,31 +45,33 @@
                         <td>{{ $apk->status_label }}</td>
                         <td>{{ $apk->jenis_assessment == 'Pertama' ? 'Pengajuan Pertama' : 'Pengajuan Revisi' }}</td>
                         <td>
-                            {{-- Khusus jika status adalah "batal", tampilkan prioritas teratas --}}
                             @if($apk->status === 'diproses')
-                                {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
-                            {{-- Jika role user adalah Admin --}}
                             @elseif(Auth::user()->role == 'admin')
                                 @if((is_null($apk->jenis_jawaban) && $apk->status === 'assessment1' ) || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
-                                    <button class="btn btn-primary btn-sm terima-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#terimaModal">Terima</button>
+                                    <button class=" btn btn-primary btn-sm terima-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#terimaModal">Terima</button>
                                     <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal">Tolak</button>
-                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2'))
+                                    <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
+                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'development'))
                                     <a href="{{ route('penilaian.create') }}?rekap_aplikasi_id={{ $apk->id }}" class="btn btn-sm" style="background-color: yellow; color: black;">Buat Penilaian</a>
+                                    <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
                                 @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
                                     <span class="btn btn-danger btn-sm">Assessment ditunda</span>
+                                    <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
                                 @elseif($apk->status == 'prosesBA'|| $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
                                     @if($apk->latestPenilaian)
-                                        <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
+                                    <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
+                                        @if(($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diterima') || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diproses'))
+                                            <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
+                                        @elseif(($apk->status == 'batal') || ($apk->status == 'selesai') || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null) || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == null || $apk->jenis_jawaban == 'Ditolak'))
+                                            <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
+                                        @endif
                                     @endif
                                 @endif
                             @endif
                         </td>
-                        <td class="text-center">
-                            @php
-                                $routeName = 'admin.show-apk';
-                            @endphp
-                            <a href="{{ route($routeName, $apk->id) }}" title="Detail">
-                                <i class="bx bxs-show" style="font-size: 1.5rem;"></i>
+                        <td>
+                            <a href="{{ route('admin.show-apk', $apk->id) }}" title="Detail" class="btn btn-primary btn-sm">
+                                <i class="bx bx-show" style="color: white"></i>
                             </a>
                         </td>
                     </tr>
@@ -92,6 +94,7 @@
                                     <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse;">
                                         <tbody>
                                             <tr><th style="text-align: left;">Tanggal Pengajuan</th><td>{{ $latest->permohonan ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">Status</th><td>{{ $latest->rekapAplikasi->status_label ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Jenis</th><td>{{ $latest->jenis ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Nama</th><td>{{ $latest->nama ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Subdomain</th><td>

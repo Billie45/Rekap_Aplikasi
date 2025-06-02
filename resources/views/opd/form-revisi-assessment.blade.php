@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Pengembangan</label>
+                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Perihal Permohonan</label>
                             <div class="col-md-9">
                                 <input type="text" id="jenis_permohonan" class="form-control" name="jenis_permohonan"
                                     value="{{ old('jenis_permohonan', $apk->jenis_permohonan ?? '') }}" required>

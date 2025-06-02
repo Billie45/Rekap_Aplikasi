@@ -34,7 +34,7 @@
                         {{-- Catatan Revisi --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="catatan_revisi">
-                                Catatan Revisi <span class="text-danger">*</span>
+                                Catatan Singkat <span class="text-danger">*</span>
                             </label>
                             <textarea name="catatan_revisi"
                                     id="catatan_revisi"
@@ -52,7 +52,7 @@
                         {{-- Dokumen Revisi --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_revisi">
-                                Dokumen Revisi
+                                Surat Perbaikan
                             </label>
                             @if($revisiPenilaian->dokumen_revisi)
                                 <div class="mb-2 p-2 bg-light rounded">
@@ -85,7 +85,7 @@
                         {{-- Dokumen Laporan --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_laporan">
-                                Dokumen Laporan
+                                Lampiran Perbaikan
                             </label>
                             @if($revisiPenilaian->dokumen_laporan)
                                 <div class="mb-2 p-2 bg-light rounded">

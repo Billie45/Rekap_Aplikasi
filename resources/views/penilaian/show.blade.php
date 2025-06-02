@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4 mt-4">Detail Penilaian</h4>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 {{-- Header --}}
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h3">Detail Penilaian</h1>
                     <div>
                         @auth
                         @if(Auth::user()->role === 'admin')
@@ -189,7 +189,7 @@
                                                 </td>
                                             </tr> --}}
                                             <tr>
-                                                <th>Catatan Revisi</th>
+                                                <th>Catatan Singkat</th>
                                                 <td>{{ $latestRevisi->catatan_revisi ?? '-' }}</td>
                                             </tr>
                                             <tr>
@@ -199,14 +199,14 @@
                                                         <a href="{{ asset('storage/' . $latestRevisi->dokumen_revisi) }}"
                                                            target="_blank"
                                                            class="btn btn-sm btn-primary">
-                                                        <i class="fas fa-file-pdf me-1"></i> Lihat Dokumen Revisi
+                                                        <i class="fas fa-file-pdf me-1"></i> Surat Perbaikan
                                                         </a>
                                                     @endif
                                                     @if($latestRevisi->dokumen_laporan)
                                                         <a href="{{ asset('storage/' . $latestRevisi->dokumen_laporan) }}"
                                                            target="_blank"
                                                            class="btn btn-sm btn-info ms-1">
-                                                        <i class="fas fa-file-pdf me-1"></i> Lihat Dokumen Laporan
+                                                        <i class="fas fa-file-pdf me-1"></i> Lampiran Perbaikan
                                                         </a>
                                                     @endif
                                                 </td>
@@ -226,6 +226,8 @@
                     {{-- Sidebar --}}
                     <div class="col-md-4">
                         {{-- Quick Actions --}}
+                        {{-- Quick Actions --}}
+
 
                         <div class="card mb-4">
                             <div class="card-header">
@@ -233,16 +235,34 @@
                                     <i class="fas fa-cogs"></i> Aksi Cepat
                                 </h5>
                             </div>
+
                             <div class="card-body">
                                 @if($penilaian->ba)
                                     <a href="{{ route('ba.show', $penilaian->ba->id) }}" class="btn btn-success w-100">
-                                        <i class="fas fa-file-signature"></i> Lihat Berita Acara
+                                        <i class="fas fa-file-signature"></i> Lihat Surat Keterangan Lulus
                                     </a>
                                 @else
                                     <span class="btn btn-secondary w-100 disabled">
-                                        <i class="fas fa-file-signature"></i> Berita Acara Belum Tersedia
+                                        <i class="fas fa-file-signature"></i> Surat Keterangan Lulus Belum Tersedia
                                     </span>
                                 @endif
+                                <div class="d-grid gap-2 mt-2">
+                                    {{-- Tombol Status Server --}}
+
+                                        @if(!$penilaian->statusServer)
+                                            @auth
+                                                @if(Auth::user()->role === 'admin')
+                                                    <a href="{{ route('status-server.create', ['penilaian_id' => $penilaian->id]) }}" class="btn btn-primary w-100 mb-2">
+                                                        <i class="fas fa-server"></i> Buat Status Server
+                                                    </a>
+                                                @endif
+                                            @endauth
+                                        @else
+                                            <a href="{{ route('status-server.show', $penilaian->statusServer->id) }}" class="btn btn-info w-100 mb-2">
+                                                <i class="fas fa-server"></i> Lihat Status Server
+                                            </a>
+                                        @endif
+                                </div>
                                 {{-- Tombol Revisi untuk OPD --}}
                                 @auth
                                     @if(Auth::user()->role === 'opd')
@@ -310,7 +330,7 @@
                                     </a> --}}
                                     @if($penilaian->rekapAplikasi->status === 'prosesBA' && $penilaian->rekapAplikasi->jenis_jawaban === 'Diterima')
                                         <a href="{{ route('ba.create', ['penilaian_id' => $penilaian->id]) }}" class="btn btn-success w-100">
-                                            <i class="fas fa-file-signature"></i> Buat Berita Acara
+                                            <i class="fas fa-file-signature"></i> Buat Surat Keterangan Lulus
                                         </a>
                                     @endif
                                     @if($penilaian->rekapAplikasi->status === 'assessment2' && $penilaian->rekapAplikasi->jenis_jawaban === null)

@@ -106,10 +106,17 @@
     <nav>
         <ul>
             <li>
-                <a href="/dashboard" class="{{ request()->is('dashboard') ? 'active' : '' }}">
-                    <i class="bx bx-home-circle"></i>
-                    <span>Dashboard</span>
-                </a>
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.list-apk') ? 'active' : '' }}">
+                        <i class="bx bx-home-circle"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
+                        <i class="bx bx-home-circle"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @endif
             </li>
             <li>
                 <a href="/rekap-aplikasi-view" class="{{ request()->is('rekap-aplikasi-view') ? 'active' : '' }}">

@@ -18,6 +18,12 @@
         font-weight: normal;
         color: #212529;
         text-align: left;
+        overflow: visible;
+        white-space: normal;
+        word-break: break-word;
+        background-color: #fff;
+        position: relative;
+        max-width: 300px; 
     }
 
     .compact-table thead th {

@@ -21,8 +21,8 @@ class AdminController extends Controller
     public function dashboard()
     {
         $aplikasis = RekapAplikasi::all();
-        $undangans = Undangan::with(['rekapAplikasi.opd'])->paginate(10);
-        $penilaians = Penilaian::with(['rekapAplikasi.opd'])->paginate(10);
+        $undangans = Undangan::with(['rekapAplikasi.opd'])->orderBy('created_at', 'desc')->paginate(10);
+        $penilaians = Penilaian::with(['rekapAplikasi.opd'])->orderBy('created_at', 'desc')->paginate(10);
         $rekap = RekapAplikasi::latest('updated_at')->first();
 
         return view('admin.dashboard', compact('aplikasis', 'undangans', 'penilaians', 'rekap'));

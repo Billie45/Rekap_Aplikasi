@@ -34,7 +34,10 @@
             <tbody>
                 @php
                     $opdId = Auth::user()->opd_id;
-                    $aplikasis = \App\Models\RekapAplikasi::where('opd_id', $opdId)->with('undangan')->get();
+                    $aplikasis = \App\Models\RekapAplikasi::where('opd_id', $opdId)
+                        ->with('undangan')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
                 @endphp
                 @forelse ($aplikasis->pluck('undangan')->flatten() as $index => $undangan)
                     <tr>
@@ -89,16 +92,17 @@
             </thead>
             <tbody>
                 @php
-                    $penilaians = \App\Models\Penilaian::whereHas('rekapAplikasi', function($query) use ($opdId) {
-                        $query->where('opd_id', $opdId);
-                    })->get();
+                    $penilaians = \App\Models\Penilaian::whereHas('rekapAplikasi', function($query) use ($opdId) { $query
+                        ->where('opd_id', $opdId);})
+                        ->orderBy('created_at', 'desc')
+                        ->get();
                 @endphp
                 @forelse ($penilaians as $index => $penilaian)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $penilaian->rekapAplikasi->nama }}</td>
                         <td>{{ str_replace('_', ' ', ucwords($penilaian->keputusan_assessment)) }}</td>
-                        <td>{{ $penilaian->tanggal_deadline_perbaikan ?? '-' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($penilaian->tanggal_deadline_perbaikan)->format('Y-m-d') }}</td>
                         <td>
                             <a href="{{ route('penilaian.show', $penilaian->id) }}" class="btn btn-primary btn-sm">
                                 Lihat Detail

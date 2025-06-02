@@ -103,7 +103,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
 
-                    <label>Jenis Permohonan:</label>
+                    <label>Perihal Permohonan:</label>
                     <input type="text" name="jenis_permohonan" id="jenis_permohonan" value="{{ old('jenis_permohonan', $apk->jenis_permohonan ?? '') }}">
                     @error('jenis_permohonan')
                         <div class="text-danger">{{ $message }}</div>

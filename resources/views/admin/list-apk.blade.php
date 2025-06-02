@@ -110,7 +110,7 @@
 
     @php
         $n = $aplikasis->firstItem();
-        $headers = ['No', 'Organisasi Pemerintah Daerah', 'Nama Aplikasi', 'Nama Subdomain', 'Status Assessment', 'Detail'];
+        $headers = ['No', 'Organisasi Pemerintah Daerah', 'Nama Aplikasi', 'Nama Subdomain', 'Tipe','Jenis','Status Assessment', 'Detail'];
         $rows = [];
 
         foreach ($aplikasis as $apk) {
@@ -120,6 +120,8 @@
                 $apk->opd->nama_opd ?? '-',
                 $apk->nama ?? '-',
                 $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>' : '-',
+                $apk->tipe_label ?? '-',
+                $apk->jenis ?? '-',
                 $apk->status_label ?? '-',
                 '<div class="text-center"><a href="' . route('admin.show-apk', $apk->id) . '" title="Detail"><i class="bx bxs-show" style="font-size: 1.5rem;"></i></a></div>',
             ];

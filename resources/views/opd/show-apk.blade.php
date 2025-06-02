@@ -10,7 +10,7 @@ $assessmentData = [
     ['label' => 'Nama Aplikasi', 'value' => $apk->nama ?? '-'],
     ['label' => 'Nama Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>': '-'],
     ['label' => 'Jenis Pengajuan Aplikasi', 'value' => $apk->tipe_label ?? '-'],
-    ['label' => 'Jenis Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
+    ['label' => 'Perihal Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
     ['label' => 'Link Dokumentasi', 'value' => $apk->link_dokumentasi ? '<a href="' . $apk->link_dokumentasi . '" target="_blank">LINK</a>' : '-' ],
     ['label' => 'Akun untuk Diskominfo', 'value' =>
         $apk->akun_link && $apk->akun_username && $apk->akun_password
@@ -115,7 +115,7 @@ $serverHostingData = [
                     <td>
                         @if ($undangan->link_zoom_meeting)
                             <a href="{{ $undangan->link_zoom_meeting }}" target="_blank" style="color: blue; text-decoration: none;">
-                                <i class='bx bx-link-external' style="vertical-align: middle;"></i>
+                                <i class='bx bxs-video' style="vertical-align: middle;"></i>
                                 External Link
                             </a>
                         @else

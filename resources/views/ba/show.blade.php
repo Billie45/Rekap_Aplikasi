@@ -68,10 +68,10 @@
             </div>
         </div>
 
-        @auth
-        @if(Auth::user()->role === 'admin')
+
         {{-- Sidebar --}}
         <div class="col-md-4">
+
             {{-- Quick Actions --}}
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
@@ -82,6 +82,8 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
+                        @auth
+                        @if(Auth::user()->role === 'admin')
                         <a href="{{ route('ba.edit', $ba->id) }}"
                            class="btn btn-warning">
                             <i class="fas fa-edit me-2"></i>
@@ -97,6 +99,8 @@
                                 Hapus Berita Acara
                             </button>
                         </form>
+                        @endif
+                        @endauth
                         <a href="{{ route('penilaian.show', $ba->penilaian_id) }}"
                            class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-2"></i>
@@ -105,8 +109,7 @@
                     </div>
                 </div>
             </div>
-        @endif
-        @endauth
+
 
             {{-- Metadata --}}
             <div class="card shadow-sm">

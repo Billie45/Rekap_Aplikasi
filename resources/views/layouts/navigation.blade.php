@@ -24,12 +24,12 @@
                 @if (Auth::user()->role == 'admin')
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <a href="{{ route('admin.list-apk') }}">
-                            <i>Kelola Assessment Aplikasi</i>
+                            <i>Daftar Assessment Aplikasi</i>
                             {{-- <span>Kelola Aplikasi</span> --}}
                         </a>
 
                         <a href="{{ route('admin.daftar-pengajuan-assessment') }}">
-                            <i>Kelola Pengajuan Assessment</i>
+                            <i>Progres Assessment Aplikasi</i>
                             {{-- <span>Daftar Pengajuan Assessment</span> --}}
                         </a>
 
@@ -52,7 +52,7 @@
                             {{-- <span>Tambah Pengajuan Assessment</span> --}}
                         </a>
                         <a href="{{ route('opd.daftar-pengajuan-assessment') }}">
-                            <i>Kelola Pengajuan Assessment</i>
+                            <i>Progres Assessment Aplikasi</i>
                             {{-- <span>Daftar Pengajuan Assessment</span> --}}
                         </a>
                     </div>

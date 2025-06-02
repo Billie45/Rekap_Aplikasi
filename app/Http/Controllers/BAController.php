@@ -46,9 +46,10 @@ class BAController extends Controller
 
         $ba = BA::create($validated);
 
-        // Update status rekap aplikasi menjadi 'selesai'
+        // Update status dan tanggal_masuk_ba pada rekap aplikasi
         $ba->penilaian->rekapAplikasi->update([
-            'status' => 'selesai'
+            'status' => 'selesai',
+            'tanggal_masuk_ba' => $ba->tanggal_pelaksanaan
         ]);
 
         return redirect()
@@ -71,7 +72,7 @@ class BAController extends Controller
     public function edit(BA $ba)
     {
         $ba->load('penilaian.rekapAplikasi');
-        return view('ba.edit', compact('ba'));
+        return view('ba.update', compact('ba'));
     }
 
     /**
@@ -96,6 +97,11 @@ class BAController extends Controller
         }
 
         $ba->update($validated);
+
+        // Update tanggal_masuk_ba pada rekap aplikasi
+        $ba->penilaian->rekapAplikasi->update([
+            'tanggal_masuk_ba' => $ba->tanggal_pelaksanaan
+        ]);
 
         return redirect()
             ->route('ba.show', $ba->id)

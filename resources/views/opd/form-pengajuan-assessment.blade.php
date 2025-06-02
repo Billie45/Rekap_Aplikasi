@@ -145,7 +145,7 @@
                         </div> --}}
 
                         <div class="form-group row">
-                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Jenis Permohonan</label>
+                            <label for="jenis_permohonan" class="col-md-3 col-form-label text-md-right">Perihal Permohonan</label>
                             <div class="col-md-9">
                                 <input id="jenis_permohonan" type="text" class="form-control " name="jenis_permohonan"
                                     value="{{ old('jenis_permohonan') }}">

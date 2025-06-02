@@ -41,4 +41,9 @@ class Penilaian extends Model
     {
         return $this->hasMany(RevisiPenilaian::class);
     }
+
+    public function statusServer()
+    {
+        return $this->hasOne(StatusServer::class);
+    }
 }

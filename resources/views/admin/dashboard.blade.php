@@ -39,11 +39,11 @@
                     @foreach ($undangans as $index => $undangan)
                         <tr>
                             <td>{{ $undangans->firstItem() + $index }}</td>
-                            <td>{{ $undangan->rekapAplikasi->nama }}</td>
-                            <td>{{ $undangan->rekapAplikasi->opd->nama_opd }}</td>
-                            <td>{{ $undangan->tanggal_zoom_meeting }}</td>
-                            <td>{{ $undangan->waktu_zoom_meeting }}</td>
-                            <td>{{ $undangan->tempat }}</td>
+                            <td>{{ $undangan->rekapAplikasi->nama ?? '-' }}</td>
+                            <td>{{ $undangan->rekapAplikasi->opd->nama_opd ?? '-'}}</td>
+                            <td>{{ $undangan->tanggal_zoom_meeting ?? '-'}}</td>
+                            <td>{{ $undangan->waktu_zoom_meeting ?? '-'}}</td>
+                            <td>{{ $undangan->tempat ?? '-'}}</td>
                             <td class="text-center">
                                 @if($undangan->link_zoom_meeting)
                                     <a href="{{ $undangan->link_zoom_meeting }}" target="_blank" title="Join Zoom Meeting">
@@ -57,7 +57,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $undangans->links() }}
+            {{ $undangans->links('pagination::tailwind') }}
         </div>
 
         <!-- Tabel Penilaian -->
@@ -70,7 +70,7 @@
                         <th>Nama Aplikasi</th>
                         <th>OPD</th>
                         <th>Keputusan Assessment</th>
-                        <th>Deadline</th>
+                        <th>Tanggal Deadline</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -78,10 +78,10 @@
                     @foreach ($penilaians as $index => $penilaian)
                         <tr>
                             <td>{{ $penilaians->firstItem() + $index }}</td>
-                            <td>{{ $penilaian->rekapAplikasi->nama }}</td>
-                            <td>{{ $penilaian->rekapAplikasi->opd->nama_opd }}</td>
-                            <td>{{ str_replace('_', ' ', ucwords($penilaian->keputusan_assessment)) }}</td>
-                            <td>{{ $penilaian->tanggal_deadline_perbaikan }}</td>
+                            <td>{{ $penilaian->rekapAplikasi->nama ?? '-'}}</td>
+                            <td>{{ $penilaian->rekapAplikasi->opd->nama_opd ?? '-'}}</td>
+                            <td>{{ str_replace('_', ' ', ucwords($penilaian->keputusan_assessment)) ?? '-'}}</td>
+                            <td>{{ \Carbon\Carbon::parse($penilaian->tanggal_deadline_perbaikan)->format('Y-m-d') ?? '-'}}</td>
                             <td>
                                 <a href="{{ route('penilaian.show', $penilaian->id) }}" class="btn btn-primary btn-sm">Detail</a>
                             </td>
@@ -89,7 +89,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $penilaians->links() }}
+            {{ $penilaians->links('pagination::tailwind') }}
         </div>
 @endsection
 

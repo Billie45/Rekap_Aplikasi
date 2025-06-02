@@ -14,6 +14,7 @@ use App\Http\Controllers\BAController;
 use App\Models\RekapAplikasi;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RevisiPenilaianController;
+use App\Http\Controllers\StatusServerController;
 
 // ============================================================
 // Landing Page
@@ -343,3 +344,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('penilaian/{penilaian}/revisi-penilaian/verdict', [RevisiPenilaianController::class, 'verdict'])
         ->name('penilaian.revisi-penilaian.verdict');
 });
+
+// ============================================================
+// bagian ini untuk status server
+// ============================================================
+//
+// Start
+Route::resource('status-server', StatusServerController::class);
+//
+// end

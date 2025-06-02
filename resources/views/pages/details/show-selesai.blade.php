@@ -8,7 +8,7 @@ $detailData = [
                 ['label' => 'Nama Subdomain', 'value' => $apk->subdomain ? '<a href="https://' . $apk->subdomain . '" target="_blank">' . $apk->subdomain . '</a>' : '-'],
                 ['label' => 'Status Assessment', 'value' => $apk->status_label ?? '-'],
                 ['label' => 'Jenis Pengajuan Aplikasi', 'value' => $apk->tipe_label ?? '-'],
-                ['label' => 'Jenis Pengembangan', 'value' => $apk->jenis_permohonan ?? '-'],
+                ['label' => 'Perihal Permohonan', 'value' => $apk->jenis_permohonan ?? '-'],
                 ['label' => 'Tanggal Laporan Perbaikan / Rekom Lulus', 'value' => $apk->tanggal_masuk_ba ?? '-'],
                 ['label' => 'Tanggal Masuk BA', 'value' => $apk->tanggal_masuk_ba ?? '-'],
                 ['label' => 'Server Hosting', 'value' => $apk->server ?? '-'],

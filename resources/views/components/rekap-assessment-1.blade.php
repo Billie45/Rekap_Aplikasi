@@ -57,13 +57,13 @@
 <div class="container">
 
 
-    @if ($rekap)
+    @if ($rekap && $rekap->updated_at)
         <p class="text-muted">
             <strong>Rekap update data S.D:</strong> {{ $rekap->updated_at->translatedFormat('l, d F Y H:i:s') }}
         </p>
     @else
         <p class="text-muted">
-            <strong>Rekap update data S.D:</strong> Data belum tersedia
+            <strong>Rekap update data S.D:</strong> -
         </p>
     @endif
 
