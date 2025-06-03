@@ -45,15 +45,15 @@ class RevisiPenilaianController extends Controller
             // Add more debug logging
             Log::info('Validated data:', $validated);
 
-            if ($request->hasFile('dokumen_revisi')) {
-                $path = $request->file('dokumen_revisi')->store('revisi-documents', 'public');
-                $validated['dokumen_revisi'] = $path;
-            }
+            // if ($request->hasFile('dokumen_revisi')) {
+            //     $path = $request->file('dokumen_revisi')->store('revisi-documents', 'public');
+            //     $validated['dokumen_revisi'] = $path;
+            // }
 
-            if ($request->hasFile('dokumen_laporan')) {
-                $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
-                $validated['dokumen_laporan'] = $path;
-            }
+            // if ($request->hasFile('dokumen_laporan')) {
+            //     $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
+            //     $validated['dokumen_laporan'] = $path;
+            // }
 
             $validated['penilaian_id'] = $penilaian->id;
             $validated['status'] = 'diajukan';
