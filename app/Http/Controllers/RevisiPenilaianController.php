@@ -113,21 +113,21 @@ class RevisiPenilaianController extends Controller
                 'status' => 'nullable|in:diajukan,diproses,selesai'
             ]);
 
-            if ($request->hasFile('dokumen_revisi')) {
-                if ($revisi_penilaian->dokumen_revisi) {
-                    Storage::disk('public')->delete($revisi_penilaian->dokumen_revisi);
-                }
-                $path = $request->file('dokumen_revisi')->store('revisi-documents', 'public');
-                $validated['dokumen_revisi'] = $path;
-            }
+            // if ($request->hasFile('dokumen_revisi')) {
+            //     if ($revisi_penilaian->dokumen_revisi) {
+            //         Storage::disk('public')->delete($revisi_penilaian->dokumen_revisi);
+            //     }
+            //     $path = $request->file('dokumen_revisi')->store('revisi-documents', 'public');
+            //     $validated['dokumen_revisi'] = $path;
+            // }
 
-            if ($request->hasFile('dokumen_laporan')) {
-                if ($revisi_penilaian->dokumen_laporan) {
-                    Storage::disk('public')->delete($revisi_penilaian->dokumen_laporan);
-                }
-                $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
-                $validated['dokumen_laporan'] = $path;
-            }
+            // if ($request->hasFile('dokumen_laporan')) {
+            //     if ($revisi_penilaian->dokumen_laporan) {
+            //         Storage::disk('public')->delete($revisi_penilaian->dokumen_laporan);
+            //     }
+            //     $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
+            //     $validated['dokumen_laporan'] = $path;
+            // }
 
             $revisi_penilaian->update($validated);
 
@@ -159,12 +159,12 @@ class RevisiPenilaianController extends Controller
     {
         try {
             // Delete associated files if they exist
-            if ($revisiPenilaian->dokumen_revisi) {
-                Storage::disk('public')->delete($revisiPenilaian->dokumen_revisi);
-            }
-            if ($revisiPenilaian->dokumen_laporan) {
-                Storage::disk('public')->delete($revisiPenilaian->dokumen_laporan);
-            }
+            // if ($revisiPenilaian->dokumen_revisi) {
+            //     Storage::disk('public')->delete($revisiPenilaian->dokumen_revisi);
+            // }
+            // if ($revisiPenilaian->dokumen_laporan) {
+            //     Storage::disk('public')->delete($revisiPenilaian->dokumen_laporan);
+            // }
 
             $revisiPenilaian->delete();
 

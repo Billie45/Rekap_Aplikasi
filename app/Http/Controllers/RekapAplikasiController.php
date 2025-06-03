@@ -606,14 +606,14 @@ class RekapAplikasiController extends Controller
             $item->save();
 
         // Handle file upload
-        if ($request->hasFile('surat_permohonan')) {
-            $file = $request->file('surat_permohonan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/surat_permohonan'), $fileName);
-            $suratPermohonanPath = 'surat_permohonan/' . $fileName;
-        } else {
-            $suratPermohonanPath = null;
-        }
+        // if ($request->hasFile('surat_permohonan')) {
+        //     $file = $request->file('surat_permohonan');
+        //     $fileName = time() . '_' . $file->getClientOriginalName();
+        //     $file->move(public_path('storage/surat_permohonan'), $fileName);
+        //     $suratPermohonanPath = 'surat_permohonan/' . $fileName;
+        // } else {
+        //     $suratPermohonanPath = null;
+        // }
 
         $nama = $request->nama;
         $opdId = $request->opd_id;
@@ -660,7 +660,7 @@ class RekapAplikasiController extends Controller
         'cp_opd_no_telepon' => $validated['cp_opd_no_telepon'],
         'cp_pengembang_nama' => $validated['cp_pengembang_nama'],
         'cp_pengembang_no_telepon' => $validated['cp_pengembang_no_telepon'],
-        'surat_permohonan' => $suratPermohonanPath,
+        // 'surat_permohonan' => $suratPermohonanPath,
     ]);
 
         return redirect()->route('opd.daftar-pengajuan-assessment')->with('success', 'Revisi telah diajukan');

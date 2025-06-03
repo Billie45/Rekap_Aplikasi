@@ -39,12 +39,12 @@ class StatusServerController extends Controller
         ]);
 
         // Handle file uploads
-        if ($request->hasFile('permohonan')) {
-            $validated['permohonan'] = $request->file('permohonan')->store('permohonan', 'public');
-        }
-        if ($request->hasFile('dokumen_teknis')) {
-            $validated['dokumen_teknis'] = $request->file('dokumen_teknis')->store('dokumen_teknis', 'public');
-        }
+        // if ($request->hasFile('permohonan')) {
+        //     $validated['permohonan'] = $request->file('permohonan')->store('permohonan', 'public');
+        // }
+        // if ($request->hasFile('dokumen_teknis')) {
+        //     $validated['dokumen_teknis'] = $request->file('dokumen_teknis')->store('dokumen_teknis', 'public');
+        // }
 
         $statusServer = StatusServer::create($validated);
 
@@ -81,12 +81,12 @@ class StatusServerController extends Controller
         ]);
 
         // Handle file uploads
-        if ($request->hasFile('permohonan')) {
-            $validated['permohonan'] = $request->file('permohonan')->store('permohonan', 'public');
-        }
-        if ($request->hasFile('dokumen_teknis')) {
-            $validated['dokumen_teknis'] = $request->file('dokumen_teknis')->store('dokumen_teknis', 'public');
-        }
+        // if ($request->hasFile('permohonan')) {
+        //     $validated['permohonan'] = $request->file('permohonan')->store('permohonan', 'public');
+        // }
+        // if ($request->hasFile('dokumen_teknis')) {
+        //     $validated['dokumen_teknis'] = $request->file('dokumen_teknis')->store('dokumen_teknis', 'public');
+        // }
 
         $statusServer->update($validated);
 

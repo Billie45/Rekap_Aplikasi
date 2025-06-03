@@ -55,10 +55,10 @@ class PenilaianController extends Controller
             ];
 
             // Handle dokumen hasil assessment (PDF)
-            if ($request->hasFile('dokumen_hasil_assessment')) {
-                $pdfPath = $request->file('dokumen_hasil_assessment')->store('dokumen_assessment', 'public');
-                $data['dokumen_hasil_assessment'] = $pdfPath;
-            }
+            // if ($request->hasFile('dokumen_hasil_assessment')) {
+            //     $pdfPath = $request->file('dokumen_hasil_assessment')->store('dokumen_assessment', 'public');
+            //     $data['dokumen_hasil_assessment'] = $pdfPath;
+            // }
 
             $penilaian = Penilaian::create($data);
 
@@ -67,30 +67,30 @@ class PenilaianController extends Controller
             $this->updateRekapAplikasiStatus($rekapAplikasi, $request->input('keputusan_assessment'));
 
             // Handle foto dokumentasi assessment - Perbaikan di sini
-            if ($request->hasFile('fotos')) {
-                $fotos = $request->file('fotos');
+            // if ($request->hasFile('fotos')) {
+            //     $fotos = $request->file('fotos');
 
-                foreach ($fotos as $foto) {
-                    // Cek apakah file valid sebelum disimpan
-                    if ($foto && $foto->isValid()) {
-                        try {
-                            $path = $foto->store('penilaian_fotos', 'public');
+            //     foreach ($fotos as $foto) {
+            //         // Cek apakah file valid sebelum disimpan
+            //         if ($foto && $foto->isValid()) {
+            //             try {
+            //                 $path = $foto->store('penilaian_fotos', 'public');
 
-                            PenilaianFoto::create([
-                                'penilaian_id' => $penilaian->id,
-                                'foto' => $path,
-                            ]);
+            //                 PenilaianFoto::create([
+            //                     'penilaian_id' => $penilaian->id,
+            //                     'foto' => $path,
+            //                 ]);
 
-                            Log::info('Foto berhasil disimpan: ' . $path);
-                        } catch (\Exception $e) {
-                            Log::error('Error menyimpan foto: ' . $e->getMessage());
-                            // Jangan stop proses, lanjutkan ke foto berikutnya
-                        }
-                    } else {
-                        Log::warning('File foto tidak valid atau kosong');
-                    }
-                }
-            }
+            //                 Log::info('Foto berhasil disimpan: ' . $path);
+            //             } catch (\Exception $e) {
+            //                 Log::error('Error menyimpan foto: ' . $e->getMessage());
+            //                 // Jangan stop proses, lanjutkan ke foto berikutnya
+            //             }
+            //         } else {
+            //             Log::warning('File foto tidak valid atau kosong');
+            //         }
+            //     }
+            // }
 
             return redirect()->route('rekap-aplikasi.show', $penilaian->rekap_aplikasi_id)
                 ->with('success', 'Penilaian berhasil ditambahkan.');
@@ -149,22 +149,22 @@ class PenilaianController extends Controller
             ]);
 
             // Handle dokumen hasil assessment (PDF)
-            if ($request->hasFile('dokumen_hasil_assessment')) {
-                try {
-                    // Hapus file lama jika ada
-                    if ($penilaian->dokumen_hasil_assessment && Storage::exists('public/' . $penilaian->dokumen_hasil_assessment)) {
-                        Storage::delete('public/' . $penilaian->dokumen_hasil_assessment);
-                        Log::info('File PDF lama berhasil dihapus: ' . $penilaian->dokumen_hasil_assessment);
-                    }
+            // if ($request->hasFile('dokumen_hasil_assessment')) {
+            //     try {
+            //         // Hapus file lama jika ada
+            //         if ($penilaian->dokumen_hasil_assessment && Storage::exists('public/' . $penilaian->dokumen_hasil_assessment)) {
+            //             Storage::delete('public/' . $penilaian->dokumen_hasil_assessment);
+            //             Log::info('File PDF lama berhasil dihapus: ' . $penilaian->dokumen_hasil_assessment);
+            //         }
 
-                    $pdfPath = $request->file('dokumen_hasil_assessment')->store('dokumen_assessment', 'public');
-                    $data['dokumen_hasil_assessment'] = $pdfPath;
-                    Log::info('File PDF baru berhasil diupload: ' . $pdfPath);
-                } catch (\Exception $e) {
-                    Log::error('Error handling PDF file: ' . $e->getMessage());
-                    return back()->with('error', 'Gagal mengupload dokumen PDF: ' . $e->getMessage())->withInput();
-                }
-            }
+            //         $pdfPath = $request->file('dokumen_hasil_assessment')->store('dokumen_assessment', 'public');
+            //         $data['dokumen_hasil_assessment'] = $pdfPath;
+            //         Log::info('File PDF baru berhasil diupload: ' . $pdfPath);
+            //     } catch (\Exception $e) {
+            //         Log::error('Error handling PDF file: ' . $e->getMessage());
+            //         return back()->with('error', 'Gagal mengupload dokumen PDF: ' . $e->getMessage())->withInput();
+            //     }
+            // }
 
             // Update data penilaian
             $penilaian->update($data);
@@ -174,31 +174,31 @@ class PenilaianController extends Controller
             $this->updateRekapAplikasiStatus($rekapAplikasi, $request->input('keputusan_assessment'));
 
             // Handle foto dokumentasi assessment - Perbaikan di sini
-            if ($request->hasFile('fotos')) {
-                $fotos = $request->file('fotos');
-                Log::info('Jumlah foto yang diupload: ' . count($fotos));
+            // if ($request->hasFile('fotos')) {
+            //     $fotos = $request->file('fotos');
+            //     Log::info('Jumlah foto yang diupload: ' . count($fotos));
 
-                foreach ($fotos as $index => $foto) {
-                    // Cek apakah file valid sebelum disimpan
-                    if ($foto && $foto->isValid()) {
-                        try {
-                            $path = $foto->store('penilaian_fotos', 'public');
+            //     foreach ($fotos as $index => $foto) {
+            //         // Cek apakah file valid sebelum disimpan
+            //         if ($foto && $foto->isValid()) {
+            //             try {
+            //                 $path = $foto->store('penilaian_fotos', 'public');
 
-                            PenilaianFoto::create([
-                                'penilaian_id' => $penilaian->id,
-                                'foto' => $path,
-                            ]);
+            //                 PenilaianFoto::create([
+            //                     'penilaian_id' => $penilaian->id,
+            //                     'foto' => $path,
+            //                 ]);
 
-                            Log::info('Foto ' . ($index + 1) . ' berhasil disimpan: ' . $path);
-                        } catch (\Exception $e) {
-                            Log::error('Error menyimpan foto ' . ($index + 1) . ': ' . $e->getMessage());
-                            // Jangan stop proses, lanjutkan ke foto berikutnya
-                        }
-                    } else {
-                        Log::warning('File foto ' . ($index + 1) . ' tidak valid atau kosong');
-                    }
-                }
-            }
+            //                 Log::info('Foto ' . ($index + 1) . ' berhasil disimpan: ' . $path);
+            //             } catch (\Exception $e) {
+            //                 Log::error('Error menyimpan foto ' . ($index + 1) . ': ' . $e->getMessage());
+            //                 // Jangan stop proses, lanjutkan ke foto berikutnya
+            //             }
+            //         } else {
+            //             Log::warning('File foto ' . ($index + 1) . ' tidak valid atau kosong');
+            //         }
+            //     }
+            // }
 
             return redirect()->route('rekap-aplikasi.show', $penilaian->rekap_aplikasi_id)
                 ->with('success', 'Penilaian berhasil diperbarui.');
