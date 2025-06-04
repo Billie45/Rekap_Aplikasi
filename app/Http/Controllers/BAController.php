@@ -36,13 +36,15 @@ class BAController extends Controller
             'penilaian_id' => 'required|exists:penilaians,id',
             'tanggal_pelaksanaan' => 'required|date',
             'ringkasan_hasil' => 'required|string',
-            'dokumen_ba' => 'required|file|mimes:pdf'
+            // 'dokumen_ba' => 'required|file|mimes:pdf'
+
+            'dokumen_ba' => 'nullable|file|mimes:pdf'
         ]);
 
-        // if ($request->hasFile('dokumen_ba')) {
-        //     $path = $request->file('dokumen_ba')->store('ba-documents', 'public');
-        //     $validated['dokumen_ba'] = $path;
-        // }
+        if ($request->hasFile('dokumen_ba')) {
+            $path = $request->file('dokumen_ba')->store('ba-documents', 'public');
+            $validated['dokumen_ba'] = $path;
+        }
 
         $ba = BA::create($validated);
 
@@ -86,15 +88,15 @@ class BAController extends Controller
             'dokumen_ba' => 'nullable|file|mimes:pdf'
         ]);
 
-        // if ($request->hasFile('dokumen_ba')) {
-        //     // Delete old file if exists
-        //     if ($ba->dokumen_ba) {
-        //         Storage::disk('public')->delete($ba->dokumen_ba);
-        //     }
+        if ($request->hasFile('dokumen_ba')) {
+            // Delete old file if exists
+            if ($ba->dokumen_ba) {
+                Storage::disk('public')->delete($ba->dokumen_ba);
+            }
 
-        //     $path = $request->file('dokumen_ba')->store('ba-documents', 'public');
-        //     $validated['dokumen_ba'] = $path;
-        // }
+            $path = $request->file('dokumen_ba')->store('ba-documents', 'public');
+            $validated['dokumen_ba'] = $path;
+        }
 
         $ba->update($validated);
 
@@ -114,9 +116,9 @@ class BAController extends Controller
     public function destroy(BA $ba)
     {
         // Delete associated file if exists
-        // if ($ba->dokumen_ba) {
-        //     Storage::disk('public')->delete($ba->dokumen_ba);
-        // }
+        if ($ba->dokumen_ba) {
+            Storage::disk('public')->delete($ba->dokumen_ba);
+        }
 
         // Update status rekap aplikasi kembali ke 'prosesBA'
         $ba->penilaian->rekapAplikasi->update([

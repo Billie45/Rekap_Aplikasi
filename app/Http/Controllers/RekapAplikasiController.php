@@ -445,7 +445,9 @@ class RekapAplikasiController extends Controller
             'permohonan' => 'nullable',
             'undangan_terakhir' => 'nullable',
             'laporan_perbaikan' => 'nullable',
-            'surat_permohonan' => 'required|mimes:pdf',
+            // 'surat_permohonan' => 'required|mimes:pdf',
+
+            'surat_permohonan' => 'nullable|mimes:pdf',
         ]);
 
         $opdId = auth::user()->opd_id;
@@ -565,7 +567,9 @@ class RekapAplikasiController extends Controller
             'cp_opd_no_telepon' => 'nullable',
             'cp_pengembang_nama' => 'nullable',
             'cp_pengembang_no_telepon' => 'nullable',
-            'surat_permohonan' => 'required|file|mimes:pdf',
+            // 'surat_permohonan' => 'required|file|mimes:pdf',
+
+            'surat_permohonan' => 'nullable|file|mimes:pdf',
         ]);
 
         $item = RekapAplikasi::findOrFail($id);
@@ -606,14 +610,14 @@ class RekapAplikasiController extends Controller
             $item->save();
 
         // Handle file upload
-        // if ($request->hasFile('surat_permohonan')) {
-        //     $file = $request->file('surat_permohonan');
-        //     $fileName = time() . '_' . $file->getClientOriginalName();
-        //     $file->move(public_path('storage/surat_permohonan'), $fileName);
-        //     $suratPermohonanPath = 'surat_permohonan/' . $fileName;
-        // } else {
-        //     $suratPermohonanPath = null;
-        // }
+        if ($request->hasFile('surat_permohonan')) {
+            $file = $request->file('surat_permohonan');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/surat_permohonan'), $fileName);
+            $suratPermohonanPath = 'surat_permohonan/' . $fileName;
+        } else {
+            $suratPermohonanPath = null;
+        }
 
         $nama = $request->nama;
         $opdId = $request->opd_id;

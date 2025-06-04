@@ -52,10 +52,10 @@ class UndanganController extends Controller
             'tempat' => 'nullable|string',
         ]);
 
-        // if ($request->hasFile('surat_undangan')) {
-        //     $validated['surat_undangan'] = $request->file('surat_undangan')
-        //         ->store('undangan/surat', 'public');
-        // }
+        if ($request->hasFile('surat_undangan')) {
+            $validated['surat_undangan'] = $request->file('surat_undangan')
+                ->store('undangan/surat', 'public');
+        }
 
         Undangan::create($validated);
 
@@ -101,13 +101,13 @@ class UndanganController extends Controller
             'tempat' => 'nullable|string',
         ]);
 
-        // if ($request->hasFile('surat_undangan')) {
-        //     if ($undangan->surat_undangan) {
-        //         Storage::disk('public')->delete($undangan->surat_undangan);
-        //     }
-        //     $validated['surat_undangan'] = $request->file('surat_undangan')
-        //         ->store('undangan/surat', 'public');
-        // }
+        if ($request->hasFile('surat_undangan')) {
+            if ($undangan->surat_undangan) {
+                Storage::disk('public')->delete($undangan->surat_undangan);
+            }
+            $validated['surat_undangan'] = $request->file('surat_undangan')
+                ->store('undangan/surat', 'public');
+        }
 
         $undangan->update($validated);
 
@@ -122,9 +122,9 @@ class UndanganController extends Controller
     {
         $apk_id = $undangan->rekap_aplikasi_id;
 
-        // if ($undangan->surat_undangan) {
-        //     Storage::disk('public')->delete($undangan->surat_undangan);
-        // }
+        if ($undangan->surat_undangan) {
+            Storage::disk('public')->delete($undangan->surat_undangan);
+        }
 
         $undangan->delete();
 
