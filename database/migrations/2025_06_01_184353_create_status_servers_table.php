@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('status_servers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('penilaian_id')->constrained('penilaians')->onDelete('cascade')->unique();
+            $table->string('nama_server'); // tambah kolom nama_server
             $table->date('tanggal_masuk_server');
             $table->enum('status_server', ['development', 'production', 'luar']);
             $table->string('permohonan')->nullable(); // path file PDF

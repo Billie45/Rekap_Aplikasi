@@ -5,6 +5,7 @@
     {{-- Template tabel --}}
     @include('components.template-tabel')
 
+    <div class="bg-white rounded shadow p-4 mt-4">
     <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Daftar Status Hosting dan Akses Server Aplikasi</h4>
 
     <div class="table-wrapper mt-3">
@@ -19,7 +20,7 @@
                     <th>Server Hosting</th>
                     <th>Open Akses</th>
                     <th>Close Akses</th>
-                    <th>Urgensi</th>
+                    {{-- <th>Urgensi</th> --}}
                 </tr>
             </thead>
 
@@ -43,14 +44,17 @@
                         <td>{{ $apk->server ?? '-' }}</td>
                         <td>{{ $apk->open_akses ?? '-' }}</td>
                         <td>{{ $apk->close_akses ?? '-' }}</td>
-                        <td>{{ $apk->urgensi ?? '-' }}</td>
+                        {{-- <td>{{ $apk->urgensi ?? '-' }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 
+    {{-- Pagination --}}
+
     <div class ="mt-3">
         {{ $aplikasis->links('pagination::tailwind') }}
+    </div>
     </div>
 @endsection

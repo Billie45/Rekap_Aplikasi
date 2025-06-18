@@ -85,35 +85,37 @@
                         {{-- Dokumen Laporan --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_laporan">
-                                Lampiran Perbaikan
+                                Link Lampiran Perbaikan
                             </label>
                             @if($revisiPenilaian->dokumen_laporan)
                                 <div class="mb-2 p-2 bg-light rounded">
-                                    <i class="fas fa-file-pdf text-danger"></i>
-                                    <a href="{{ asset('storage/' . $revisiPenilaian->dokumen_laporan) }}"
-                                       target="_blank"
-                                       class="text-decoration-none">
-                                        Dokumen Laporan Saat Ini
+                                    <i class="fas fa-link text-primary"></i>
+                                    <a href="{{ $revisiPenilaian->dokumen_laporan }}"
+                                    target="_blank"
+                                    class="text-decoration-none">
+                                        Lihat Link Lampiran Saat Ini
                                     </a>
                                 </div>
                             @endif
                             <div class="input-group">
-                                <input type="file"
-                                       name="dokumen_laporan"
-                                       id="dokumen_laporan"
-                                       class="form-control @error('dokumen_laporan') is-invalid @enderror"
-                                       accept="application/pdf">
+                                <input type="url"
+                                    name="dokumen_laporan"
+                                    id="dokumen_laporan"
+                                    class="form-control @error('dokumen_laporan') is-invalid @enderror"
+                                    placeholder="https://contoh.com/lampiran"
+                                    value="{{ old('dokumen_laporan', $revisiPenilaian->dokumen_laporan) }}">
                                 <span class="input-group-text">
-                                    <i class="fas fa-file-pdf"></i>
+                                    <i class="fas fa-link"></i>
                                 </span>
                             </div>
                             <small class="text-muted">
-                                Kosongkan jika tidak ingin mengubah dokumen. Format: PDF, Maksimal 2MB
+                                Masukkan link (URL) jika ingin mengganti. Kosongkan jika tidak mengubah.
                             </small>
                             @error('dokumen_laporan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
 
                         {{-- Status Revisi --}}
                         {{-- <div class="form-group mb-4">

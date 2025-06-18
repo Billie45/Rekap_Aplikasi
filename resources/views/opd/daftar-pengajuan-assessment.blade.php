@@ -2,7 +2,7 @@
 
 @section('content')
     @include('components.template-tabel')
-
+    <div class="bg-white rounded shadow p-4 mt-4">
     <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Pengajuan Assessment Aplikasi</h4>
 
     @if(session('success'))
@@ -17,7 +17,7 @@
                 <tr>
                     <th>No</th>
                     <th>Riwayat</th>
-                    <th>Tanggal Pengajuan/Revisi</th>
+                    <th>Tanggal Pengajuan</th>
                     <th>Organisasi Pemerintah Daerah</th>
                     <th>Nama Aplikasi</th>
                     <th>Status Assessment</th>
@@ -55,72 +55,95 @@
                                 Diproses
                             @endif
                         </td> --}}
-                        <td>
-                            @if($apk->status === 'diproses')
-                                {{-- <span class="btn btn-danger btn-sm">Assessment ditolak</span> --}}
-                            @elseif(Auth::user()->role == 'opd')
-                                @if(is_null($apk->jenis_jawaban) && ($apk->status === 'assessment1' || $apk->status === 'perbaikan') || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
-                                    <span class="btn btn-secondary btn-sm">Menunggu Verifikasi</span>
-                                    <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
-                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status == 'development'))
-                                    <span class="btn btn-secondary btn-sm">Menunggu Penilaian</span>
-                                    <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
-                                @elseif($apk->status == 'prosesBA' || $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
-                                    @if($apk->latestPenilaian)
-                                        <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
-                                        @if(($apk->status == 'prosesBA' && ($apk->jenis_jawaban == 'Ditolak' || $apk->jenis_jawaban == null)) || ($apk->status == 'assessment2' && ($apk->jenis_jawaban == 'Ditolak' || $apk->jenis_jawaban == null)))
-                                            <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
-                                        @elseif(($apk->status == 'selesai') || ($apk->status == 'batal') || ($apk->status == 'prosesBA' && ($apk->jenis_jawaban == 'Diterima' || $apk->jenis_jawaban == 'Diproses')))
-                                            <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
-                                        @endif
-                                    @endif
-                                @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#assessmentDitolakModal{{ $apk->id }}">Assessment ditolak</button>
-                                    <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="assessmentDitolakModal{{ $apk->id }}" tabindex="-1" role="dialog" aria-labelledby="assessmentDitolakModalLabel{{ $apk->id }}" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="assessmentDitolakModalLabel{{ $apk->id }}">Catatan Perbaikan dari Admin</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    @php
-                                                        // Ambil revisi terbaru langsung dari query builder
-                                                        $latestRevision = $apk->riwayatRevisiAssessments()
-                                                            ->orderByDesc('tanggal_pengajuan')
-                                                            ->first();
-                                                    @endphp
+<td>
+    <div class="action-buttons">
+        @if($apk->status === 'diproses')
+            {{-- Tidak ada tombol --}}
+        @elseif(Auth::user()->role == 'opd')
+            @if(is_null($apk->jenis_jawaban) && ($apk->status === 'assessment1' || $apk->status === 'perbaikan') || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
+                <span class="btn btn-secondary btn-sm" title="Menunggu Verifikasi">
+                    <i class='bx bx-time'></i>
+                    <span class="btn-text">Menunggu Verifikasi</span>
+                </span>
+                <button class="btn btn-secondary btn-sm" title="Notifikasi">
+                    <i class='bx bx-bell'></i>
+                </button>
+            @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status == 'development'))
+                <span class="btn btn-secondary btn-sm" title="Menunggu Penilaian">
+                    <i class='bx bx-time'></i>
+                    <span class="btn-text">Menunggu Penilaian</span>
+                </span>
+                <button class="btn btn-secondary btn-sm" title="Notifikasi">
+                    <i class='bx bx-bell'></i>
+                </button>
+            @elseif($apk->status == 'prosesBA' || $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
+                @if($apk->latestPenilaian)
+                    <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;" title="Lihat Penilaian">
+                        <i class='bx bx-show'></i>
+                        <span class="btn-text">Lihat Penilaian</span>
+                    </a>
+                    @if(($apk->status == 'prosesBA' && ($apk->jenis_jawaban == 'Ditolak' || $apk->jenis_jawaban == null)) || ($apk->status == 'assessment2' && ($apk->jenis_jawaban == 'Ditolak' || $apk->jenis_jawaban == null)))
+                        <button class="btn btn-warning btn-sm" title="Notifikasi">
+                            <i class='bx bx-bell'></i>
+                        </button>
+                    @elseif(($apk->status == 'selesai') || ($apk->status == 'batal') || ($apk->status == 'prosesBA' && ($apk->jenis_jawaban == 'Diterima' || $apk->jenis_jawaban == 'Diproses')))
+                        <button class="btn btn-secondary btn-sm" title="Notifikasi">
+                            <i class='bx bx-bell'></i>
+                        </button>
+                    @endif
+                @endif
+            @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#assessmentDitolakModal{{ $apk->id }}" title="Assessment Ditolak">
+                    <i class='bx bx-pause-circle'></i>
+                    <span class="btn-text">Assessment ditolak</span>
+                </button>
+                <button class="btn btn-warning btn-sm" title="Notifikasi">
+                    <i class='bx bx-bell'></i>
+                </button>
 
-                                                    @if($latestRevision)
-                                                        <div class="mb-2">
-                                                            <span>{{ $latestRevision->catatan ?? 'Tidak ada catatan.' }}</span>
-                                                        </div>
-                                                    @else
-                                                        <div class="mb-2">
-                                                            <strong>Undangan:</strong>
-                                                            <span>Tidak ada data revisi.</span>
-                                                        </div>
-                                                    @endif
+                <!-- Modal -->
+                <div class="modal fade" id="assessmentDitolakModal{{ $apk->id }}" tabindex="-1" role="dialog" aria-labelledby="assessmentDitolakModalLabel{{ $apk->id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="assessmentDitolakModalLabel{{ $apk->id }}">Catatan Perbaikan dari Admin</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                @php
+                                    $latestRevision = $apk->riwayatRevisiAssessments()
+                                        ->orderByDesc('tanggal_pengajuan')
+                                        ->first();
+                                @endphp
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                    <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger">Ajukan Revisi</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                @if($latestRevision)
+                                    <div class="mb-2">
+                                        <span>{{ $latestRevision->catatan ?? 'Tidak ada catatan.' }}</span>
+                                    </div>
+                                @else
+                                    <div class="mb-2">
+                                        <strong>Undangan:</strong>
+                                        <span>Tidak ada data revisi.</span>
                                     </div>
                                 @endif
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                <form action="{{ route('assessment.revisi', $apk->id) }}" method="GET" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">Ajukan Revisi</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
+    </div>
+</td>
 
-                            @endif
-                        </td>
 
                         <td class="text-center">
                             @php
@@ -209,14 +232,16 @@
                                         <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse; background: #fff;">
                                             <thead style="background: #e5e7eb;">
                                                 <tr>
+                                                    <th style="text-align:left; width:5%;">No</th>
                                                     <th style="text-align:left; width:20%;">Tanggal Pengajuan</th>
-                                                    <th style="text-align:left; width:5%;">Surat Permohonan</th>
-                                                    <th style="text-align:left; width:75%;">Catatan Perbaikan dari Admin</th>
+                                                    <th style="text-align:left; width:15%;">Surat Permohonan</th>
+                                                    <th style="text-align:left; width:60%;">Catatan Perbaikan dari Admin</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($others as $rev)
+                                                @foreach($others as $index => $rev)
                                                     <tr>
+                                                        <td>{{ $index + 1 }}</td>
                                                         <td>{{ $rev->permohonan ?? '-' }}</td>
                                                         <td>
                                                             @if($rev->surat_permohonan)
@@ -248,7 +273,7 @@
     <div class="mt-3">
         {{ $aplikasis->links('pagination::tailwind') }}
     </div>
-
+    </div>
     <!-- Script -->
     <script>
         $(document).ready(function() {

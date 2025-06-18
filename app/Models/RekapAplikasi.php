@@ -65,7 +65,7 @@ class RekapAplikasi extends Model
 
     public function penilaian()
     {
-        return $this->hasMany(Penilaian::class);
+        return $this->hasMany(Penilaian::class)->orderBy('created_at', 'desc');
     }
 
     public function latestPenilaian()
@@ -75,7 +75,7 @@ class RekapAplikasi extends Model
 
     public function undangan()
     {
-        return $this->hasMany(Undangan::class, 'rekap_aplikasi_id');
+        return $this->hasMany(Undangan::class, 'rekap_aplikasi_id')->orderBy('tanggal_assessment', 'desc');
     }
 
     public function master()
@@ -85,7 +85,7 @@ class RekapAplikasi extends Model
 
     public function riwayatRevisiAssessments()
     {
-        return $this->hasMany(RiwayatRevisiAssessment::class);
+        return $this->hasMany(RiwayatRevisiAssessment::class)->orderBy('permohonan', 'asc');
     }
 
     public function riwayatRevisiPertama()

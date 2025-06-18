@@ -60,7 +60,7 @@ class RekapAplikasiController extends Controller
     // Start
     public function show($id)
     {
-        $apk = \App\Models\RekapAplikasi::with(['opd', 'undangan'])->findOrFail($id);
+        $apk = \App\Models\RekapAplikasi::with(['opd', 'undangan', 'riwayatRevisiAssessments', 'penilaian'])->findOrFail($id);
         $opds = Opd::all();
         return view('admin.show-apk', compact('apk', 'opds'));
     }
@@ -686,7 +686,7 @@ class RekapAplikasiController extends Controller
             $item->status = 'assessment1';
         }
 
-        $item->jenis_jawaban = 'Diterima';
+        // $item->jenis_jawaban = 'Diterima';
 
         $item->save();
 

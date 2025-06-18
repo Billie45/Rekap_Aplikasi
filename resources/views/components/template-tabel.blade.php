@@ -5,6 +5,7 @@
 
     .compact-table {
         width: 100%;
+        min-width: 1000px;
         border-collapse: collapse;
         font-size: 0.85rem;
         white-space: nowrap;
@@ -23,7 +24,7 @@
         word-break: break-word;
         background-color: #fff;
         position: relative;
-        max-width: 300px; 
+        max-width: 300px;
     }
 
     .compact-table thead th {
@@ -78,6 +79,47 @@
         cursor: grabbing;
     }
 
+    /* Default - tampilkan text */
+    .btn-text {
+        display: inline;
+    }
+
+    .btn-icon-only {
+        display: none;
+    }
+
+    /* Media query untuk layar kecil */
+    @media (max-width: 1570px) {
+        .btn-text {
+            display: none;
+        }
+
+        .btn-icon-only {
+            display: inline;
+        }
+
+        /* Adjust button spacing untuk mobile */
+        .action-buttons .btn {
+            margin: 2px;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+    /* Media query untuk layar sangat kecil */
+    @media (max-width: 1570px) {
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            min-width: 35px;
+            padding: 0.25rem;
+            font-size: 0.875rem;
+        }
+    }
 </style>
 
 <script>

@@ -5,15 +5,15 @@
 
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Pengguna</h4>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-bordered table-sm" style="table-layout: fixed;">
-                    <thead class="thead-dark">
+<div>
+    <div>
+        <div>
+            <div>
+                <table class="compact-table">
+                    <thead>
                         <tr>
                             <th style="width: 5%">No</th>
-                            <th style="width: 20%">Nama</th>
+                            <th style="width: 20%">Username</th>
                             <th style="width: 25%">Email</th>
                             <th style="width: 20%">Role</th>
                             <th style="width: 20%">OPD</th>
@@ -26,10 +26,10 @@
                         @endphp
                         @foreach($users as $user)
                         <tr style="height: 50px;">
-                            <td class="align-middle text-center">{{ $n++ }}</td>
-                            <td class="align-middle text-truncate" title="{{ $user->name }}">{{ $user->name }}</td>
-                            <td class="align-middle text-truncate" title="{{ $user->email }}">{{ $user->email }}</td>
-                            <td class="align-middle p-1">
+                            <td>{{ $n++ }}</td>
+                            <td title="{{ $user->name }}">{{ $user->name }}</td>
+                            <td title="{{ $user->email }}">{{ $user->email }}</td>
+                            <td>
                                 <form action="{{ route('users.updateRole', $user->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
@@ -39,7 +39,7 @@
                                         <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                     </select>
                             </td>
-                            <td class="align-middle p-1">
+                            <td>
                                 <select name="opd_id" class="form-control form-control-sm select2">
                                     <option value="">-- Pilih OPD --</option>
                                     @foreach($opds as $opd)
@@ -49,7 +49,7 @@
                                     @endforeach
                                 </select>
                             </td>
-                            <td class="align-middle p-1">
+                            <td>
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-sm btn-success" title="Update" style="padding: 4px 8px;">
                                         <i class="bx bx-refresh" style="font-size: 1.2rem;"></i>

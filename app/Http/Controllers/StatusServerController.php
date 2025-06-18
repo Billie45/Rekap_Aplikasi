@@ -12,7 +12,7 @@ class StatusServerController extends Controller
      */
     public function index()
     {
-        $statusServers = StatusServer::with('penilaian')->get();
+        $statusServers = StatusServer::with('penilaian.rekapAplikasi')->get();
         return view('status-servers.show', compact('statusServers'));
     }
 
@@ -32,6 +32,7 @@ class StatusServerController extends Controller
     {
         $validated = $request->validate([
             'penilaian_id' => 'required|exists:penilaians,id|unique:status_servers,penilaian_id',
+            'nama_server' => 'required|string|max:255', // tambahkan validasi nama_server
             'tanggal_masuk_server' => 'required|date',
             'status_server' => 'required|in:development,production,luar',
             'permohonan' => 'nullable|file|mimes:pdf',
@@ -47,6 +48,12 @@ class StatusServerController extends Controller
         }
 
         $statusServer = StatusServer::create($validated);
+
+        $rekap = $statusServer->penilaian->rekapAplikasi ?? null;
+        if ($rekap) {
+            $rekap->update(['server' => $statusServer->nama_server]);
+            $rekap->update(['open_akses' => $statusServer->tanggal_masuk_server]);
+        }
 
         // Redirect ke halaman show status server yang baru dibuat
        return redirect()->route('status-server.show', $statusServer->id)->with('success', 'Status server berhasil ditambahkan.');
@@ -74,6 +81,7 @@ class StatusServerController extends Controller
     public function update(Request $request, StatusServer $statusServer)
     {
         $validated = $request->validate([
+            'nama_server' => 'required|string|max:255', // tambahkan validasi nama_server
             'tanggal_masuk_server' => 'required|date',
             'status_server' => 'required|in:development,production,luar',
             'permohonan' => 'nullable|file|mimes:pdf',
@@ -90,8 +98,14 @@ class StatusServerController extends Controller
 
         $statusServer->update($validated);
 
+        $rekap = $statusServer->penilaian->rekapAplikasi ?? null;
+        if ($rekap) {
+            $rekap->update(['server' => $statusServer->nama_server]);
+            $rekap->update(['open_akses' => $statusServer->tanggal_masuk_server]);
+        }
+
         // Redirect ke halaman show status server yang diupdate
-        return redirect()->route('status-server.show', $statusServer->id)->with('success', 'Status server berhasil ditambahkan.');
+        return redirect()->route('status-server.show', $statusServer->id)->with('success', 'Status server berhasil diperbarui.');
     }
 
     /**

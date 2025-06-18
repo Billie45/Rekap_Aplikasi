@@ -44,7 +44,7 @@ class RevisiPenilaianController extends Controller
 
                 // Untuk Hosting Gratis
                 'dokumen_revisi' => 'nullable|file|mimes:pdf',
-                'dokumen_laporan' => 'nullable|file|mimes:pdf'
+                'dokumen_laporan' => 'nullable|string|url'
             ]);
 
             // Add more debug logging
@@ -55,10 +55,10 @@ class RevisiPenilaianController extends Controller
                 $validated['dokumen_revisi'] = $path;
             }
 
-            if ($request->hasFile('dokumen_laporan')) {
-                $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
-                $validated['dokumen_laporan'] = $path;
-            }
+            // if ($request->hasFile('dokumen_laporan')) {
+            //     $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
+            //     $validated['dokumen_laporan'] = $path;
+            // }
 
             $validated['penilaian_id'] = $penilaian->id;
             $validated['status'] = 'diajukan';
@@ -119,7 +119,7 @@ class RevisiPenilaianController extends Controller
 
                 // Untuk Hosting Gratis
                 'dokumen_revisi' => 'nullable|file|mimes:pdf',
-                'dokumen_laporan' => 'nullable|file|mimes:pdf',
+                'dokumen_laporan' => 'nullable|string|url',
                 'status' => 'nullable|in:diajukan,diproses,selesai'
             ]);
 
@@ -131,13 +131,13 @@ class RevisiPenilaianController extends Controller
                 $validated['dokumen_revisi'] = $path;
             }
 
-            if ($request->hasFile('dokumen_laporan')) {
-                if ($revisi_penilaian->dokumen_laporan) {
-                    Storage::disk('public')->delete($revisi_penilaian->dokumen_laporan);
-                }
-                $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
-                $validated['dokumen_laporan'] = $path;
-            }
+            // if ($request->hasFile('dokumen_laporan')) {
+            //     if ($revisi_penilaian->dokumen_laporan) {
+            //         Storage::disk('public')->delete($revisi_penilaian->dokumen_laporan);
+            //     }
+            //     $path = $request->file('dokumen_laporan')->store('laporan-documents', 'public');
+            //     $validated['dokumen_laporan'] = $path;
+            // }
 
             $revisi_penilaian->update($validated);
 

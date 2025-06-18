@@ -7,8 +7,15 @@
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
     }
 
-    .custom-table thead th {
-        background-color: #1e3a8a;
+    .thead-default th {
+        background-color: #1e3a8a; /* default biru */
+        color: white;
+        font-weight: 600;
+        border: 1px solid #dee2e6;
+    }
+
+    .thead-opd th {
+        background-color: #1f7a6b; /* hijau untuk OPD */
         color: white;
         font-weight: 600;
         border: 1px solid #dee2e6;
@@ -86,7 +93,7 @@
     @endphp
 
     <table class="table custom-table text-center align-middle">
-        <thead>
+        <thead class="{{ (in_array(Auth::user()->role, ['opd', 'user'])) ? 'thead-opd' : 'thead-default' }}">
             <tr>
                 <th colspan="3">1. Jenis Pengajuan Aplikasi</th>
                 <th colspan="3">2. Jenis Permohonan</th>
@@ -123,7 +130,7 @@
     @endphp
 
     <table class="table custom-table text-center align-middle">
-        <thead>
+        <thead class="{{ (in_array(Auth::user()->role, ['opd', 'user'])) ? 'thead-opd' : 'thead-default' }}">
             <tr>
                 <th colspan="5">3. Proses Assessment</th>
             </tr>

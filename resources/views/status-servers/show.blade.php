@@ -26,13 +26,20 @@
                                 <td>{{ $statusServer->penilaian->rekapAplikasi->nama ?? '-' }}</td>
                             </tr>
                             <tr>
+                                <th class="bg-light">Nama Server</th>
+                                <td>{{ $statusServer->nama_server ?? '-' }}</td>
+                            </tr>
+                            <tr>
                                 <th class="bg-light">Tanggal Masuk Server</th>
                                 <td>{{ \Carbon\Carbon::parse($statusServer->tanggal_masuk_server)->format('d F Y') }}</td>
                             </tr>
                             <tr>
-                                <th class="bg-light">Status Server</th>
+                                <th class="bg-light">Server</th>
                                 <td>
-                                    <span class="badge {{ $statusServer->status_server == 'aktif' ? 'bg-success' : 'bg-danger' }}">
+                                    <span class="badge
+                                        @if($statusServer->status_server == 'development') bg-info
+                                        @elseif($statusServer->status_server == 'production') bg-success
+                                        @else bg-secondary @endif">
                                         {{ ucfirst($statusServer->status_server) }}
                                     </span>
                                 </td>
@@ -103,7 +110,7 @@
                             <i class="fas fa-edit me-2"></i>
                             Edit Status Server
                         </a>
-                        <a href="{{ url()->previous() }}"
+                        <a href="{{ route('penilaian.show', $statusServer->penilaian_id) }}"
                            class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-2"></i>
                             Kembali

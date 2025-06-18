@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('components.template-tabel')
+@include('components.template-tabel')
 
     <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Manajemen Pengajuan Assessment Aplikasi</h4>
 
@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Riwayat</th>
+                    <th>Expand</th>
                     <th>Tanggal Pengajuan</th>
                     <th>Organisasi Pemerintah Daerah</th>
                     <th>Nama Aplikasi</th>
@@ -45,29 +45,59 @@
                         <td>{{ $apk->status_label }}</td>
                         <td>{{ $apk->jenis_assessment == 'Pertama' ? 'Pengajuan Pertama' : 'Pengajuan Revisi' }}</td>
                         <td>
-                            @if($apk->status === 'diproses')
-                            @elseif(Auth::user()->role == 'admin')
-                                @if((is_null($apk->jenis_jawaban) && $apk->status === 'assessment1' ) || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
-                                    <button class=" btn btn-primary btn-sm terima-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#terimaModal">Terima</button>
-                                    <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal">Tolak</button>
-                                    <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
-                                @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'development'))
-                                    <a href="{{ route('penilaian.create') }}?rekap_aplikasi_id={{ $apk->id }}" class="btn btn-sm" style="background-color: yellow; color: black;">Buat Penilaian</a>
-                                    <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
-                                @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
-                                    <span class="btn btn-danger btn-sm">Assessment ditunda</span>
-                                    <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
-                                @elseif($apk->status == 'prosesBA'|| $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
-                                    @if($apk->latestPenilaian)
-                                    <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;">Lihat Penilaian</a>
-                                        @if(($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diterima') || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diproses'))
-                                            <button class="btn btn-warning btn-sm"><i class='bx bx-bell'></i></button>
-                                        @elseif(($apk->status == 'batal') || ($apk->status == 'selesai') || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null) || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == null || $apk->jenis_jawaban == 'Ditolak'))
-                                            <button class="btn btn-secondary btn-sm"><i class='bx bx-bell'></i></button>
+                            <div class="action-buttons">
+                                @if($apk->status === 'diproses')
+                                @elseif(Auth::user()->role == 'admin')
+                                    @if((is_null($apk->jenis_jawaban) && $apk->status === 'assessment1' ) || ($apk->jenis_jawaban == 'Diproses' && $apk->status === 'assessment2'))
+                                        <button class="btn btn-primary btn-sm terima-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#terimaModal" title="Terima Aplikasi">
+                                            <i class='bx bx-check'></i>
+                                            <span class="btn-text">Terima</span>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm revisi-button" data-id="{{ $apk->id }}" data-toggle="modal" data-target="#revisiModal" title="Tolak Aplikasi">
+                                            <i class='bx bx-x'></i>
+                                            <span class="btn-text">Tolak</span>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" title="Notifikasi">
+                                            <i class='bx bx-bell'></i>
+                                        </button>
+
+                                    @elseif($apk->jenis_jawaban == 'Diterima' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'development'))
+                                        <a href="{{ route('penilaian.create') }}?rekap_aplikasi_id={{ $apk->id }}" class="btn btn-sm" style="background-color: yellow; color: black;" title="Buat Penilaian">
+                                            <i class='bx bx-plus-circle'></i>
+                                            <span class="btn-text">Buat Penilaian</span>
+                                        </a>
+                                        <button class="btn btn-warning btn-sm" title="Notifikasi">
+                                            <i class='bx bx-bell'></i>
+                                        </button>
+
+                                    @elseif($apk->jenis_jawaban == 'Ditolak' && ($apk->status == 'assessment1' || $apk->status == 'assessment2' || $apk->status === 'perbaikan'))
+                                        <span class="btn btn-danger btn-sm" title="Assessment Ditunda">
+                                            <i class='bx bx-pause-circle'></i>
+                                            <span class="btn-text">Assessment ditunda</span>
+                                        </span>
+                                        <button class="btn btn-secondary btn-sm" title="Notifikasi">
+                                            <i class='bx bx-bell'></i>
+                                        </button>
+
+                                    @elseif($apk->status == 'prosesBA'|| $apk->status == 'batal' || $apk->status == 'selesai' || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null))
+                                        @if($apk->latestPenilaian)
+                                        <a href="{{ route('penilaian.show', $apk->latestPenilaian->id) }}" class="btn btn-sm" style="background-color: #28a745; color: white;" title="Lihat Penilaian">
+                                            <i class='bx bx-show'></i>
+                                            <span class="btn-text">Lihat Penilaian</span>
+                                        </a>
+                                            @if(($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diterima') || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == 'Diproses'))
+                                                <button class="btn btn-warning btn-sm" title="Notifikasi">
+                                                    <i class='bx bx-bell'></i>
+                                                </button>
+                                            @elseif(($apk->status == 'batal') || ($apk->status == 'selesai') || ($apk->status == 'assessment2' && $apk->jenis_jawaban == null) || ($apk->status == 'prosesBA' && $apk->jenis_jawaban == null || $apk->jenis_jawaban == 'Ditolak'))
+                                                <button class="btn btn-secondary btn-sm" title="Notifikasi">
+                                                    <i class='bx bx-bell'></i>
+                                                </button>
+                                            @endif
                                         @endif
                                     @endif
                                 @endif
-                            @endif
+                            </div>
                         </td>
                         <td>
                             <a href="{{ route('admin.show-apk', $apk->id) }}" title="Detail" class="btn btn-primary btn-sm">
@@ -104,7 +134,7 @@
                                                         -
                                                     @endif
                                                 </td></tr>
-                                            <tr><th style="text-align: left;">Tipe</th><td>{{ $latest->tipe ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">Tipe</th><td>{{ $latest->tipe_label ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Jenis Permohonan</th><td>{{ $latest->jenis_permohonan ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Link Dokumentasi</th><td>
                                                     @if($latest->link_dokumentasi)
@@ -122,10 +152,8 @@
                                                 </td></tr>
                                             <tr><th style="text-align: left;">Akun Username</th><td>{{ $latest->akun_username ?? '-' }}</td></tr>
                                             <tr><th style="text-align: left;">Akun Password</th><td>{{ $latest->akun_password ?? '-' }}</td></tr>
-                                            <tr><th style="text-align: left;">CP OPD Nama</th><td>{{ $latest->cp_opd_nama ?? '-' }}</td></tr>
-                                            <tr><th style="text-align: left;">CP OPD No Telepon</th><td>{{ $latest->cp_opd_no_telepon ?? '-' }}</td></tr>
-                                            <tr><th style="text-align: left;">CP Pengembang Nama</th><td>{{ $latest->cp_pengembang_nama ?? '-' }}</td></tr>
-                                            <tr><th style="text-align: left;">CP Pengembang No Telepon</th><td>{{ $latest->cp_pengembang_no_telepon ?? '-' }}</td></tr>
+                                            <tr><th style="text-align: left;">CP OPD</th><td>{{ $latest->cp_opd_nama ?? '-' }} ({{ $latest->cp_opd_no_telepon ?? '-'}})</td></tr>
+                                            <tr><th style="text-align: left;">CP Pengembang</th><td>{{ $latest->cp_pengembang_nama ?? '-' }} ({{ $latest->cp_pengembang_no_telepon ?? '-'}})</td></tr>
                                             <tr>
                                                 <th style="text-align: left;">Surat Permohonan</th>
                                                 <td>
@@ -143,7 +171,7 @@
                                     </table>
 
                                     {{-- Tabel Riwayat Lama --}}
-                                    <strong>Assessment Lama:</strong>
+                                    {{-- <strong>Assessment Lama:</strong>
                                     @if(count($others) > 0)
                                         <table style="width: 100%; margin-bottom: 1rem; border-collapse: collapse; background: #fff;">
                                             <thead style="background: #e5e7eb;">
@@ -171,7 +199,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    @endif
+                                    @endif --}}
                                     {{-- Tombol Revisi --}}
                                 @else
                                     <em>Tidak ada riwayat revisi.</em>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('components.template-tabel')
     {{-- <h1>Halaman Dashboard Admin</h1> --}}
 
         {{-- <div class="card-body d-flex justify-content-center gap-4">
@@ -23,7 +24,7 @@
         <!-- Tabel Undangan -->
         <div class="bg-white rounded shadow p-4 mt-4">
             <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Daftar Undangan Assessment</h4>
-            <table class="table table-bordered">
+            <table class="table table-bordered compact-table">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -63,7 +64,7 @@
         <!-- Tabel Penilaian -->
         <div class="bg-white rounded shadow p-4 mt-4">
             <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Daftar Penilaian Assessment</h4>
-            <table class="table table-bordered">
+            <table class="table table-bordered compact-table">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -82,8 +83,8 @@
                             <td>{{ $penilaian->rekapAplikasi->opd->nama_opd ?? '-'}}</td>
                             <td>{{ str_replace('_', ' ', ucwords($penilaian->keputusan_assessment)) ?? '-'}}</td>
                             <td>{{ \Carbon\Carbon::parse($penilaian->tanggal_deadline_perbaikan)->format('Y-m-d') ?? '-'}}</td>
-                            <td>
-                                <a href="{{ route('penilaian.show', $penilaian->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                            <td class="text-center">
+                                <a href="{{ route('penilaian.show', $penilaian->id) }}" class="btn btn-sm"><i class="bx bxs-show" style="font-size: 1.5rem;"></i></i></a>
                             </td>
                         </tr>
                     @endforeach

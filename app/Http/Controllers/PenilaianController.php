@@ -36,8 +36,6 @@ class PenilaianController extends Controller
     public function store(Request $request)
     {
         try {
-            // Debug: Cek apakah ada file yang diupload
-            Log::info('Files uploaded:', $request->allFiles());
 
             $request->validate([
                 'rekap_aplikasi_id' => 'required|exists:rekap_aplikasi,id',
@@ -120,8 +118,9 @@ class PenilaianController extends Controller
      */
     public function edit(Penilaian $penilaian)
     {
-        $rekapAplikasi = RekapAplikasi::all();
-        return view('penilaian.update', compact('penilaian', 'rekapAplikasi'));
+        // Perbaikan: Ambil rekap aplikasi dari penilaian yang sedang diedit
+        $rekapAplikasi = $penilaian->rekapAplikasi;
+        return view('penilaian.edit', compact('penilaian', 'rekapAplikasi'));
     }
 
     /**
@@ -130,20 +129,16 @@ class PenilaianController extends Controller
     public function update(Request $request, Penilaian $penilaian)
     {
         try {
-            // Debug: Cek apakah ada file yang diupload
-            Log::info('Files uploaded for update:', $request->allFiles());
-
             $request->validate([
-                'rekap_aplikasi_id' => 'required|exists:rekap_aplikasi,id',
+                // Hapus validasi rekap_aplikasi_id karena tidak perlu diubah
                 'dokumen_hasil_assessment' => 'nullable|mimes:pdf|max:2048',
-                'tanggal_deadline_perbaikan' => 'nullable|date',
-                'keputusan_assessment' => 'nullable|in:lulus_tanpa_revisi,lulus_dengan_revisi,assessment_ulang,tidak_lulus',
-                'fotos' => 'nullable|array', // Validasi array dulu
+                'tanggal_deadline_perbaikan' => 'required|date', // Ubah menjadi required
+                'keputusan_assessment' => 'required|in:lulus_tanpa_revisi,lulus_dengan_revisi,assessment_ulang,tidak_lulus', // Ubah menjadi required
+                'fotos' => 'nullable|array',
                 'fotos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             $data = $request->only([
-                'rekap_aplikasi_id',
                 'tanggal_deadline_perbaikan',
                 'keputusan_assessment',
             ]);
@@ -152,14 +147,12 @@ class PenilaianController extends Controller
             if ($request->hasFile('dokumen_hasil_assessment')) {
                 try {
                     // Hapus file lama jika ada
-                    if ($penilaian->dokumen_hasil_assessment && Storage::exists('public/' . $penilaian->dokumen_hasil_assessment)) {
+                    if ($penilaian->dokumen_hasil_assessment) {
                         Storage::delete('public/' . $penilaian->dokumen_hasil_assessment);
-                        Log::info('File PDF lama berhasil dihapus: ' . $penilaian->dokumen_hasil_assessment);
                     }
 
                     $pdfPath = $request->file('dokumen_hasil_assessment')->store('dokumen_assessment', 'public');
                     $data['dokumen_hasil_assessment'] = $pdfPath;
-                    Log::info('File PDF baru berhasil diupload: ' . $pdfPath);
                 } catch (\Exception $e) {
                     Log::error('Error handling PDF file: ' . $e->getMessage());
                     return back()->with('error', 'Gagal mengupload dokumen PDF: ' . $e->getMessage())->withInput();
@@ -170,41 +163,25 @@ class PenilaianController extends Controller
             $penilaian->update($data);
 
             // Update rekap aplikasi status
-            $rekapAplikasi = RekapAplikasi::findOrFail($request->input('rekap_aplikasi_id'));
-            $this->updateRekapAplikasiStatus($rekapAplikasi, $request->input('keputusan_assessment'));
+            $this->updateRekapAplikasiStatus($penilaian->rekapAplikasi, $request->input('keputusan_assessment'));
 
-            // Handle foto dokumentasi assessment - Perbaikan di sini
+            // Handle foto dokumentasi assessment
             if ($request->hasFile('fotos')) {
-                $fotos = $request->file('fotos');
-                Log::info('Jumlah foto yang diupload: ' . count($fotos));
-
-                foreach ($fotos as $index => $foto) {
-                    // Cek apakah file valid sebelum disimpan
+                foreach ($request->file('fotos') as $foto) {
                     if ($foto && $foto->isValid()) {
-                        try {
-                            $path = $foto->store('penilaian_fotos', 'public');
-
-                            PenilaianFoto::create([
-                                'penilaian_id' => $penilaian->id,
-                                'foto' => $path,
-                            ]);
-
-                            Log::info('Foto ' . ($index + 1) . ' berhasil disimpan: ' . $path);
-                        } catch (\Exception $e) {
-                            Log::error('Error menyimpan foto ' . ($index + 1) . ': ' . $e->getMessage());
-                            // Jangan stop proses, lanjutkan ke foto berikutnya
-                        }
-                    } else {
-                        Log::warning('File foto ' . ($index + 1) . ' tidak valid atau kosong');
+                        $path = $foto->store('penilaian_fotos', 'public');
+                        PenilaianFoto::create([
+                            'penilaian_id' => $penilaian->id,
+                            'foto' => $path,
+                        ]);
                     }
                 }
             }
 
-            return redirect()->route('rekap-aplikasi.show', $penilaian->rekap_aplikasi_id)
+            return redirect()->route('penilaian.show', compact('penilaian'))
                 ->with('success', 'Penilaian berhasil diperbarui.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation Error:', $e->errors());
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('Error updating penilaian: ' . $e->getMessage());
@@ -217,23 +194,44 @@ class PenilaianController extends Controller
      */
     public function destroy(Penilaian $penilaian)
     {
+        $rekapAplikasiId = $penilaian->rekap_aplikasi_id;
+
         // Delete associated photos
         foreach ($penilaian->penilaianFotos as $foto) {
             Storage::delete('public/' . $foto->foto);
             $foto->delete();
         }
 
+        // Hapus dokumen assessment jika ada
+        if ($penilaian->dokumen_hasil_assessment) {
+            Storage::delete('public/' . $penilaian->dokumen_hasil_assessment);
+        }
+
         $penilaian->delete();
 
-        return redirect()->route('penilaian.index')->with('success', 'Penilaian berhasil dihapus.');
+        return redirect()->route('rekap-aplikasi.show', $rekapAplikasiId)
+            ->with('success', 'Penilaian berhasil dihapus.');
     }
 
-    public function destroyFoto(PenilaianFoto $penilaianFoto)
+    // Perbaikan method destroyFoto
+    public function destroyFoto($id)
     {
-        Storage::delete('public/' . $penilaianFoto->foto);
-        $penilaianFoto->delete();
+        try {
+            $foto = PenilaianFoto::findOrFail($id);
 
-        return back()->with('success', 'Foto berhasil dihapus.');
+            // Hapus file dari storage
+            if (Storage::exists('public/' . $foto->foto)) {
+                Storage::delete('public/' . $foto->foto);
+            }
+
+            // Hapus record dari database
+            $foto->delete();
+
+            return back()->with('success', 'Foto berhasil dihapus.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting foto: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menghapus foto: ' . $e->getMessage());
+        }
     }
 
     private function updateRekapAplikasiStatus(RekapAplikasi $rekapAplikasi, $keputusanAssessment)

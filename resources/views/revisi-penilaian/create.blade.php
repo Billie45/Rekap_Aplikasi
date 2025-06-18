@@ -73,26 +73,30 @@
                         {{-- Dokumen Laporan --}}
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold" for="dokumen_laporan">
-                                Lampiran Perbaikan <span class="text-danger">*</span>
+                                Link Lampiran Perbaikan <span class="text-danger">*</span>
                             </label>
                             <div class="input-group">
-                                <input type="file"
-                                       name="dokumen_laporan"
-                                       id="dokumen_laporan"
-                                       class="form-control @error('dokumen_laporan') is-invalid @enderror"
-                                       accept="application/pdf"
-                                       required>
+                                <input type="url"
+                                    name="dokumen_laporan"
+                                    id="dokumen_laporan"
+                                    class="form-control @error('dokumen_laporan') is-invalid @enderror"
+                                    placeholder="https://contoh.com/lampiran"
+                                    value="{{ old('dokumen_laporan') }}"
+                                    required>
                                 <span class="input-group-text">
-                                    <i class="fas fa-file-pdf"></i>
+                                    <i class="fas fa-link"></i>
                                 </span>
                             </div>
                             <small class="text-muted">
-                                Format: PDF, Maksimal 2MB
+                                Masukkan link (URL) menuju file lampiran (Google Drive, OneDrive, dsb.)
                             </small>
                             @error('dokumen_laporan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        {{-- Catatan Tambahan --}}
+                        <div class="form-group
                     </div>
                 </div>
 

@@ -37,4 +37,13 @@ class RiwayatRevisiAssessment extends Model
     {
         return $this->belongsTo(RekapAplikasi::class);
     }
+
+    public function getTipeLabelAttribute()
+    {
+        return match ($this->tipe) {
+            'apk' => 'Aplikasi Web',
+            'web' => 'Website',
+            default => '-',
+        };
+    }
 }

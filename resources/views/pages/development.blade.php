@@ -21,10 +21,12 @@
         }
     @endphp
 
+<div class="bg-white rounded shadow p-4 mt-4">
 <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Daftar Aplikasi Tahap Development</h4>
 <x-template-tabel-3 :headers="$headers" :rows="$rows" />
 
     <div class="mt-3">
         {{ $aplikasis->links('pagination::tailwind') }}
     </div>
+</div>
 @endsection

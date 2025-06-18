@@ -8,6 +8,7 @@ class StatusServer extends Model
 {
     protected $fillable = [
         'penilaian_id',
+        'nama_server',
         'tanggal_masuk_server',
         'status_server',
         'permohonan',

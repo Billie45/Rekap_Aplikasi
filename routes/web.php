@@ -286,6 +286,8 @@ Route::middleware('auth', 'role:admin')->group(function () {
 //
 // end
 
+Route::delete('penilaian/penilaianfoto/{id}', [\App\Http\Controllers\PenilaianController::class, 'destroyFoto'])->name('penilaian.foto.destroy');
+Route::put('/penilaian/{penilaian}', [PenilaianController::class, 'update'])->name('penilaian.update');
 // ============================================================
 // Bagian ini untuk undangan
 // ============================================================
@@ -295,11 +297,6 @@ Route::resource('rekap-aplikasi', RekapAplikasiController::class);
 Route::resource('undangan', UndanganController::class);
 Route::resource('penilaian', PenilaianController::class);
 Route::resource('revisi-penilaian', RevisiPenilaianController::class);
-
-Route::put('/penilaian/{penilaian}', [PenilaianController::class, 'update'])->name('penilaian.update');
-
-// Route untuk delete foto penilaian
-Route::delete('/penilaian/foto/{penilaianFoto}', [PenilaianController::class, 'destroyFoto'])->name('penilaian.foto.destroy');
 //
 // end
 
@@ -353,3 +350,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::resource('status-server', StatusServerController::class);
 //
 // end
+
+// ============================================================
+// bagian ini untuk riwayat revisi assessment
+// ============================================================
+Route::resource('riwayat', \App\Http\Controllers\RiwayatRevisiAssessmentController::class);
+// ============================================================
