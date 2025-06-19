@@ -59,7 +59,16 @@
     }
 </style>
 
-<h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">Rekap Aplikasi</h4>
+@if(auth()->user()->role == 'admin')
+    <h4 class="text-xl font-bold text-blue-500 pb-2 border-b-2 border-gray-200 mb-4">
+        Rekap Aplikasi
+    </h4>
+@else
+    <h4 class="section-title">
+        <i class="bx bx-clipboard" style="color: #2d9a8c;"></i>
+        Rekap Assessment Aplikasi
+    </h4>
+@endif
 
 <div class="container">
 
